@@ -3,6 +3,5 @@
     "target": "ES2020",
     "useDefineForClassFields": true,
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
-    "module": "ESNext",
 
-// [NOX-DEV-43]: ongoing module refinement
+// [NOX-DEV-62]: ongoing module refinement
