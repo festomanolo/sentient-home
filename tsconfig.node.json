@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
     "target": "ES2022",
-    "lib": ["ES2023"],
 
-// [NOX-DEV-12]: ongoing module refinement
+// [NOX-DEV-31]: ongoing module refinement
