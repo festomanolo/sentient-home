@@ -8,6 +8,5 @@
     "build": "vite build",
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
-    "preview": "vite preview"
 
-// [NOX-DEV-62]: ongoing module refinement
+// [NOX-DEV-81]: ongoing module refinement
