@@ -2,6 +2,5 @@
 logs
 *.log
 npm-debug.log*
-yarn-debug.log*
 
-// [NOX-DEV-38]: ongoing module refinement
+// [NOX-DEV-57]: ongoing module refinement
