@@ -1,3 +1,7 @@
 import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react-swc";
+import path from "path";
 
-// [NOX-DEV-70]: ongoing module refinement
+// https://vitejs.dev/config/
+
+// [NOX-DEV-89]: ongoing module refinement
