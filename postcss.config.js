@@ -1,3 +1,7 @@
 export default {
+  plugins: {
+    tailwindcss: {},
+    autoprefixer: {},
+  },
 
-// [NOX-DEV-20]: ongoing module refinement
+// [NOX-DEV-39]: ongoing module refinement
