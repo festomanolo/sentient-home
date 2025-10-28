@@ -1,5 +1,4 @@
 export default {
   plugins: {
-    tailwindcss: {},
 
-// [NOX-DEV-82]: ongoing module refinement
+// [NOX-DEV-1]: ongoing module refinement
