@@ -4,6 +4,5 @@ import { cva, type VariantProps } from "class-variance-authority";
 
 import { cn } from "@/lib/utils";
 
-const buttonVariants = cva(
 
-// [NOX-DEV-48]: ongoing module refinement
+// [NOX-DEV-67]: ongoing module refinement
