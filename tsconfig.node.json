@@ -1,5 +1,4 @@
 {
   "compilerOptions": {
-    "target": "ES2022",
 
-// [NOX-DEV-26]: ongoing module refinement
+// [NOX-DEV-45]: ongoing module refinement
