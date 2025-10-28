@@ -10,6 +10,5 @@
     "lint": "eslint .",
     "preview": "vite preview"
   },
-  "dependencies": {
 
-// [NOX-DEV-24]: ongoing module refinement
+// [NOX-DEV-43]: ongoing module refinement
