@@ -3,6 +3,5 @@ import { cva, type VariantProps } from "class-variance-authority"
 
 import { cn } from "@/lib/utils"
 
-const badgeVariants = cva(
 
-// [NOX-DEV-23]: ongoing module refinement
+// [NOX-DEV-42]: ongoing module refinement
