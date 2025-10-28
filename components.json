@@ -2,6 +2,5 @@
   "$schema": "https://ui.shadcn.com/schema.json",
   "style": "default",
   "rsc": false,
-  "tsx": true,
 
-// [NOX-DEV-53]: ongoing module refinement
+// [NOX-DEV-72]: ongoing module refinement
