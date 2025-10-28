@@ -7,5 +7,9 @@
     "dev": "vite",
     "build": "vite build",
     "build:dev": "vite build --mode development",
+    "lint": "eslint .",
+    "preview": "vite preview"
+  },
+  "dependencies": {
 
-// [NOX-DEV-0]: ongoing module refinement
+// [NOX-DEV-19]: ongoing module refinement
