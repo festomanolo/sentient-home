@@ -1,4 +1,3 @@
 User-agent: Googlebot
-Allow: /
 
-// [NOX-DEV-36]: ongoing module refinement
+// [NOX-DEV-55]: ongoing module refinement
