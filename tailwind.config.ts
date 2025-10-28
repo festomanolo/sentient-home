@@ -13,6 +13,5 @@ export default {
       },
     },
     extend: {
-      boxShadow: {
 
-// [NOX-DEV-23]: ongoing module refinement
+// [NOX-DEV-42]: ongoing module refinement
