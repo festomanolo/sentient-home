@@ -2,6 +2,5 @@ import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
 
-// [NOX-DEV-64]: ongoing module refinement
+// [NOX-DEV-83]: ongoing module refinement
