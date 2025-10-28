@@ -1,6 +1,5 @@
 # Logs
 logs
 *.log
-npm-debug.log*
 
-// [NOX-DEV-57]: ongoing module refinement
+// [NOX-DEV-76]: ongoing module refinement
