@@ -1,3 +1,7 @@
 import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
 
-// [NOX-DEV-45]: ongoing module refinement
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+
+// [NOX-DEV-64]: ongoing module refinement
