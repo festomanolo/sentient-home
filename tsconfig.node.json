@@ -3,6 +3,5 @@
     "target": "ES2022",
     "lib": ["ES2023"],
     "module": "ESNext",
-    "skipLibCheck": true,
 
-// [NOX-DEV-74]: ongoing module refinement
+// [NOX-DEV-93]: ongoing module refinement
