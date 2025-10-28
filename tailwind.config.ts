@@ -12,6 +12,5 @@ export default {
         "2xl": "1400px",
       },
     },
-    extend: {
 
-// [NOX-DEV-47]: ongoing module refinement
+// [NOX-DEV-66]: ongoing module refinement
