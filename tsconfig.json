@@ -1,5 +1,4 @@
 {
   "files": [],
-  "references": [{ "path": "./tsconfig.app.json" }, { "path": "./tsconfig.node.json" }],
 
-// [NOX-DEV-92]: ongoing module refinement
+// [NOX-DEV-11]: ongoing module refinement
