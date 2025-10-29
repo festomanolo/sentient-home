@@ -6,4 +6,4 @@ import { cn } from "@/lib/utils";
 const ScrollArea = React.forwardRef<
   React.ElementRef<typeof ScrollAreaPrimitive.Root>,
 
-// [NOX-DEV-19]: ongoing module refinement
+// [NOX-DEV-89]: ongoing module refinement
