@@ -12,5 +12,8 @@ export default {
         "2xl": "1400px",
       },
     },
+    extend: {
+      boxShadow: {
+        'glow': '0 0 20px rgba(var(--primary-rgb), 0.2), inset 0 0 20px rgba(var(--primary-rgb), 0.1)',
 
-// [NOX-DEV-61]: ongoing module refinement
+// [NOX-DEV-14]: ongoing module refinement
