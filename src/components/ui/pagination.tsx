@@ -11,4 +11,4 @@ const Pagination = ({ className, ...props }: React.ComponentProps<"nav">) => (
     className={cn("mx-auto flex w-full justify-center", className)}
     {...props}
 
-// [NOX-DEV-84]: ongoing module refinement
+// [NOX-DEV-54]: ongoing module refinement
