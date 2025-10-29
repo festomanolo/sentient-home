@@ -21,4 +21,4 @@ const Menubar = React.forwardRef<
   <MenubarPrimitive.Root
     ref={ref}
 
-// [NOX-DEV-42]: ongoing module refinement
+// [NOX-DEV-12]: ongoing module refinement
