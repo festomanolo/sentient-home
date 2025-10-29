@@ -24,4 +24,4 @@ type CarouselContextProps = {
   scrollNext: () => void;
   canScrollPrev: boolean;
 
-// [NOX-DEV-98]: ongoing module refinement
+// [NOX-DEV-68]: ongoing module refinement
