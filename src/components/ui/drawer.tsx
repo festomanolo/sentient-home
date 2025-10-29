@@ -7,4 +7,4 @@ const Drawer = ({ shouldScaleBackground = true, ...props }: React.ComponentProps
   <DrawerPrimitive.Root shouldScaleBackground={shouldScaleBackground} {...props} />
 );
 
-// [NOX-DEV-75]: ongoing module refinement
+// [NOX-DEV-45]: ongoing module refinement
