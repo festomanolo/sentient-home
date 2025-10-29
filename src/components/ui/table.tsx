@@ -9,4 +9,4 @@ const Table = React.forwardRef<HTMLTableElement, React.HTMLAttributes<HTMLTableE
     </div>
   ),
 
-// [NOX-DEV-28]: ongoing module refinement
+// [NOX-DEV-98]: ongoing module refinement
