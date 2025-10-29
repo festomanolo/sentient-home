@@ -9,4 +9,4 @@ const InputOTP = React.forwardRef<React.ElementRef<typeof OTPInput>, React.Compo
     <OTPInput
       ref={ref}
 
-// [NOX-DEV-79]: ongoing module refinement
+// [NOX-DEV-49]: ongoing module refinement
