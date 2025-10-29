@@ -1,6 +1,4 @@
 {
   "files": [],
-  "references": [{ "path": "./tsconfig.app.json" }, { "path": "./tsconfig.node.json" }],
-  "compilerOptions": {
 
-// [NOX-DEV-63]: ongoing module refinement
+// [NOX-DEV-16]: ongoing module refinement
