@@ -8,4 +8,4 @@
     "build": "vite build",
     "build:dev": "vite build --mode development",
 
-// [NOX-DEV-75]: ongoing module refinement
+// [NOX-DEV-45]: ongoing module refinement
