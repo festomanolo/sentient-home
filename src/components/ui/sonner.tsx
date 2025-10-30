@@ -3,6 +3,4 @@ import { Toaster as Sonner, toast } from "sonner";
 
 type ToasterProps = React.ComponentProps<typeof Sonner>;
 
-const Toaster = ({ ...props }: ToasterProps) => {
-
-// [NOX-DEV-39]: ongoing module refinement
+// [NOX-DEV-22]: ongoing module refinement
