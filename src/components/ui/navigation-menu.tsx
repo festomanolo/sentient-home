@@ -11,5 +11,8 @@ const NavigationMenu = React.forwardRef<
 >(({ className, children, ...props }, ref) => (
   <NavigationMenuPrimitive.Root
     ref={ref}
+    className={cn("relative z-10 flex max-w-max flex-1 items-center justify-center", className)}
+    {...props}
+  >
 
-// [NOX-DEV-26]: ongoing module refinement
+// [NOX-DEV-9]: ongoing module refinement
