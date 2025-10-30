@@ -15,4 +15,7 @@ All colors MUST be HSL.
     --card: 0 0% 100%;
     --card-foreground: 222 47% 11%;
 
-// [NOX-DEV-51]: ongoing module refinement
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+
+// [NOX-DEV-34]: ongoing module refinement
