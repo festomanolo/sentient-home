@@ -3,7 +3,5 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { DayPicker } from "react-day-picker";
 
 import { cn } from "@/lib/utils";
-import { buttonVariants } from "@/components/ui/button";
 
-
-// [NOX-DEV-27]: ongoing module refinement
+// [NOX-DEV-10]: ongoing module refinement
