@@ -29,6 +29,4 @@ function useChart() {
   return context;
 }
 
-const ChartContainer = React.forwardRef<
-
-// [NOX-DEV-12]: ongoing module refinement
+// [NOX-DEV-95]: ongoing module refinement
