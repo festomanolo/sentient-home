@@ -2,7 +2,5 @@
   "$schema": "https://ui.shadcn.com/schema.json",
   "style": "default",
   "rsc": false,
-  "tsx": true,
-  "tailwind": {
 
-// [NOX-DEV-84]: ongoing module refinement
+// [NOX-DEV-67]: ongoing module refinement
