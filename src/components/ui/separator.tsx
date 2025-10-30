@@ -3,6 +3,4 @@ import * as SeparatorPrimitive from "@radix-ui/react-separator";
 
 import { cn } from "@/lib/utils";
 
-const Separator = React.forwardRef<
-
-// [NOX-DEV-34]: ongoing module refinement
+// [NOX-DEV-17]: ongoing module refinement
