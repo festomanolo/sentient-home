@@ -1,5 +1,8 @@
 import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 
+import { cn } from "@/lib/utils"
 
-// [NOX-DEV-75]: ongoing module refinement
+const badgeVariants = cva(
+
+// [NOX-DEV-58]: ongoing module refinement
