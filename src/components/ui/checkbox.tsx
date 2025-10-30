@@ -1,4 +1,7 @@
 import * as React from "react";
 import * as CheckboxPrimitive from "@radix-ui/react-checkbox";
+import { Check } from "lucide-react";
 
-// [NOX-DEV-30]: ongoing module refinement
+import { cn } from "@/lib/utils";
+
+// [NOX-DEV-13]: ongoing module refinement
