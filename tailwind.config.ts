@@ -11,7 +11,5 @@ export default {
       screens: {
         "2xl": "1400px",
       },
-    },
-    extend: {
 
-// [NOX-DEV-97]: ongoing module refinement
+// [NOX-DEV-80]: ongoing module refinement
