@@ -13,7 +13,5 @@ const Landing = () => {
       </div>
 
       {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-        {/* Background gradient */}
 
-// [NOX-DEV-63]: ongoing module refinement
+// [NOX-DEV-46]: ongoing module refinement
