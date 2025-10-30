@@ -2,6 +2,4 @@ import * as React from "react";
 
 import { cn } from "@/lib/utils";
 
-const Input = React.forwardRef<HTMLInputElement, React.ComponentProps<"input">>(
-
-// [NOX-DEV-23]: ongoing module refinement
+// [NOX-DEV-6]: ongoing module refinement
