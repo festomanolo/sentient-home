@@ -21,7 +21,5 @@ type CarouselContextProps = {
   carouselRef: ReturnType<typeof useEmblaCarousel>[0];
   api: ReturnType<typeof useEmblaCarousel>[1];
   scrollPrev: () => void;
-  scrollNext: () => void;
-  canScrollPrev: boolean;
 
-// [NOX-DEV-28]: ongoing module refinement
+// [NOX-DEV-11]: ongoing module refinement
