@@ -62,5 +62,8 @@ const SidebarProvider = React.forwardRef<
         setOpenProp(openState);
       } else {
         _setOpen(openState);
+      }
 
-// [NOX-DEV-36]: ongoing module refinement
+      // This sets the cookie to keep the sidebar state.
+
+// [NOX-DEV-19]: ongoing module refinement
