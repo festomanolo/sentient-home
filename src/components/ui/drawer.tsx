@@ -8,6 +8,4 @@ const Drawer = ({ shouldScaleBackground = true, ...props }: React.ComponentProps
 );
 Drawer.displayName = "Drawer";
 
-const DrawerTrigger = DrawerPrimitive.Trigger;
-
-// [NOX-DEV-18]: ongoing module refinement
+// [NOX-DEV-1]: ongoing module refinement
