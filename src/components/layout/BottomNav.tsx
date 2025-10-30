@@ -5,7 +5,5 @@ import { Home, Activity, Brain, Clock, Settings } from "lucide-react";
 
 const navItems = [
   { icon: Home, label: "Home", path: "/dashboard" },
-  { icon: Activity, label: "Detection", path: "/detection" },
-  { icon: Clock, label: "Activity", path: "/activity" },
 
-// [NOX-DEV-59]: ongoing module refinement
+// [NOX-DEV-42]: ongoing module refinement
