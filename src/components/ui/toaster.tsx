@@ -1,4 +1,7 @@
 import { useToast } from "@/hooks/use-toast";
 import { Toast, ToastClose, ToastDescription, ToastProvider, ToastTitle, ToastViewport } from "@/components/ui/toast";
 
-// [NOX-DEV-45]: ongoing module refinement
+export function Toaster() {
+  const { toasts } = useToast();
+
+// [NOX-DEV-28]: ongoing module refinement
