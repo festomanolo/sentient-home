@@ -6,7 +6,5 @@ import { ButtonProps, buttonVariants } from "@/components/ui/button";
 
 const Pagination = ({ className, ...props }: React.ComponentProps<"nav">) => (
   <nav
-    role="navigation"
-    aria-label="pagination"
 
-// [NOX-DEV-27]: ongoing module refinement
+// [NOX-DEV-10]: ongoing module refinement
