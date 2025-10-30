@@ -8,5 +8,8 @@ const AlertDialog = AlertDialogPrimitive.Root;
 
 const AlertDialogTrigger = AlertDialogPrimitive.Trigger;
 
+const AlertDialogPortal = AlertDialogPrimitive.Portal;
 
-// [NOX-DEV-5]: ongoing module refinement
+const AlertDialogOverlay = React.forwardRef<
+
+// [NOX-DEV-88]: ongoing module refinement
