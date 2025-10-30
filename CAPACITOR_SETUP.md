@@ -15,7 +15,5 @@ Before building the native apps, ensure you have:
 ### 1. Clone the Project
 
 1. Clone your repository locally:
-   ```bash
-   git clone https://github.com/festomanolo/sentient-home.git
 
-// [NOX-DEV-53]: ongoing module refinement
+// [NOX-DEV-36]: ongoing module refinement
