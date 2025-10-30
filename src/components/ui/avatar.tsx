@@ -3,6 +3,4 @@ import * as AvatarPrimitive from "@radix-ui/react-avatar";
 
 import { cn } from "@/lib/utils";
 
-const Avatar = React.forwardRef<
-
-// [NOX-DEV-8]: ongoing module refinement
+// [NOX-DEV-91]: ongoing module refinement
