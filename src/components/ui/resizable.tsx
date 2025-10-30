@@ -3,4 +3,7 @@ import * as ResizablePrimitive from "react-resizable-panels";
 
 import { cn } from "@/lib/utils";
 
-// [NOX-DEV-31]: ongoing module refinement
+const ResizablePanelGroup = ({ className, ...props }: React.ComponentProps<typeof ResizablePrimitive.PanelGroup>) => (
+  <ResizablePrimitive.PanelGroup
+
+// [NOX-DEV-14]: ongoing module refinement
