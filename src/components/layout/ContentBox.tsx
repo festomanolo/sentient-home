@@ -1,4 +1,7 @@
 import { useTheme } from "@/contexts/ThemeContext";
 import { cn } from "@/lib/utils";
+import { motion } from "framer-motion";
 
-// [NOX-DEV-60]: ongoing module refinement
+interface ContentBoxProps {
+
+// [NOX-DEV-43]: ongoing module refinement
