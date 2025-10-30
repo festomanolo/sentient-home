@@ -12,7 +12,5 @@ const Onboarding = () => {
   const nextStep = () => {
     if (step < onboardingSteps.length - 1) {
       setStep(step + 1);
-    } else {
-      navigate("/dashboard");
 
-// [NOX-DEV-82]: ongoing module refinement
+// [NOX-DEV-65]: ongoing module refinement
