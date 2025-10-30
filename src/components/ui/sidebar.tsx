@@ -65,4 +65,4 @@ const SidebarProvider = React.forwardRef<
       }
 
 
-// [NOX-DEV-63]: ongoing module refinement
+// [NOX-DEV-53]: ongoing module refinement
