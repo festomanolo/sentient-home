@@ -11,7 +11,5 @@ const ToastViewport = React.forwardRef<
   React.ElementRef<typeof ToastPrimitives.Viewport>,
   React.ComponentPropsWithoutRef<typeof ToastPrimitives.Viewport>
 >(({ className, ...props }, ref) => (
-  <ToastPrimitives.Viewport
-    ref={ref}
 
-// [NOX-DEV-44]: ongoing module refinement
+// [NOX-DEV-27]: ongoing module refinement
