@@ -1,4 +1,7 @@
 import * as CollapsiblePrimitive from "@radix-ui/react-collapsible";
 
+const Collapsible = CollapsiblePrimitive.Root;
 
-// [NOX-DEV-31]: ongoing module refinement
+const CollapsibleTrigger = CollapsiblePrimitive.CollapsibleTrigger;
+
+// [NOX-DEV-14]: ongoing module refinement
