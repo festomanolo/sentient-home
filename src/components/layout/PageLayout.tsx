@@ -1,5 +1,8 @@
 import { useTheme } from "@/contexts/ThemeContext";
 import { AppBar } from "./AppBar";
 import { BottomNav } from "./BottomNav";
+import { ContentBox } from "./ContentBox";
 
-// [NOX-DEV-61]: ongoing module refinement
+interface PageLayoutProps {
+
+// [NOX-DEV-44]: ongoing module refinement
