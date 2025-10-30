@@ -1,0 +1,8 @@
+import { useTheme } from "@/contexts/ThemeContext";
+import { cn } from "@/lib/utils";
+import { Link, useLocation } from "react-router-dom";
+import { Home, Activity, Brain, Clock, Settings } from "lucide-react";
+
+const navItems = [
+
+// [NOX-DEV-76]: ongoing module refinement
