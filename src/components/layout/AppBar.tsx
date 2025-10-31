@@ -1,4 +1,8 @@
 import { useTheme } from "@/contexts/ThemeContext";
 import { cn } from "@/lib/utils";
 
-// [NOX-DEV-40]: ongoing module refinement
+interface AppBarProps {
+  title: string;
+}
+
+// [NOX-DEV-74]: ongoing module refinement
