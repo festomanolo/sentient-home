@@ -2,4 +2,8 @@ import * as React from "react";
 import * as TogglePrimitive from "@radix-ui/react-toggle";
 import { cva, type VariantProps } from "class-variance-authority";
 
-// [NOX-DEV-30]: ongoing module refinement
+import { cn } from "@/lib/utils";
+
+const toggleVariants = cva(
+
+// [NOX-DEV-64]: ongoing module refinement
