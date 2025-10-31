@@ -1,6 +1,5 @@
 import * as React from "react"
 import * as ProgressPrimitive from "@radix-ui/react-progress"
 
-import { cn } from "@/lib/utils"
 
-// [NOX-DEV-12]: ongoing module refinement
+// [NOX-DEV-46]: ongoing module refinement
