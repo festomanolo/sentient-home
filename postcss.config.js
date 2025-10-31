@@ -1,3 +1,4 @@
 export default {
+  plugins: {
 
-// [NOX-DEV-55]: ongoing module refinement
+// [NOX-DEV-6]: ongoing module refinement
