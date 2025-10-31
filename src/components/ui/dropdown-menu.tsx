@@ -16,6 +16,5 @@ const DropdownMenuSub = DropdownMenuPrimitive.Sub;
 
 const DropdownMenuRadioGroup = DropdownMenuPrimitive.RadioGroup;
 
-const DropdownMenuSubTrigger = React.forwardRef<
 
-// [NOX-DEV-2]: ongoing module refinement
+// [NOX-DEV-36]: ongoing module refinement
