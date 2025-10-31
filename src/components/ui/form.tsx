@@ -12,6 +12,5 @@ type FormFieldContextValue<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 > = {
-  name: TName;
 
-// [NOX-DEV-3]: ongoing module refinement
+// [NOX-DEV-37]: ongoing module refinement
