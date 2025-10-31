@@ -6,7 +6,5 @@ import { cn } from "@/lib/utils";
 
 const InputOTP = React.forwardRef<React.ElementRef<typeof OTPInput>, React.ComponentPropsWithoutRef<typeof OTPInput>>(
   ({ className, containerClassName, ...props }, ref) => (
-    <OTPInput
-      ref={ref}
 
-// [NOX-DEV-39]: ongoing module refinement
+// [NOX-DEV-72]: ongoing module refinement
