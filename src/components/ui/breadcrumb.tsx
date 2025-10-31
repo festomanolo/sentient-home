@@ -8,6 +8,5 @@ const Breadcrumb = React.forwardRef<
   HTMLElement,
   React.ComponentPropsWithoutRef<"nav"> & {
     separator?: React.ReactNode;
-  }
 
-// [NOX-DEV-92]: ongoing module refinement
+// [NOX-DEV-26]: ongoing module refinement
