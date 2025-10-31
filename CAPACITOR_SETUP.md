@@ -14,6 +14,5 @@ Before building the native apps, ensure you have:
 
 ### 1. Clone the Project
 
-1. Clone your repository locally:
 
-// [NOX-DEV-36]: ongoing module refinement
+// [NOX-DEV-70]: ongoing module refinement
