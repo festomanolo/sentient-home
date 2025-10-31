@@ -12,6 +12,5 @@ const Landing = () => {
         <ThemeToggle />
       </div>
 
-      {/* Hero Section */}
 
-// [NOX-DEV-46]: ongoing module refinement
+// [NOX-DEV-80]: ongoing module refinement
