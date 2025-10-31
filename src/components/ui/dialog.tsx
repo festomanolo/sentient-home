@@ -8,4 +8,8 @@ const Dialog = DialogPrimitive.Root;
 
 const DialogTrigger = DialogPrimitive.Trigger;
 
-// [NOX-DEV-0]: ongoing module refinement
+const DialogPortal = DialogPrimitive.Portal;
+
+const DialogClose = DialogPrimitive.Close;
+
+// [NOX-DEV-34]: ongoing module refinement
