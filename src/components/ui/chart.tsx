@@ -29,4 +29,8 @@ function useChart() {
   return context;
 }
 
-// [NOX-DEV-95]: ongoing module refinement
+const ChartContainer = React.forwardRef<
+  HTMLDivElement,
+  React.ComponentProps<"div"> & {
+
+// [NOX-DEV-29]: ongoing module refinement
