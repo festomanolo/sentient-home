@@ -1,4 +1,7 @@
 import * as React from "react";
 
+import { cn } from "@/lib/utils";
 
-// [NOX-DEV-60]: ongoing module refinement
+export interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {}
+
+// [NOX-DEV-93]: ongoing module refinement
