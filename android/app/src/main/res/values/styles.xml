@@ -2,7 +2,5 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
 
-// [NOX-DEV-24]: ongoing module refinement
+// [NOX-DEV-57]: ongoing module refinement
