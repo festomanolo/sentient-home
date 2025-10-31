@@ -35,5 +35,7 @@ const Dashboard = () => {
       adaptiveVolume: true,
       notifications: true,
     };
+  });
 
-// [NOX-DEV-45]: ongoing module refinement
+
+// [NOX-DEV-79]: ongoing module refinement
