@@ -1,4 +1,7 @@
 import * as React from "react";
 import * as LabelPrimitive from "@radix-ui/react-label";
+import { cva, type VariantProps } from "class-variance-authority";
 
-// [NOX-DEV-41]: ongoing module refinement
+import { cn } from "@/lib/utils";
+
+// [NOX-DEV-74]: ongoing module refinement
