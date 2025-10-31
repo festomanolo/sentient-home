@@ -16,5 +16,7 @@ interface CommandFeedbackProps {
   isProcessing?: boolean;
   lastResponse?: string;
   showHistory?: boolean;
+}
 
-// [NOX-DEV-27]: ongoing module refinement
+
+// [NOX-DEV-60]: ongoing module refinement
