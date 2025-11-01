@@ -8,5 +8,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:usesCleartextTraffic="true"
+        android:theme="@style/AppTheme">
 
-// [NOX-DEV-87]: ongoing module refinement
+        <activity
+
+// [NOX-DEV-23]: ongoing module refinement
