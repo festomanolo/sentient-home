@@ -13,5 +13,7 @@ export default {
       },
     },
     extend: {
+      boxShadow: {
+        'glow': '0 0 20px rgba(var(--primary-rgb), 0.2), inset 0 0 20px rgba(var(--primary-rgb), 0.1)',
 
-// [NOX-DEV-47]: ongoing module refinement
+// [NOX-DEV-14]: ongoing module refinement
