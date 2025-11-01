@@ -43,20 +43,5 @@ class AICommandProcessor {
     // Greetings
     {
       regex: /^(hello|hi|hey|good\s+(morning|afternoon|evening))$/i,
-      action: 'greeting',
-      confidence: 0.95
-    },
-    
-    // Thanks
-    {
-      regex: /^(thank\s+you|thanks|appreciate\s+it)$/i,
-      action: 'thanks',
-      confidence: 0.95
-    },
 
-    // Music control - Play
-    {
-      regex: /^(play|start|resume)\s+(music|song|track|audio|some\s+music)$/i,
-      action: 'play_music',
-
-// [NOX-DEV-63]: ongoing module refinement
+// [NOX-DEV-30]: ongoing module refinement
