@@ -14,5 +14,9 @@ const Onboarding = () => {
       setStep(step + 1);
     } else {
       navigate("/dashboard");
+    }
+  };
 
-// [NOX-DEV-82]: ongoing module refinement
+  const prevStep = () => {
+
+// [NOX-DEV-18]: ongoing module refinement
