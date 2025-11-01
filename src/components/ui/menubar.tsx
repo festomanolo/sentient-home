@@ -18,5 +18,7 @@ const Menubar = React.forwardRef<
   React.ElementRef<typeof MenubarPrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof MenubarPrimitive.Root>
 >(({ className, ...props }, ref) => (
+  <MenubarPrimitive.Root
+    ref={ref}
 
-// [NOX-DEV-75]: ongoing module refinement
+// [NOX-DEV-42]: ongoing module refinement
