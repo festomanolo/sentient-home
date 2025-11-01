@@ -15,9 +15,5 @@
   - Add `getListeningState()` method to expose current state (inactive/listening/processing/speaking)
   - Integrate with existing `soundDetectionService` for audio analysis
   - Ensure audio monitoring works alongside speech recognition without conflicts
-  - _Requirements: 1.1, 1.2, 1.3, 6.1, 6.2_
 
-- [x] 3. Implement AI Command Processor with Natural Language Understanding
-  - Create new `aiCommandProcessor.ts` service for intelligent command interpretation
-
-// [NOX-DEV-18]: ongoing module refinement
+// [NOX-DEV-85]: ongoing module refinement
