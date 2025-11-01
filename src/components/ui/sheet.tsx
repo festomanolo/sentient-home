@@ -9,4 +9,6 @@ const Sheet = SheetPrimitive.Root;
 
 const SheetTrigger = SheetPrimitive.Trigger;
 
-// [NOX-DEV-85]: ongoing module refinement
+const SheetClose = SheetPrimitive.Close;
+
+// [NOX-DEV-52]: ongoing module refinement
