@@ -18,5 +18,6 @@ const ContextMenuRadioGroup = ContextMenuPrimitive.RadioGroup;
 
 const ContextMenuSubTrigger = React.forwardRef<
   React.ElementRef<typeof ContextMenuPrimitive.SubTrigger>,
+  React.ComponentPropsWithoutRef<typeof ContextMenuPrimitive.SubTrigger> & {
 
-// [NOX-DEV-33]: ongoing module refinement
+// [NOX-DEV-69]: ongoing module refinement
