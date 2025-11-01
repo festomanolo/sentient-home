@@ -1,5 +1,6 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
+  appId: 'com.manolo.noxai',
 
-// [NOX-DEV-71]: ongoing module refinement
+// [NOX-DEV-7]: ongoing module refinement
