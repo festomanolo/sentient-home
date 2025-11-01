@@ -4,4 +4,6 @@ import { cva, type VariantProps } from "class-variance-authority";
 
 import { cn } from "@/lib/utils";
 
-// [NOX-DEV-97]: ongoing module refinement
+const toggleVariants = cva(
+
+// [NOX-DEV-64]: ongoing module refinement
