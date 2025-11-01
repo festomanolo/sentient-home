@@ -62,5 +62,7 @@ const SidebarProvider = React.forwardRef<
         setOpenProp(openState);
       } else {
         _setOpen(openState);
+      }
 
-// [NOX-DEV-86]: ongoing module refinement
+
+// [NOX-DEV-53]: ongoing module refinement
