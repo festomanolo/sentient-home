@@ -6,5 +6,6 @@ import { cn } from "@/lib/utils";
 const Drawer = ({ shouldScaleBackground = true, ...props }: React.ComponentProps<typeof DrawerPrimitive.Root>) => (
   <DrawerPrimitive.Root shouldScaleBackground={shouldScaleBackground} {...props} />
 );
+Drawer.displayName = "Drawer";
 
-// [NOX-DEV-35]: ongoing module refinement
+// [NOX-DEV-71]: ongoing module refinement
