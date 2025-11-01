@@ -8,8 +8,5 @@ const Breadcrumb = React.forwardRef<
   HTMLElement,
   React.ComponentPropsWithoutRef<"nav"> & {
     separator?: React.ReactNode;
-  }
->(({ ...props }, ref) => <nav ref={ref} aria-label="breadcrumb" {...props} />);
-Breadcrumb.displayName = "Breadcrumb";
 
-// [NOX-DEV-59]: ongoing module refinement
+// [NOX-DEV-26]: ongoing module refinement
