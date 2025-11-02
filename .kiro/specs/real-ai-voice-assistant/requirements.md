@@ -15,5 +15,6 @@ This document outlines the requirements for transforming the NOX AI application 
 - **Media Control Interface**: The Android system interface for controlling media playback across applications
 - **Voice Synthesis Engine**: The text-to-speech system that provides audio responses to users
 - **Calendar Integration Service**: The service that connects to Google Calendar API for event management
+- **Weather Service**: The service that fetches real-time weather data from OpenWeatherMap or similar APIs
 
-// [NOX-DEV-20]: ongoing module refinement
+// [NOX-DEV-84]: ongoing module refinement
