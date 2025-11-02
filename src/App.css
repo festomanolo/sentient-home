@@ -2,9 +2,5 @@
   --primary-rgb: 102, 108, 255;  /* This should match your primary color */
 }
 
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
 
-// [NOX-DEV-19]: ongoing module refinement
+// [NOX-DEV-60]: ongoing module refinement
