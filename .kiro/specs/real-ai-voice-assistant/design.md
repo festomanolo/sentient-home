@@ -74,5 +74,37 @@ The core transformation involves:
 
 2. **App Control Flow**:
    - Command identified as app control
+   - App Control Service validates app availability
+   - Capacitor plugin sends intent to Android
+   - Android MediaSession API controls Lark Player
+   - Status feedback returned to UI
 
-// [NOX-DEV-83]: ongoing module refinement
+3. **Data Integration Flow**:
+   - Service requests data (weather/calendar)
+   - API call made with authentication
+   - Response cached for performance
+   - Data formatted for voice/visual display
+   - UI updated with real-time information
+
+## Components and Interfaces
+
+### 1. Microphone Indicator Component
+
+**Purpose**: Visual feedback for audio input and system listening state
+
+**Interface**:
+```typescript
+interface MicrophoneIndicatorProps {
+  isListening: boolean;
+  isProcessing: boolean;
+  audioLevel: number; // 0-100
+  state: 'inactive' | 'listening' | 'processing' | 'speaking' | 'error';
+  errorMessage?: string;
+}
+
+interface MicrophoneIndicatorState {
+  animationFrame: number;
+  visualizerData: number[];
+}
+
+// [NOX-DEV-24]: ongoing module refinement
