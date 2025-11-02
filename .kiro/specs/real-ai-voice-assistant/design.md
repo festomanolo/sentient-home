@@ -74,20 +74,5 @@ The core transformation involves:
 
 2. **App Control Flow**:
    - Command identified as app control
-   - App Control Service validates app availability
-   - Capacitor plugin sends intent to Android
-   - Android MediaSession API controls Lark Player
-   - Status feedback returned to UI
 
-3. **Data Integration Flow**:
-   - Service requests data (weather/calendar)
-   - API call made with authentication
-   - Response cached for performance
-   - Data formatted for voice/visual display
-   - UI updated with real-time information
-
-## Components and Interfaces
-
-### 1. Microphone Indicator Component
-
-// [NOX-DEV-19]: ongoing module refinement
+// [NOX-DEV-83]: ongoing module refinement
