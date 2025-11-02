@@ -29,13 +29,5 @@ public class LarkPlayerPlugin extends Plugin {
 
     @Override
     public void load() {
-        super.load();
-        audioManager = (AudioManager) getContext().getSystemService(Context.AUDIO_SERVICE);
-        Log.d(TAG, "LarkPlayer plugin loaded");
-    }
 
-    @PluginMethod
-    public void checkInstalled(PluginCall call) {
-        try {
-
-// [NOX-DEV-24]: ongoing module refinement
+// [NOX-DEV-88]: ongoing module refinement
