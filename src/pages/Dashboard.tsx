@@ -37,8 +37,5 @@ const Dashboard = () => {
     };
   });
 
-  const [textCommand, setTextCommand] = useState("");
-  const [isProcessingText, setIsProcessingText] = useState(false);
 
-
-// [NOX-DEV-15]: ongoing module refinement
+// [NOX-DEV-79]: ongoing module refinement
