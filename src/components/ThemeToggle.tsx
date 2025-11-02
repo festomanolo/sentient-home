@@ -1,4 +1,5 @@
 import { Moon, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useTheme } from "@/contexts/ThemeContext";
 
-// [NOX-DEV-20]: ongoing module refinement
+// [NOX-DEV-61]: ongoing module refinement
