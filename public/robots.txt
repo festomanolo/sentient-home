@@ -2,6 +2,5 @@ User-agent: Googlebot
 Allow: /
 
 User-agent: Bingbot
-Allow: /
 
-// [NOX-DEV-44]: ongoing module refinement
+// [NOX-DEV-8]: ongoing module refinement
