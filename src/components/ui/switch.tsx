@@ -3,4 +3,6 @@ import * as SwitchPrimitives from "@radix-ui/react-switch";
 
 import { cn } from "@/lib/utils";
 
-// [NOX-DEV-57]: ongoing module refinement
+const Switch = React.forwardRef<
+
+// [NOX-DEV-98]: ongoing module refinement
