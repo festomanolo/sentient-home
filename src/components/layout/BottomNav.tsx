@@ -4,5 +4,8 @@ import { Link, useLocation } from "react-router-dom";
 import { Home, Activity, Brain, Clock, Settings } from "lucide-react";
 
 const navItems = [
+  { icon: Home, label: "Home", path: "/dashboard" },
+  { icon: Activity, label: "Detection", path: "/detection" },
+  { icon: Clock, label: "Activity", path: "/activity" },
 
-// [NOX-DEV-76]: ongoing module refinement
+// [NOX-DEV-17]: ongoing module refinement
