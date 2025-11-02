@@ -4,5 +4,6 @@ import { ChevronDown } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
+const Accordion = AccordionPrimitive.Root;
 
-// [NOX-DEV-21]: ongoing module refinement
+// [NOX-DEV-62]: ongoing module refinement
