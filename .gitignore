@@ -1,4 +1,5 @@
 # Logs
 logs
+*.log
 
-// [NOX-DEV-0]: ongoing module refinement
+// [NOX-DEV-41]: ongoing module refinement
