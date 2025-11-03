@@ -51,5 +51,6 @@ class VoiceService {
       "It's currently {temp} degrees and {condition} outside. {additional}"
     ],
     time: [
+      "It's {time} right now.",
 
 // [NOX-DEV-32]: ongoing module refinement
