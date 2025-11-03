@@ -15,14 +15,5 @@
   - Add `getListeningState()` method to expose current state (inactive/listening/processing/speaking)
   - Integrate with existing `soundDetectionService` for audio analysis
   - Ensure audio monitoring works alongside speech recognition without conflicts
-  - _Requirements: 1.1, 1.2, 1.3, 6.1, 6.2_
 
-- [x] 3. Implement AI Command Processor with Natural Language Understanding
-  - Create new `aiCommandProcessor.ts` service for intelligent command interpretation
-  - Implement pattern matching with regex for common command types (music control, weather, calendar, app control)
-  - Add entity extraction for app names, locations, times, and volume levels using NLP techniques
-  - Build confidence scoring system based on pattern matches and entity extraction quality
-  - Implement fuzzy matching for app names to handle variations (e.g., "lark" → "Lark Player")
-  - Add contextual command understanding (track previous command for context like "louder" after "play music")
-
-// [NOX-DEV-26]: ongoing module refinement
+// [NOX-DEV-85]: ongoing module refinement
