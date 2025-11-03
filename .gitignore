@@ -1,4 +1,6 @@
 # Logs
 logs
+*.log
+npm-debug.log*
 
-// [NOX-DEV-0]: ongoing module refinement
+// [NOX-DEV-47]: ongoing module refinement
