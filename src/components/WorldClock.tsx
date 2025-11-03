@@ -15,5 +15,6 @@ export const WorldClock = () => {
     updateClocks();
     setAvailableTimezones(worldClockService.getAllTimezones());
 
+    // Update every second
 
 // [NOX-DEV-39]: ongoing module refinement
