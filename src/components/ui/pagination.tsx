@@ -7,5 +7,8 @@ import { ButtonProps, buttonVariants } from "@/components/ui/button";
 const Pagination = ({ className, ...props }: React.ComponentProps<"nav">) => (
   <nav
     role="navigation"
+    aria-label="pagination"
+    className={cn("mx-auto flex w-full justify-center", className)}
+    {...props}
 
-// [NOX-DEV-85]: ongoing module refinement
+// [NOX-DEV-44]: ongoing module refinement
