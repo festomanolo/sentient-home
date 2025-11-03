@@ -80,5 +80,54 @@
             content: '';
             position: absolute;
             bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.3), transparent);
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+        }
 
-// [NOX-DEV-69]: ongoing module refinement
+        .pedestal {
+            position: absolute;
+            bottom: 20%;
+            width: 320px;
+            height: 50px;
+            background: linear-gradient(to bottom, #1a5d6e 0%, #0a2f3d 50%, #051a24 100%);
+            border-radius: 10px;
+            box-shadow: 
+                0 -8px 40px rgba(0, 255, 255, 0.4),
+                0 15px 50px rgba(0, 0, 0, 0.9),
+                inset 0 2px 10px rgba(0, 255, 255, 0.3),
+                inset 0 -2px 10px rgba(0, 0, 0, 0.5);
+            transition: box-shadow 0.1s ease;
+            transform: translateZ(50px);
+            border: 1px solid rgba(0, 255, 255, 0.2);
+        }
+
+        .pedestal::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(0, 255, 255, 0.3) 0%, rgba(0, 255, 255, 0.1) 40%, transparent 70%);
+            border-radius: 50%;
+            animation: pedestalGlow 2s ease-in-out infinite;
+            filter: blur(20px);
+        }
+
+        .pedestal::after {
+            content: '';
+            position: absolute;
+            top: 5px;
+            left: 10%;
+            width: 80%;
+            height: 15px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            border-radius: 50%;
+            filter: blur(5px);
+        }
+
+// [NOX-DEV-16]: ongoing module refinement
