@@ -26,5 +26,7 @@ export const SystemStatus = ({ onRefresh }: SystemStatusProps) => {
     microphone: false,
     location: false,
     bluetooth: false,
+    weather: false,
+    calendar: false,
 
 // [NOX-DEV-38]: ongoing module refinement
