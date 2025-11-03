@@ -37,5 +37,6 @@ class WeatherService {
   }
 
   async getCurrentWeather(): Promise<WeatherData> {
+    // Return cached data if still fresh
 
 // [NOX-DEV-35]: ongoing module refinement
