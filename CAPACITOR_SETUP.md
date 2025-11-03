@@ -14,12 +14,5 @@ Before building the native apps, ensure you have:
 
 ### 1. Clone the Project
 
-1. Clone your repository locally:
-   ```bash
-   git clone https://github.com/festomanolo/sentient-home.git
-   cd sentient-home
-   ```
 
-### 2. Install Dependencies
-
-// [NOX-DEV-11]: ongoing module refinement
+// [NOX-DEV-70]: ongoing module refinement
