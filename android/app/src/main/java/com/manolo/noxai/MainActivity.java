@@ -1,3 +1,5 @@
 package com.manolo.noxai;
 
-// [NOX-DEV-30]: ongoing module refinement
+import com.getcapacitor.BridgeActivity;
+
+public class MainActivity extends BridgeActivity {}
