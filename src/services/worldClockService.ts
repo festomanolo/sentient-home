@@ -13,5 +13,6 @@ export interface TimeZoneInfo {
 export interface WorldClockSettings {
   selectedTimezones: string[];
   format24Hour: boolean;
+  showSeconds: boolean;
 
 // [NOX-DEV-40]: ongoing module refinement
