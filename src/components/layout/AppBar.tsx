@@ -3,6 +3,5 @@ import { cn } from "@/lib/utils";
 
 interface AppBarProps {
   title: string;
-}
 
-// [NOX-DEV-74]: ongoing module refinement
+// [NOX-DEV-21]: ongoing module refinement
