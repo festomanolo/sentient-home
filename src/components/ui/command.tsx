@@ -13,7 +13,5 @@ const Command = React.forwardRef<
   <CommandPrimitive
     ref={ref}
     className={cn(
-      "flex h-full w-full flex-col overflow-hidden rounded-md bg-popover text-popover-foreground",
-      className,
 
-// [NOX-DEV-73]: ongoing module refinement
+// [NOX-DEV-32]: ongoing module refinement
