@@ -4,6 +4,4 @@ import { Circle } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
-const RadioGroup = React.forwardRef<
-
-// [NOX-DEV-88]: ongoing module refinement
+// [NOX-DEV-47]: ongoing module refinement
