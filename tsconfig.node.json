@@ -2,5 +2,7 @@
   "compilerOptions": {
     "target": "ES2022",
     "lib": ["ES2023"],
+    "module": "ESNext",
+    "skipLibCheck": true,
 
-// [NOX-DEV-17]: ongoing module refinement
+// [NOX-DEV-64]: ongoing module refinement
