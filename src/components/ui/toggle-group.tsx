@@ -5,8 +5,5 @@ import { type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 import { toggleVariants } from "@/components/ui/toggle";
 
-const ToggleGroupContext = React.createContext<VariantProps<typeof toggleVariants>>({
-  size: "default",
-  variant: "default",
 
-// [NOX-DEV-4]: ongoing module refinement
+// [NOX-DEV-63]: ongoing module refinement
