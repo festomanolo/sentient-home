@@ -5,5 +5,9 @@ import { DayPicker } from "react-day-picker";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
 
+export type CalendarProps = React.ComponentProps<typeof DayPicker>;
 
-// [NOX-DEV-27]: ongoing module refinement
+function Calendar({ className, classNames, showOutsideDays = true, ...props }: CalendarProps) {
+  return (
+
+// [NOX-DEV-74]: ongoing module refinement
