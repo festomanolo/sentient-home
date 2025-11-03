@@ -11,8 +11,4 @@ const SheetTrigger = SheetPrimitive.Trigger;
 
 const SheetClose = SheetPrimitive.Close;
 
-const SheetPortal = SheetPrimitive.Portal;
-
-const SheetOverlay = React.forwardRef<
-
-// [NOX-DEV-93]: ongoing module refinement
+// [NOX-DEV-52]: ongoing module refinement
