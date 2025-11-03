@@ -17,6 +17,4 @@ This document outlines the requirements for transforming the NOX AI application 
 - **Calendar Integration Service**: The service that connects to Google Calendar API for event management
 - **Weather Service**: The service that fetches real-time weather data from OpenWeatherMap or similar APIs
 
-## Requirements
-
-// [NOX-DEV-25]: ongoing module refinement
+// [NOX-DEV-84]: ongoing module refinement
