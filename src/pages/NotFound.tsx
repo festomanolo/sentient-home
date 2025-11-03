@@ -1,5 +1,9 @@
 import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
 
+const NotFound = () => {
+  const location = useLocation();
 
-// [NOX-DEV-81]: ongoing module refinement
+  useEffect(() => {
+
+// [NOX-DEV-28]: ongoing module refinement
