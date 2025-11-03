@@ -8,8 +8,5 @@ const Table = React.forwardRef<HTMLTableElement, React.HTMLAttributes<HTMLTableE
       <table ref={ref} className={cn("w-full caption-bottom text-sm", className)} {...props} />
     </div>
   ),
-);
-Table.displayName = "Table";
 
-
-// [NOX-DEV-99]: ongoing module refinement
+// [NOX-DEV-58]: ongoing module refinement
