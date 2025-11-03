@@ -4,7 +4,5 @@ type Theme = "light" | "dark";
 
 interface ThemeContextType {
   theme: Theme;
-  toggleTheme: () => void;
-}
 
-// [NOX-DEV-8]: ongoing module refinement
+// [NOX-DEV-67]: ongoing module refinement
