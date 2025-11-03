@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
     "target": "ES2020",
-    "useDefineForClassFields": true,
 
-// [NOX-DEV-56]: ongoing module refinement
+// [NOX-DEV-15]: ongoing module refinement
