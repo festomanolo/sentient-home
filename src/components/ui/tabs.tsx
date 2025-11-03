@@ -5,4 +5,7 @@ import { cn } from "@/lib/utils"
 
 const Tabs = TabsPrimitive.Root
 
-// [NOX-DEV-0]: ongoing module refinement
+const TabsList = React.forwardRef<
+  React.ElementRef<typeof TabsPrimitive.List>,
+
+// [NOX-DEV-59]: ongoing module refinement
