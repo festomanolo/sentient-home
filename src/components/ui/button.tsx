@@ -2,6 +2,5 @@ import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
 
-import { cn } from "@/lib/utils";
 
-// [NOX-DEV-51]: ongoing module refinement
+// [NOX-DEV-10]: ongoing module refinement
