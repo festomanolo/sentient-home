@@ -37,16 +37,5 @@ const Dashboard = () => {
     };
   });
 
-  const [textCommand, setTextCommand] = useState("");
-  const [isProcessingText, setIsProcessingText] = useState(false);
 
-  useSmartReactions(recentEvents, settings);
-
-  useEffect(() => {
-    localStorage.setItem("nox-listening-enabled", isListeningEnabled.toString());
-  }, [isListeningEnabled]);
-
-  useEffect(() => {
-    if (isListeningEnabled) {
-
-// [NOX-DEV-20]: ongoing module refinement
+// [NOX-DEV-79]: ongoing module refinement
