@@ -18,5 +18,9 @@ export function Learning() {
       title: "Pattern Learning",
       progress: 65,
       description: "Understanding your daily routines",
+      icon: TrendingUp
+    },
+    {
+      title: "Temporal Awareness",
 
 // [NOX-DEV-43]: ongoing module refinement
