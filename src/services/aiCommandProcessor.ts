@@ -43,5 +43,16 @@ class AICommandProcessor {
     // Greetings
     {
       regex: /^(hello|hi|hey|good\s+(morning|afternoon|evening))$/i,
+      action: 'greeting',
+      confidence: 0.95
+    },
+    
+    // Thanks
+    {
+      regex: /^(thank\s+you|thanks|appreciate\s+it)$/i,
+      action: 'thanks',
+      confidence: 0.95
+    },
+
 
 // [NOX-DEV-30]: ongoing module refinement
