@@ -19,5 +19,9 @@ export const WeatherWidget = () => {
   }, []);
 
   const loadWeatherData = async () => {
+    setIsLoading(true);
+    try {
+      const [currentWeather, weatherForecast] = await Promise.all([
+        weatherService.getCurrentWeather(),
 
 // [NOX-DEV-34]: ongoing module refinement
