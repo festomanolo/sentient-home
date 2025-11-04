@@ -12,17 +12,5 @@ const Landing = () => {
         <ThemeToggle />
       </div>
 
-      {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-        {/* Background gradient */}
-        <div 
-          className="absolute inset-0 opacity-30"
-          style={{
-            background: "var(--gradient-header)",
-          }}
-        />
-        
-        {/* Hero content */}
-        <div className="container mx-auto px-4 z-10">
 
-// [NOX-DEV-27]: ongoing module refinement
+// [NOX-DEV-80]: ongoing module refinement
