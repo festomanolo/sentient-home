@@ -8,4 +8,4 @@ const Tabs = TabsPrimitive.Root
 const TabsList = React.forwardRef<
   React.ElementRef<typeof TabsPrimitive.List>,
 
-// [NOX-DEV-6]: ongoing module refinement
+// [NOX-DEV-59]: ongoing module refinement
