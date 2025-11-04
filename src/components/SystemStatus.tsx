@@ -28,5 +28,11 @@ export const SystemStatus = ({ onRefresh }: SystemStatusProps) => {
     bluetooth: false,
     weather: false,
     calendar: false,
+    apps: 0,
+    battery: null as number | null,
+    lastUpdate: new Date()
+  });
+
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
 // [NOX-DEV-38]: ongoing module refinement
