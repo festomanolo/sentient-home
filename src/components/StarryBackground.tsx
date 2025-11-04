@@ -7,5 +7,7 @@ const drawStar = (
   size: number,
   alpha: number
 ) => {
+  ctx.beginPath();
+  ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
 
 // [NOX-DEV-36]: ongoing module refinement
