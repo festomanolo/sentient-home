@@ -38,5 +38,16 @@ class WeatherService {
 
   async getCurrentWeather(): Promise<WeatherData> {
     // Return cached data if still fresh
+    if (this.cachedWeather && Date.now() - this.lastFetch < this.CACHE_DURATION) {
+      return this.cachedWeather;
+    }
+
+    if (!this.API_KEY) {
+      throw new Error('Weather API key not configured. Please add your OpenWeatherMap API key in settings.');
+    }
+
+    try {
+      const position = await this.getCurrentPosition();
+      const { latitude, longitude } = position.coords;
 
 // [NOX-DEV-35]: ongoing module refinement
