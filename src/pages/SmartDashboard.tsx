@@ -50,5 +50,17 @@ const SmartDashboard = () => {
     };
   });
 
+  const [textCommand, setTextCommand] = useState("");
+  const [isProcessingText, setIsProcessingText] = useState(false);
+  const [connectedApps, setConnectedApps] = useState<any[]>([]);
+
+  useSmartReactions(recentEvents, settings);
+
+  useEffect(() => {
+    localStorage.setItem("nox-listening-enabled", isListeningEnabled.toString());
+  }, [isListeningEnabled]);
+
+  useEffect(() => {
+    if (isListeningEnabled) {
 
 // [NOX-DEV-44]: ongoing module refinement
