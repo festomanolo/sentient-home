@@ -52,5 +52,18 @@ class VoiceService {
     ],
     time: [
       "It's {time} right now.",
+      "The current time is {time}.",
+      "Right now it's {time}."
+    ],
+    calendar: [
+      "You have {event} coming up at {time}. {details}",
+      "Your next event is {event} at {time}. {details}",
+      "Looking at your calendar, you have {event} scheduled for {time}. {details}"
+    ],
+    music: [
+      "I've {action} the music for you.",
+      "Done! I've {action} your music.",
+      "Music {action}. Anything else I can help with?"
+    ],
 
 // [NOX-DEV-32]: ongoing module refinement
