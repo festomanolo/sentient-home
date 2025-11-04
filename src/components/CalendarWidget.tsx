@@ -20,5 +20,11 @@ export const CalendarWidget = () => {
   const loadCalendarData = async () => {
     setIsLoading(true);
     try {
+      const [today, upcoming] = await Promise.all([
+        calendarService.getTodaysEvents(),
+        calendarService.getUpcomingEvents(72) // Next 3 days
+      ]);
+      
+      setTodayEvents(today);
 
 // [NOX-DEV-41]: ongoing module refinement
