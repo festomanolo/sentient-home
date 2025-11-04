@@ -17,12 +17,4 @@ This document outlines the requirements for transforming the NOX AI application 
 - **Calendar Integration Service**: The service that connects to Google Calendar API for event management
 - **Weather Service**: The service that fetches real-time weather data from OpenWeatherMap or similar APIs
 
-## Requirements
-
-### Requirement 1
-
-**User Story:** As a user, I want to see a visual microphone indicator that shows when the system is listening and detecting sound, so that I have clear feedback about the assistant's state.
-
-#### Acceptance Criteria
-
-// [NOX-DEV-31]: ongoing module refinement
+// [NOX-DEV-84]: ongoing module refinement
