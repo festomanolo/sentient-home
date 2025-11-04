@@ -4,5 +4,7 @@
 
 #root {
   max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
 
-// [NOX-DEV-66]: ongoing module refinement
+// [NOX-DEV-19]: ongoing module refinement
