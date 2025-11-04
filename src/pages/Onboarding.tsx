@@ -14,5 +14,24 @@ const Onboarding = () => {
       setStep(step + 1);
     } else {
       navigate("/dashboard");
+    }
+  };
 
-// [NOX-DEV-82]: ongoing module refinement
+  const prevStep = () => {
+    if (step > 0) {
+      setStep(step - 1);
+    }
+  };
+
+  const currentStep = onboardingSteps[step];
+
+  return (
+    <div className="min-h-screen bg-background flex items-center justify-center p-4">
+      {/* Theme Toggle */}
+      <div className="fixed top-4 right-4 z-50">
+        <ThemeToggle />
+      </div>
+
+      <div className="max-w-2xl w-full">
+
+// [NOX-DEV-37]: ongoing module refinement
