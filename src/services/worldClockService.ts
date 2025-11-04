@@ -14,5 +14,9 @@ export interface WorldClockSettings {
   selectedTimezones: string[];
   format24Hour: boolean;
   showSeconds: boolean;
+}
+
+class WorldClockService {
+  private readonly DEFAULT_TIMEZONES = [
 
 // [NOX-DEV-40]: ongoing module refinement
