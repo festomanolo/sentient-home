@@ -16,5 +16,9 @@ interface CommandFeedbackProps {
   isProcessing?: boolean;
   lastResponse?: string;
   showHistory?: boolean;
+}
+
+export const CommandFeedback = ({
+  currentCommand,
 
 // [NOX-DEV-27]: ongoing module refinement
