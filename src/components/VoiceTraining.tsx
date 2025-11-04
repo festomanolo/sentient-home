@@ -29,5 +29,11 @@ export const VoiceTraining = () => {
     "Open Lark Player",
     "Set volume to fifty percent",
     "Good morning NOX",
+    "Thank you"
+  ];
+
+  const trainingTips = [
+    "Speak clearly and at normal volume",
+    "Use natural speech patterns",
 
 // [NOX-DEV-28]: ongoing module refinement
