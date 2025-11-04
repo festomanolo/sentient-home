@@ -37,28 +37,5 @@ const Dashboard = () => {
     };
   });
 
-  const [textCommand, setTextCommand] = useState("");
-  const [isProcessingText, setIsProcessingText] = useState(false);
 
-  useSmartReactions(recentEvents, settings);
-
-  useEffect(() => {
-    localStorage.setItem("nox-listening-enabled", isListeningEnabled.toString());
-  }, [isListeningEnabled]);
-
-  useEffect(() => {
-    if (isListeningEnabled) {
-      assistant.startListening();
-    } else {
-      assistant.stopListening();
-    }
-  }, [isListeningEnabled]);
-
-  const handleTextCommand = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!textCommand.trim() || isProcessingText) return;
-
-    setIsProcessingText(true);
-    try {
-
-// [NOX-DEV-26]: ongoing module refinement
+// [NOX-DEV-79]: ongoing module refinement
