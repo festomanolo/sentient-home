@@ -48,5 +48,18 @@ class CommandProcessor {
 
     this.isProcessing = true;
     
+    try {
+      // Add a small delay to make it feel more natural
+      await new Promise(resolve => setTimeout(resolve, 200));
+      
+      const response = await this.executeCommand(cleanCommand);
+      
+      if (response.shouldSpeak && response.message) {
+        await voiceService.speak(response.message);
+      }
+      
+      console.log('Command processed successfully:', { 
+        command: cleanCommand, 
+        success: response.success,
 
 // [NOX-DEV-31]: ongoing module refinement
