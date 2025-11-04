@@ -6,5 +6,6 @@ interface AIOrbProps {
 }
 
 export const AIOrb = ({ isListening = false, size = "lg" }: AIOrbProps) => {
+  const [particles, setParticles] = useState<Array<{ id: number; delay: number }>>([]);
 
 // [NOX-DEV-26]: ongoing module refinement
