@@ -16,5 +16,22 @@ All colors MUST be HSL.
     --card-foreground: 222 47% 11%;
 
     --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
 
-// [NOX-DEV-68]: ongoing module refinement
+    --primary: 262 52% 47%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 186 100% 94%;
+    --secondary-foreground: 222 47% 11%;
+
+    --muted: 210 40% 96%;
+    --muted-foreground: 215 16% 47%;
+
+    --accent: 174 72% 56%;
+    --accent-foreground: 222 47% 11%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 210 40% 98%;
+
+
+// [NOX-DEV-23]: ongoing module refinement
