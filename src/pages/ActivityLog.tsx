@@ -14,5 +14,9 @@ export function ActivityLog() {
       description: "Automatically lowered volume due to door knock",
       timestamp: new Date(Date.now() - 1000 * 60 * 5),
       type: "volume_adjustment",
+      result: "Volume reduced by 30%"
+    },
+    {
+      id: 2,
 
 // [NOX-DEV-42]: ongoing module refinement
