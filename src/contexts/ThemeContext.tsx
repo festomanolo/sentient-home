@@ -4,5 +4,10 @@ type Theme = "light" | "dark";
 
 interface ThemeContextType {
   theme: Theme;
+  toggleTheme: () => void;
+}
 
-// [NOX-DEV-67]: ongoing module refinement
+const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
+
+
+// [NOX-DEV-22]: ongoing module refinement
