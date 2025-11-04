@@ -21,5 +21,11 @@ class GoogleCalendarService {
   }
 
   async authenticate(): Promise<boolean> {
+    try {
+      console.log('Google Calendar authentication not yet implemented');
+      console.log('This requires:');
+      console.log('1. Google Cloud Console project setup');
+      console.log('2. OAuth 2.0 credentials');
+      console.log('3. @codetrix-studio/capacitor-google-auth package');
 
 // [NOX-DEV-46]: ongoing module refinement
