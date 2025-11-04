@@ -14,5 +14,9 @@ export const WeatherSetup = () => {
   const [isTestingKey, setIsTestingKey] = useState(false);
   const [testResult, setTestResult] = useState<{ success: boolean; message: string } | null>(null);
 
+  const handleSaveApiKey = async () => {
+    if (!apiKey.trim()) return;
+    
+    setIsTestingKey(true);
 
 // [NOX-DEV-33]: ongoing module refinement
