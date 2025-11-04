@@ -23,5 +23,22 @@ type CarouselContextProps = {
   scrollPrev: () => void;
   scrollNext: () => void;
   canScrollPrev: boolean;
+  canScrollNext: boolean;
+} & CarouselProps;
 
-// [NOX-DEV-28]: ongoing module refinement
+const CarouselContext = React.createContext<CarouselContextProps | null>(null);
+
+function useCarousel() {
+  const context = React.useContext(CarouselContext);
+
+  if (!context) {
+    throw new Error("useCarousel must be used within a <Carousel />");
+  }
+
+  return context;
+}
+
+const Carousel = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement> & CarouselProps>(
+  ({ orientation = "horizontal", opts, setApi, plugins, className, children, ...props }, ref) => {
+
+// [NOX-DEV-83]: ongoing module refinement
