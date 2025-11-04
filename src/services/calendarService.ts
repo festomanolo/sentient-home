@@ -37,5 +37,15 @@ class CalendarService {
     const end = endDate || new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 days from now
 
     return this.events.filter(event => 
+      event.startTime >= start && event.startTime <= end
+    ).sort((a, b) => a.startTime.getTime() - b.startTime.getTime());
+  }
+
+  async getTodaysEvents(): Promise<CalendarEvent[]> {
+    const today = new Date();
+    const startOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    const endOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 23, 59, 59);
+
+    return this.getEvents(startOfDay, endOfDay);
 
 // [NOX-DEV-45]: ongoing module refinement
