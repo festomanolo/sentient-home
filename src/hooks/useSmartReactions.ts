@@ -8,5 +8,8 @@ interface SmartReactionsSettings {
   notifications: boolean;
 }
 
+export const useSmartReactions = (
+  soundEvents: SoundEvent[],
+  settings: SmartReactionsSettings
 
 // [NOX-DEV-47]: ongoing module refinement
