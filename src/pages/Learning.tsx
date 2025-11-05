@@ -22,5 +22,12 @@ export function Learning() {
     },
     {
       title: "Temporal Awareness",
+      progress: 82,
+      description: "Time-based sound pattern recognition",
+      icon: Clock
+    },
+    {
+      title: "Spatial Learning",
+      progress: 45,
 
 // [NOX-DEV-43]: ongoing module refinement
