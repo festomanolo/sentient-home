@@ -23,5 +23,13 @@ export const WeatherWidget = () => {
     try {
       const [currentWeather, weatherForecast] = await Promise.all([
         weatherService.getCurrentWeather(),
+        weatherService.getForecast()
+      ]);
+      
+      setWeather(currentWeather);
+      setForecast(weatherForecast);
+      setLastUpdated(new Date());
+    } catch (error) {
+      console.error('Failed to load weather data:', error);
 
 // [NOX-DEV-34]: ongoing module refinement
