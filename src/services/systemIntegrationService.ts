@@ -48,5 +48,21 @@ class SystemIntegrationService {
       // Get permissions status
       const permissions = await this.checkPermissions();
       
+      this.systemInfo = {
+        platform: deviceInfo.platform || this.detectPlatform(),
+        version: deviceInfo.osVersion || navigator.userAgent,
+        model: deviceInfo.model || 'Unknown Device',
+        batteryLevel: batteryInfo.batteryLevel ? Math.round(batteryInfo.batteryLevel * 100) : undefined,
+        isCharging: batteryInfo.isCharging,
+        networkStatus: navigator.onLine ? 'online' : 'offline',
+        permissions
+      };
+      
+      console.log('System info collected:', this.systemInfo);
+      return this.systemInfo;
+      
+    } catch (error) {
+      console.error('Failed to get system info:', error);
+      
 
 // [NOX-DEV-54]: ongoing module refinement
