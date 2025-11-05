@@ -35,4 +35,16 @@ export const SystemStatus = ({ onRefresh }: SystemStatusProps) => {
 
   const [isRefreshing, setIsRefreshing] = useState(false);
 
+  useEffect(() => {
+    checkSystemStatus();
+    
+    // Check status every 30 seconds
+    const interval = setInterval(checkSystemStatus, 30000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const checkSystemStatus = async () => {
+    try {
+      // Check internet connectivity
+
 // [NOX-DEV-38]: ongoing module refinement
