@@ -41,5 +41,20 @@ const Settings = () => {
         });
       }
       
+      if (key === "environmentAwareness" && !prev[key]) {
+        // Turning off environment awareness should notify user
+        toast.warning("Environment Awareness Disabled", {
+          description: "Sound detection will be paused.",
+        });
+      }
+
+      return newSettings;
+    });
+  };
+
+  useEffect(() => {
+    localStorage.setItem("nox-settings", JSON.stringify(settings));
+  }, [settings]);
+
 
 // [NOX-DEV-50]: ongoing module refinement
