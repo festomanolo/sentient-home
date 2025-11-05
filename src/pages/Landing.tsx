@@ -12,5 +12,36 @@ const Landing = () => {
         <ThemeToggle />
       </div>
 
+      {/* Hero Section */}
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+        {/* Background gradient */}
+        <div 
+          className="absolute inset-0 opacity-30"
+          style={{
+            background: "var(--gradient-header)",
+          }}
+        />
+        
+        {/* Hero content */}
+        <div className="container mx-auto px-4 z-10">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <div className="text-center lg:text-left animate-fade-in">
+              <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                NOX AI
+              </h1>
+              <p className="text-xl md:text-2xl text-muted-foreground mb-4">
+                The Smartest Home Companion
+              </p>
+              <p className="text-lg text-foreground/80 mb-8 max-w-2xl">
+                Transform your old phone into an intelligent home assistant. NOX AI listens, learns, and reacts to your environment with unmatched awareness.
+              </p>
+              <div className="flex gap-4 justify-center lg:justify-start">
+                <Button asChild size="lg" className="text-lg px-8">
+                  <Link to="/smart">
+                    Get Started <ArrowRight className="ml-2 w-5 h-5" />
+                  </Link>
+                </Button>
+                <Button asChild variant="outline" size="lg" className="text-lg px-8">
+                  <Link to="/onboarding">Learn More</Link>
 
-// [NOX-DEV-80]: ongoing module refinement
+// [NOX-DEV-46]: ongoing module refinement
