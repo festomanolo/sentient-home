@@ -15,13 +15,5 @@ export default {
     extend: {
       boxShadow: {
         'glow': '0 0 20px rgba(var(--primary-rgb), 0.2), inset 0 0 20px rgba(var(--primary-rgb), 0.1)',
-      },
-      colors: {
-        border: "hsl(var(--border))",
-        input: "hsl(var(--input))",
-        ring: "hsl(var(--ring))",
-        background: "hsl(var(--background))",
-        foreground: "hsl(var(--foreground))",
-        primary: {
 
-// [NOX-DEV-69]: ongoing module refinement
+// [NOX-DEV-14]: ongoing module refinement
