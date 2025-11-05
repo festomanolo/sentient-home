@@ -4,5 +4,15 @@ type Theme = "light" | "dark";
 
 interface ThemeContextType {
   theme: Theme;
+  toggleTheme: () => void;
+}
 
-// [NOX-DEV-67]: ongoing module refinement
+const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
+
+export const ThemeProvider = ({ children }: { children: ReactNode }) => {
+  const [theme, setTheme] = useState<Theme>(() => {
+    const stored = localStorage.getItem("nox-theme");
+    return (stored as Theme) || "dark";
+  });
+
+// [NOX-DEV-33]: ongoing module refinement
