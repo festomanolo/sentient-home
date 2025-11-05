@@ -20,5 +20,11 @@ export const WorldClock = () => {
     return () => clearInterval(interval);
   }, []);
 
+  const updateClocks = () => {
+    const worldClocks = worldClockService.getWorldClocks();
+    setClocks(worldClocks);
+  };
+
+  const addTimezone = () => {
 
 // [NOX-DEV-39]: ongoing module refinement
