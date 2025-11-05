@@ -20,5 +20,11 @@ interface CommandFeedbackProps {
 
 export const CommandFeedback = ({
   currentCommand,
+  isProcessing = false,
+  lastResponse,
+  showHistory = true
+}: CommandFeedbackProps) => {
+  const [history, setHistory] = useState<CommandHistoryEntry[]>([]);
+  const [showFeedback, setShowFeedback] = useState(false);
 
 // [NOX-DEV-27]: ongoing module refinement
