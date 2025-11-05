@@ -54,5 +54,24 @@ class AICommandProcessor {
       confidence: 0.95
     },
 
+    // Music control - Play
+    {
+      regex: /^(play|start|resume)\s+(music|song|track|audio|some\s+music)$/i,
+      action: 'play_music',
+      confidence: 0.9
+    },
+    {
+      regex: /^(play|start)\s+(.+)\s+in\s+(lark|lark\s+player)$/i,
+      action: 'play_music',
+      extractEntities: (match) => ({ app: 'lark_player', query: match[2] }),
+      confidence: 0.85
+    },
+    {
+      regex: /^music\s+(on|play)$/i,
+      action: 'play_music',
+      confidence: 0.85
+    },
+
+    // Music control - Pause
 
 // [NOX-DEV-30]: ongoing module refinement
