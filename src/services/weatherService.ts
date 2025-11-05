@@ -50,4 +50,21 @@ class WeatherService {
       const position = await this.getCurrentPosition();
       const { latitude, longitude } = position.coords;
 
+      console.log(`Fetching weather for coordinates: ${latitude}, ${longitude}`);
+
+      const response = await axios.get(`${this.BASE_URL}/weather`, {
+        params: {
+          lat: latitude,
+          lon: longitude,
+          appid: this.API_KEY,
+          units: 'imperial'
+        },
+        timeout: 10000 // 10 second timeout
+      });
+
+      if (response.status !== 200) {
+        throw new Error(`Weather API returned status: ${response.status}`);
+      }
+
+
 // [NOX-DEV-35]: ongoing module refinement
