@@ -18,5 +18,11 @@ export interface WorldClockSettings {
 
 class WorldClockService {
   private readonly DEFAULT_TIMEZONES = [
+    'America/New_York',
+    'America/Los_Angeles',
+    'Europe/London',
+    'Europe/Paris',
+    'Asia/Tokyo',
+    'Asia/Shanghai',
 
 // [NOX-DEV-40]: ongoing module refinement
