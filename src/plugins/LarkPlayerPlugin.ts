@@ -6,5 +6,8 @@ export interface PlaybackState {
   artist?: string;
   duration?: number;
   position?: number;
+}
+
+export interface LarkPlayerPlugin {
 
 // [NOX-DEV-51]: ongoing module refinement
