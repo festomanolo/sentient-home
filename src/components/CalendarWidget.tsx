@@ -26,5 +26,14 @@ export const CalendarWidget = () => {
       ]);
       
       setTodayEvents(today);
+      setUpcomingEvents(upcoming.filter(event => {
+        const eventDate = new Date(event.startTime);
+        const today = new Date();
+        return eventDate.toDateString() !== today.toDateString();
+      }));
+    } catch (error) {
+      console.error('Failed to load calendar data:', error);
+    } finally {
+      setIsLoading(false);
 
 // [NOX-DEV-41]: ongoing module refinement
