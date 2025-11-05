@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NOX AI Services Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; background: #1a1a1a; color: white; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #333; border-radius: 8px; }
+        .success { color: #4ade80; }
+        .error { color: #f87171; }
+        .info { color: #60a5fa; }
+        button { padding: 8px 16px; margin: 5px; background: #3b82f6; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        button:hover { background: #2563eb; }
+        #output { background: #111; padding: 10px; border-radius: 4px; margin-top: 10px; max-height: 400px; overflow-y: auto; }
+    </style>
+</head>
+<body>
+    <h1>NOX AI Services Test</h1>
+    
+    <div class="test-section">
+        <h2>Service Tests</h2>
+        <button onclick="testWeather()">Test Weather Service</button>
+        <button onclick="testVoice()">Test Voice Service</button>
+        <button onclick="testSound()">Test Sound Detection</button>
+        <button onclick="testWorldClock()">Test World Clock</button>
+        <button onclick="testCalendar()">Test Calendar</button>
+        <button onclick="testAppControl()">Test App Control</button>
+        <button onclick="clearOutput()">Clear Output</button>
+    </div>
+
+    <div id="output"></div>
+
+    <script type="module">
+        function log(message, type = 'info') {
+            const output = document.getElementById('output');
+            const timestamp = new Date().toLocaleTimeString();
+            const className = type === 'error' ? 'error' : type === 'success' ? 'success' : 'info';
+            output.innerHTML += `<div class="${className}">[${timestamp}] ${message}</div>`;
+            output.scrollTop = output.scrollHeight;
+            console.log(`[${type.toUpperCase()}] ${message}`);
+        }
+
+        // Test Weather Service
+        window.testWeather = async () => {
+
+// [NOX-DEV-65]: ongoing module refinement
