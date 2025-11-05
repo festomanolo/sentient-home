@@ -34,39 +34,4 @@ public class LarkPlayerPlugin extends Plugin {
         Log.d(TAG, "LarkPlayer plugin loaded");
     }
 
-    @PluginMethod
-    public void checkInstalled(PluginCall call) {
-        try {
-            PackageManager pm = getContext().getPackageManager();
-            pm.getPackageInfo(LARK_PLAYER_PACKAGE, PackageManager.GET_ACTIVITIES);
-            
-            JSObject ret = new JSObject();
-            ret.put("installed", true);
-            call.resolve(ret);
-            Log.d(TAG, "Lark Player is installed");
-        } catch (PackageManager.NameNotFoundException e) {
-            JSObject ret = new JSObject();
-            ret.put("installed", false);
-            call.resolve(ret);
-            Log.d(TAG, "Lark Player is not installed");
-        }
-    }
-
-    @PluginMethod
-    public void isRunning(PluginCall call) {
-        MediaController controller = getMediaController();
-        boolean running = controller != null;
-        
-        JSObject ret = new JSObject();
-        ret.put("running", running);
-        call.resolve(ret);
-        Log.d(TAG, "Lark Player running: " + running);
-    }
-
-    @PluginMethod
-    public void sendMediaCommand(PluginCall call) {
-        String command = call.getString("command");
-        if (command == null) {
-            call.reject("Command is required");
-
-// [NOX-DEV-43]: ongoing module refinement
+// [NOX-DEV-88]: ongoing module refinement
