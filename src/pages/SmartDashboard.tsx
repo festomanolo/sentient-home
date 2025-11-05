@@ -62,5 +62,26 @@ const SmartDashboard = () => {
 
   useEffect(() => {
     if (isListeningEnabled) {
+      assistant.startListening();
+    } else {
+      assistant.stopListening();
+    }
+  }, [isListeningEnabled]);
+
+  useEffect(() => {
+    // Load connected apps
+    const apps = appControlService.getControllableApps();
+    setConnectedApps(apps);
+  }, []);
+
+  const handleTextCommand = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!textCommand.trim() || isProcessingText) return;
+
+    setIsProcessingText(true);
+    try {
+      await assistant.processTextCommand(textCommand);
+      setTextCommand("");
+    } catch (error) {
 
 // [NOX-DEV-44]: ongoing module refinement
