@@ -18,5 +18,11 @@ export function ActivityLog() {
     },
     {
       id: 2,
+      title: "Music Paused",
+      description: "Phone ring detected",
+      timestamp: new Date(Date.now() - 1000 * 60 * 15),
+      type: "music_control",
+      result: "Playback paused for 2 minutes"
+    },
 
 // [NOX-DEV-42]: ongoing module refinement
