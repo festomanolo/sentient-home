@@ -47,5 +47,22 @@ class CalendarService {
     const endOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 23, 59, 59);
 
     return this.getEvents(startOfDay, endOfDay);
+  }
+
+  async getUpcomingEvents(hours: number = 24): Promise<CalendarEvent[]> {
+    const now = new Date();
+    const future = new Date(now.getTime() + hours * 60 * 60 * 1000);
+
+    return this.getEvents(now, future);
+  }
+
+  async addEvent(event: Omit<CalendarEvent, 'id'>): Promise<CalendarEvent> {
+    const newEvent: CalendarEvent = {
+      ...event,
+      id: Date.now().toString() + Math.random().toString(36).substr(2, 9)
+    };
+
+    this.events.push(newEvent);
+    this.saveEvents();
 
 // [NOX-DEV-45]: ongoing module refinement
