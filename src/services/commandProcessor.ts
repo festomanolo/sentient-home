@@ -61,5 +61,25 @@ class CommandProcessor {
       console.log('Command processed successfully:', { 
         command: cleanCommand, 
         success: response.success,
+        message: response.message 
+      });
+      
+      // Store command history
+      this.storeCommandHistory(cleanCommand, response);
+      
+    } catch (error) {
+      console.error('Command processing error:', error);
+      const errorMessage = error instanceof Error ? error.message : "Sorry, I couldn't process that command.";
+      await voiceService.speak(errorMessage);
+    } finally {
+      this.isProcessing = false;
+    }
+  }
+
+  private storeCommandHistory(command: string, response: CommandResponse): void {
+    try {
+      const history = JSON.parse(localStorage.getItem('nox-command-history') || '[]');
+      history.unshift({
+        command,
 
 // [NOX-DEV-31]: ongoing module refinement
