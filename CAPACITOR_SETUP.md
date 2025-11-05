@@ -14,25 +14,5 @@ Before building the native apps, ensure you have:
 
 ### 1. Clone the Project
 
-1. Clone your repository locally:
-   ```bash
-   git clone https://github.com/festomanolo/sentient-home.git
-   cd sentient-home
-   ```
 
-### 2. Install Dependencies
-
-```bash
-npm install
-```
-
-### 3. Initialize Capacitor (Already configured)
-
-The project already has `capacitor.config.ts` configured with:
-- App ID: `com.manolo.noxai`
-- App Name: `NOX AI`
-
-### 4. Add Native Platforms
-
-
-// [NOX-DEV-25]: ongoing module refinement
+// [NOX-DEV-70]: ongoing module refinement
