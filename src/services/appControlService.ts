@@ -94,5 +94,36 @@ class AppControlService {
         await this.checkRealInstalledApps();
       } else {
         // For web, check which web apps are accessible
+        await this.checkWebApps();
+      }
+      
+      // Always mark system apps as installed
+      this.knownApps.camera.isInstalled = true;
+      this.knownApps.settings.isInstalled = true;
+      
+      console.log('App check completed. Installed apps:', 
+        Object.values(this.knownApps).filter(app => app.isInstalled).map(app => app.appName)
+      );
+      
+    } catch (error) {
+      console.error('Failed to check installed apps:', error);
+      // Fallback: assume common apps are installed
+      this.knownApps.lark_player.isInstalled = true;
+      this.knownApps.spotify.isInstalled = true;
+      this.knownApps.youtube.isInstalled = true;
+      this.knownApps.camera.isInstalled = true;
+      this.knownApps.settings.isInstalled = true;
+    }
+  }
+
+  private async checkRealInstalledApps(): Promise<void> {
+    // This would use a native plugin to check installed apps
+    // For now, simulate checking by trying to launch apps
+    const appsToCheck = Object.keys(this.knownApps);
+    
+    for (const appKey of appsToCheck) {
+      const app = this.knownApps[appKey];
+      try {
+        // Try to check if app is installed (would use native code)
 
 // [NOX-DEV-53]: ongoing module refinement
