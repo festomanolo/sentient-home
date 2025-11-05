@@ -18,5 +18,10 @@ export const WeatherSetup = () => {
     if (!apiKey.trim()) return;
     
     setIsTestingKey(true);
+    setTestResult(null);
+    
+    try {
+      // Save the API key
+      weatherService.setApiKey(apiKey.trim());
 
 // [NOX-DEV-33]: ongoing module refinement
