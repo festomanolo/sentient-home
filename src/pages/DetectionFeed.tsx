@@ -16,5 +16,9 @@ export function DetectionFeed() {
         <SoundWave isActive={isListening} intensity={1.5} />
         <motion.div
           animate={{
+            scale: isListening ? [1, 1.1, 1] : 1,
+          }}
+          transition={{
+            duration: 2,
 
 // [NOX-DEV-49]: ongoing module refinement
