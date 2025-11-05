@@ -35,5 +35,17 @@ export const VoiceTraining = () => {
   const trainingTips = [
     "Speak clearly and at normal volume",
     "Use natural speech patterns",
+    "Ensure you're in a quiet environment",
+    "Position yourself 1-2 feet from the microphone",
+    "Speak at a normal pace, not too fast or slow",
+    "Try different voice tones and inflections",
+    "Practice the wake word 'Hey NOX' clearly",
+    "Test various command variations"
+  ];
+
+  useEffect(() => {
+    // Subscribe to voice commands during training
+    const unsubscribe = voiceService.subscribeToCommands((command) => {
+      setRecognizedText(command.command);
 
 // [NOX-DEV-28]: ongoing module refinement
