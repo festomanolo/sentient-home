@@ -34,4 +34,66 @@ public class LarkPlayerPlugin extends Plugin {
         Log.d(TAG, "LarkPlayer plugin loaded");
     }
 
-// [NOX-DEV-88]: ongoing module refinement
+    @PluginMethod
+    public void checkInstalled(PluginCall call) {
+        try {
+            PackageManager pm = getContext().getPackageManager();
+            pm.getPackageInfo(LARK_PLAYER_PACKAGE, PackageManager.GET_ACTIVITIES);
+            
+            JSObject ret = new JSObject();
+            ret.put("installed", true);
+            call.resolve(ret);
+            Log.d(TAG, "Lark Player is installed");
+        } catch (PackageManager.NameNotFoundException e) {
+            JSObject ret = new JSObject();
+            ret.put("installed", false);
+            call.resolve(ret);
+            Log.d(TAG, "Lark Player is not installed");
+        }
+    }
+
+    @PluginMethod
+    public void isRunning(PluginCall call) {
+        MediaController controller = getMediaController();
+        boolean running = controller != null;
+        
+        JSObject ret = new JSObject();
+        ret.put("running", running);
+        call.resolve(ret);
+        Log.d(TAG, "Lark Player running: " + running);
+    }
+
+    @PluginMethod
+    public void sendMediaCommand(PluginCall call) {
+        String command = call.getString("command");
+        if (command == null) {
+            call.reject("Command is required");
+            return;
+        }
+
+        MediaController controller = getMediaController();
+        if (controller == null) {
+            call.reject("Media controller not available. Is Lark Player running?");
+            return;
+        }
+
+        try {
+            MediaController.TransportControls controls = controller.getTransportControls();
+            
+            switch (command.toLowerCase()) {
+                case "play":
+                    controls.play();
+                    Log.d(TAG, "Sent PLAY command");
+                    break;
+                case "pause":
+                    controls.pause();
+                    Log.d(TAG, "Sent PAUSE command");
+                    break;
+                case "next":
+                    controls.skipToNext();
+                    Log.d(TAG, "Sent NEXT command");
+                    break;
+                case "previous":
+                    controls.skipToPrevious();
+
+// [NOX-DEV-54]: ongoing module refinement
