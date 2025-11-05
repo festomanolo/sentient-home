@@ -17,22 +17,5 @@ This document outlines the requirements for transforming the NOX AI application 
 - **Calendar Integration Service**: The service that connects to Google Calendar API for event management
 - **Weather Service**: The service that fetches real-time weather data from OpenWeatherMap or similar APIs
 
-## Requirements
 
-### Requirement 1
-
-**User Story:** As a user, I want to see a visual microphone indicator that shows when the system is listening and detecting sound, so that I have clear feedback about the assistant's state.
-
-#### Acceptance Criteria
-
-1. WHEN the NOX AI System initializes, THE Microphone Indicator SHALL display in the user interface with a default inactive state
-2. WHEN the Voice Recognition Engine detects audio input above the noise threshold, THE Microphone Indicator SHALL animate to show sound detection with visual feedback proportional to audio volume
-3. WHEN the Voice Recognition Engine processes a voice command, THE Microphone Indicator SHALL display a processing state with distinct visual animation
-4. WHEN the Voice Recognition Engine completes command processing, THE Microphone Indicator SHALL return to the listening state within 500 milliseconds
-5. WHERE microphone permissions are denied, THE Microphone Indicator SHALL display an error state with a clear message prompting the user to grant permissions
-
-### Requirement 2
-
-**User Story:** As a user, I want to control Lark Player (com.dywx.larplayer) using voice commands, so that I can play, pause, skip tracks, and adjust volume without touching my device.
-
-// [NOX-DEV-39]: ongoing module refinement
+// [NOX-DEV-84]: ongoing module refinement
