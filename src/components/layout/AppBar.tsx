@@ -5,4 +5,6 @@ interface AppBarProps {
   title: string;
 }
 
-// [NOX-DEV-74]: ongoing module refinement
+export function AppBar({ title }: AppBarProps) {
+
+// [NOX-DEV-40]: ongoing module refinement
