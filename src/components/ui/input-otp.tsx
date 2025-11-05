@@ -8,5 +8,10 @@ const InputOTP = React.forwardRef<React.ElementRef<typeof OTPInput>, React.Compo
   ({ className, containerClassName, ...props }, ref) => (
     <OTPInput
       ref={ref}
+      containerClassName={cn("flex items-center gap-2 has-[:disabled]:opacity-50", containerClassName)}
+      className={cn("disabled:cursor-not-allowed", className)}
+      {...props}
+    />
+  ),
 
-// [NOX-DEV-39]: ongoing module refinement
+// [NOX-DEV-5]: ongoing module refinement
