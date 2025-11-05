@@ -70,5 +70,29 @@ const AdvancedSettings = () => {
       weatherApiKey: "",
       locationAccuracy: "high",
       weatherUpdateInterval: 10,
+      
+      // Notifications
+      notifications: true,
+      nightMode: false,
+      quietHours: { start: "22:00", end: "07:00" }
+    };
+  });
+
+  const [apiKeyVisible, setApiKeyVisible] = useState(false);
+
+  useEffect(() => {
+    localStorage.setItem("nox-advanced-settings", JSON.stringify(settings));
+    
+    // Apply settings to services
+    voiceService.updateSettings({
+      language: settings.language,
+      voiceRate: settings.voiceRate,
+      voicePitch: settings.voicePitch,
+      volume: settings.voiceVolume,
+      wakeWord: settings.wakeWord,
+      continuousListening: settings.continuousListening,
+      voiceResponseEnabled: settings.voiceResponseEnabled
+    });
+
 
 // [NOX-DEV-48]: ongoing module refinement
