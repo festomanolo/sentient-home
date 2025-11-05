@@ -65,5 +65,27 @@ class VoiceService {
       "Done! I've {action} your music.",
       "Music {action}. Anything else I can help with?"
     ],
+    app: [
+      "I've {action} {app} for you.",
+      "Opening {app} now.",
+      "{app} is starting up."
+    ],
+    error: [
+      "I'm sorry, I didn't quite catch that. Could you try again?",
+      "I'm not sure I understood. Can you rephrase that?",
+      "Sorry, I missed that. What did you need help with?",
+      "I didn't get that. Could you say it again?"
+    ],
+    acknowledgment: [
+      "You're very welcome! Anything else I can help you with?",
+      "My pleasure! Is there anything else you need?",
+      "Happy to help! Let me know if you need anything else.",
+      "Glad I could help! What else can I do for you?"
+    ]
+  };
+
+  private conversationalFillers = [
+    "Let me check that for you...",
+    "One moment please...",
 
 // [NOX-DEV-32]: ongoing module refinement
