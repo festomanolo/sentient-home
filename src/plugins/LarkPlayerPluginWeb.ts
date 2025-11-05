@@ -10,5 +10,8 @@ export class LarkPlayerPluginWeb extends WebPlugin implements LarkPlayerPlugin {
 
   async isRunning(): Promise<{ running: boolean }> {
     console.log('LarkPlayer plugin - web fallback: isRunning');
+    return { running: false };
+  }
+
 
 // [NOX-DEV-52]: ongoing module refinement
