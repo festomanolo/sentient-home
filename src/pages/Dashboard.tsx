@@ -38,49 +38,5 @@ const Dashboard = () => {
   });
 
   const [textCommand, setTextCommand] = useState("");
-  const [isProcessingText, setIsProcessingText] = useState(false);
 
-  useSmartReactions(recentEvents, settings);
-
-  useEffect(() => {
-    localStorage.setItem("nox-listening-enabled", isListeningEnabled.toString());
-  }, [isListeningEnabled]);
-
-  useEffect(() => {
-    if (isListeningEnabled) {
-      assistant.startListening();
-    } else {
-      assistant.stopListening();
-    }
-  }, [isListeningEnabled]);
-
-  const handleTextCommand = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!textCommand.trim() || isProcessingText) return;
-
-    setIsProcessingText(true);
-    try {
-      await assistant.processTextCommand(textCommand);
-      setTextCommand("");
-    } catch (error) {
-      console.error('Failed to process text command:', error);
-    } finally {
-      setIsProcessingText(false);
-    }
-  };
-
-  const runServiceTests = async () => {
-    console.log('🧪 Running comprehensive service tests...');
-    try {
-      const results = await serviceTester.runAllTests();
-      serviceTester.printSummary();
-      
-      // Show results in UI
-      const successRate = serviceTester.getSuccessRate();
-      const message = `Service tests completed! Success rate: ${successRate.toFixed(1)}%. Check console for details.`;
-      await assistant.speak(message);
-    } catch (error) {
-      console.error('Service test error:', error);
-      await assistant.speak('Service tests encountered an error. Check the console for details.');
-
-// [NOX-DEV-34]: ongoing module refinement
+// [NOX-DEV-79]: ongoing module refinement
