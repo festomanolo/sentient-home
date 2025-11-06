@@ -73,5 +73,43 @@ class AICommandProcessor {
     },
 
     // Music control - Pause
+    {
+      regex: /^(pause|stop|halt)\s+(music|song|track|audio|it)$/i,
+      action: 'pause_music',
+      confidence: 0.9
+    },
+    {
+      regex: /^(pause|stop)$/i,
+      action: 'pause_music',
+      confidence: 0.75
+    },
+
+    // Music control - Next/Previous
+    {
+      regex: /^(next|skip)\s+(song|track)?$/i,
+      action: 'next_track',
+      confidence: 0.9
+    },
+    {
+      regex: /^(previous|back|last)\s+(song|track)?$/i,
+      action: 'previous_track',
+      confidence: 0.9
+    },
+
+    // Volume control
+    {
+      regex: /^volume\s+(up|louder|increase)$/i,
+      action: 'volume_up',
+      confidence: 0.9
+    },
+    {
+      regex: /^(louder|turn\s+it\s+up)$/i,
+      action: 'volume_up',
+      confidence: 0.85
+    },
+    {
+      regex: /^volume\s+(down|quieter|decrease|lower)$/i,
+      action: 'volume_down',
+      confidence: 0.9
 
 // [NOX-DEV-30]: ongoing module refinement
