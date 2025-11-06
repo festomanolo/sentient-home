@@ -64,5 +64,36 @@ class SystemIntegrationService {
     } catch (error) {
       console.error('Failed to get system info:', error);
       
+      // Fallback system info
+      return {
+        platform: this.detectPlatform(),
+        version: 'Unknown',
+        model: 'Unknown Device',
+        networkStatus: navigator.onLine ? 'online' : 'offline',
+        permissions: {
+          microphone: false,
+          location: false,
+          camera: false,
+          notifications: false
+        }
+      };
+    }
+  }
+
+  private detectPlatform(): string {
+    const userAgent = navigator.userAgent.toLowerCase();
+    
+    if (userAgent.includes('android')) return 'android';
+    if (userAgent.includes('iphone') || userAgent.includes('ipad')) return 'ios';
+    if (userAgent.includes('mac')) return 'macos';
+    if (userAgent.includes('win')) return 'windows';
+    if (userAgent.includes('linux')) return 'linux';
+    
+    return 'web';
+  }
+
+  private async checkPermissions(): Promise<SystemInfo['permissions']> {
+    const permissions = {
+      microphone: false,
 
 // [NOX-DEV-54]: ongoing module refinement
