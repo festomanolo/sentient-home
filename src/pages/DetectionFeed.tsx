@@ -20,5 +20,15 @@ export function DetectionFeed() {
           }}
           transition={{
             duration: 2,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+          className={`absolute inset-0 flex items-center justify-center ${
+            theme === "dark" ? "text-violet-400" : "text-blue-600"
+          }`}
+        >
+          <Volume2 size={40} />
+        </motion.div>
+      </div>
 
 // [NOX-DEV-49]: ongoing module refinement
