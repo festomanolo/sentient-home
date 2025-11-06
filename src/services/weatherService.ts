@@ -66,5 +66,39 @@ class WeatherService {
         throw new Error(`Weather API returned status: ${response.status}`);
       }
 
+      const data = response.data;
+      
+      if (!data || !data.main || !data.weather || !data.weather[0]) {
+        throw new Error('Invalid weather data received from API');
+      }
+      
+      this.cachedWeather = {
+        temperature: Math.round(data.main.temp),
+        description: data.weather[0].description,
+        humidity: data.main.humidity,
+        windSpeed: Math.round(data.wind?.speed || 0),
+        location: data.name || 'Unknown Location',
+        icon: data.weather[0].icon,
+        feelsLike: Math.round(data.main.feels_like),
+        pressure: data.main.pressure,
+        visibility: Math.round((data.visibility || 10000) / 1000), // Convert to km
+        uvIndex: 0 // Would need separate UV API call
+      };
+
+      this.lastFetch = Date.now();
+      console.log('Weather data fetched successfully:', this.cachedWeather);
+      return this.cachedWeather;
+    } catch (error) {
+      console.error('Weather fetch error:', error);
+      throw new Error(`Failed to fetch weather data: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
+  }
+
+  async getForecast(): Promise<WeatherForecast[]> {
+    if (!this.API_KEY) {
+      console.log('No API key, returning mock forecast');
+      return this.getMockForecast();
+    }
+
 
 // [NOX-DEV-35]: ongoing module refinement
