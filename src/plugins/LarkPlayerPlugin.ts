@@ -9,5 +9,10 @@ export interface PlaybackState {
 }
 
 export interface LarkPlayerPlugin {
+  /**
+   * Check if Lark Player is installed on the device
+   */
+  checkInstalled(): Promise<{ installed: boolean }>;
+
 
 // [NOX-DEV-51]: ongoing module refinement
