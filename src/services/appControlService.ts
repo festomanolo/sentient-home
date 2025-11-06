@@ -125,5 +125,68 @@ class AppControlService {
       const app = this.knownApps[appKey];
       try {
         // Try to check if app is installed (would use native code)
+        app.isInstalled = await this.isAppInstalled(app.packageName);
+      } catch (error) {
+        console.log(`Could not check ${app.appName}:`, error);
+        app.isInstalled = false;
+      }
+    }
+  }
+
+  private async checkWebApps(): Promise<void> {
+    // For web apps, check if services are accessible
+    const webChecks = [
+      { key: 'spotify', url: 'https://open.spotify.com', timeout: 3000 },
+      { key: 'youtube', url: 'https://youtube.com', timeout: 3000 }
+    ];
+
+    for (const check of webChecks) {
+      try {
+        const response = await fetch(check.url, { 
+          method: 'HEAD', 
+          mode: 'no-cors',
+          signal: AbortSignal.timeout(check.timeout)
+        });
+        this.knownApps[check.key].isInstalled = true;
+      } catch (error) {
+        console.log(`Web app ${check.key} not accessible:`, error);
+        this.knownApps[check.key].isInstalled = false;
+      }
+    }
+  }
+
+  private async isAppInstalled(packageName: string): Promise<boolean> {
+    // In a real Capacitor app, this would use native code to check
+    // For now, simulate based on common apps
+    const commonApps = [
+      'com.dywx.larkplayer',
+      'com.spotify.music', 
+      'com.google.android.youtube',
+      'com.android.camera',
+      'com.android.settings'
+    ];
+    
+    return commonApps.includes(packageName);
+  }
+
+  async controlApp(appName: string, action: string, parameters?: Record<string, any>): Promise<boolean> {
+    const app = this.findApp(appName);
+    if (!app) {
+      console.error(`App not found: ${appName}`);
+      return false;
+    }
+
+    if (!app.isInstalled) {
+      console.error(`App not installed: ${app.appName}`);
+      return false;
+    }
+
+    if (!app.supportedActions.includes(action)) {
+      console.error(`Action not supported: ${action} for ${app.appName}`);
+      return false;
+    }
+
+    try {
+      const success = await this.executeAppAction(app, action, parameters);
 
 // [NOX-DEV-53]: ongoing module refinement
