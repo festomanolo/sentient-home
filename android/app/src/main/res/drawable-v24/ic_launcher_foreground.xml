@@ -3,5 +3,7 @@
     android:width="108dp"
     android:height="108dp"
     android:viewportHeight="108"
+    android:viewportWidth="108">
+    <path
 
 // [NOX-DEV-1]: ongoing module refinement
