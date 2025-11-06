@@ -24,5 +24,17 @@ export function ActivityLog() {
       type: "music_control",
       result: "Playback paused for 2 minutes"
     },
+    {
+      id: 3,
+      title: "Alert Triggered",
+      description: "Unusual sound pattern detected",
+      timestamp: new Date(Date.now() - 1000 * 60 * 45),
+      type: "notification",
+      result: "Notification sent to connected devices"
+    }
+  ]);
+
+  const getActivityIcon = (type: string) => {
+    switch (type) {
 
 // [NOX-DEV-42]: ongoing module refinement
