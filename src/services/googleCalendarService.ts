@@ -37,5 +37,24 @@ class GoogleCalendarService {
       
       return false;
     } catch (error) {
+      console.error('Google Calendar authentication failed:', error);
+      return false;
+    }
+  }
+
+  isAuthenticatedUser(): boolean {
+    return this.isAuthenticated;
+  }
+
+  async syncEvents(timeMin: Date, timeMax: Date): Promise<CalendarEvent[]> {
+    if (!this.isAuthenticated || !this.accessToken) {
+      console.log('Not authenticated with Google Calendar');
+      return [];
+    }
+
+    try {
+      const response = await fetch(
+        `https://www.googleapis.com/calendar/v3/calendars/primary/events?` +
+        `timeMin=${timeMin.toISOString()}&timeMax=${timeMax.toISOString()}&` +
 
 // [NOX-DEV-46]: ongoing module refinement
