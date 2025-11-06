@@ -5,4 +5,7 @@ export const useSoundDetection = (enabled: boolean) => {
   const [recentEvents, setRecentEvents] = useState<SoundEvent[]>([]);
   const [isListening, setIsListening] = useState(false);
 
+  useEffect(() => {
+    if (enabled) {
+
 // [NOX-DEV-61]: ongoing module refinement
