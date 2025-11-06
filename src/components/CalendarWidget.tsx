@@ -35,5 +35,23 @@ export const CalendarWidget = () => {
       console.error('Failed to load calendar data:', error);
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const formatEventTime = (event: CalendarEvent) => {
+    if (event.isAllDay) return 'All day';
+    
+    const start = new Date(event.startTime);
+    const end = new Date(event.endTime);
+    
+    return `${start.toLocaleTimeString([], { 
+      hour: 'numeric', 
+      minute: '2-digit' 
+    })} - ${end.toLocaleTimeString([], { 
+      hour: 'numeric', 
+      minute: '2-digit' 
+    })}`;
+  };
+
 
 // [NOX-DEV-41]: ongoing module refinement
