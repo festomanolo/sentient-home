@@ -94,5 +94,51 @@ const AdvancedSettings = () => {
       voiceResponseEnabled: settings.voiceResponseEnabled
     });
 
+    soundDetectionService.updateSettings({
+      sensitivity: settings.soundSensitivity,
+      noiseThreshold: settings.noiseThreshold,
+      enableVoiceDetection: settings.enableVoiceDetection,
+      enableKnockDetection: settings.enableKnockDetection,
+      enablePhoneDetection: settings.enablePhoneDetection
+    });
+  }, [settings]);
+
+  const updateSetting = (key: string, value: any) => {
+    setSettings((prev: any) => ({ ...prev, [key]: value }));
+  };
+
+  const handleSave = () => {
+    localStorage.setItem("nox-advanced-settings", JSON.stringify(settings));
+    toast.success("Settings Saved", {
+      description: "All your preferences have been updated successfully.",
+    });
+  };
+
+  const handleReset = () => {
+    if (confirm("Are you sure you want to reset all settings to default?")) {
+      localStorage.removeItem("nox-advanced-settings");
+      window.location.reload();
+    }
+  };
+
+  const testVoiceSettings = async () => {
+    await voiceService.speak("Hello Manolo! These are your current voice settings. How do I sound?");
+  };
+
+  const SettingItem = ({ 
+    icon: Icon, 
+    label, 
+    description, 
+    children 
+  }: { 
+    icon: React.ElementType; 
+    label: string; 
+    description: string; 
+    children: React.ReactNode;
+  }) => (
+    <div className="flex items-start gap-4 p-4 rounded-lg bg-background/30 border border-border/20">
+      <div className="p-2 rounded-lg bg-primary/10 mt-1">
+        <Icon className="w-4 h-4 text-primary" />
+      </div>
 
 // [NOX-DEV-48]: ongoing module refinement
