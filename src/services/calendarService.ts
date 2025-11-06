@@ -64,5 +64,38 @@ class CalendarService {
 
     this.events.push(newEvent);
     this.saveEvents();
+    return newEvent;
+  }
+
+  async updateEvent(id: string, updates: Partial<CalendarEvent>): Promise<CalendarEvent | null> {
+    const eventIndex = this.events.findIndex(e => e.id === id);
+    if (eventIndex === -1) return null;
+
+    this.events[eventIndex] = { ...this.events[eventIndex], ...updates };
+    this.saveEvents();
+    return this.events[eventIndex];
+  }
+
+  async deleteEvent(id: string): Promise<boolean> {
+    const initialLength = this.events.length;
+    this.events = this.events.filter(e => e.id !== id);
+    
+    if (this.events.length < initialLength) {
+      this.saveEvents();
+      return true;
+    }
+    return false;
+  }
+
+  async getEventById(id: string): Promise<CalendarEvent | null> {
+    return this.events.find(e => e.id === id) || null;
+  }
+
+  // Voice command helpers
+  async getNextEvent(): Promise<CalendarEvent | null> {
+    const upcoming = await this.getUpcomingEvents(168); // Next week
+    return upcoming.length > 0 ? upcoming[0] : null;
+  }
+
 
 // [NOX-DEV-45]: ongoing module refinement
