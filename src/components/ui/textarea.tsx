@@ -1,4 +1,11 @@
 import * as React from "react";
 
+import { cn } from "@/lib/utils";
 
-// [NOX-DEV-60]: ongoing module refinement
+export interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {}
+
+const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(({ className, ...props }, ref) => {
+  return (
+    <textarea
+
+// [NOX-DEV-45]: ongoing module refinement
