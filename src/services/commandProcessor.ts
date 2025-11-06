@@ -81,5 +81,47 @@ class CommandProcessor {
       const history = JSON.parse(localStorage.getItem('nox-command-history') || '[]');
       history.unshift({
         command,
+        response: response.message,
+        success: response.success,
+        timestamp: new Date().toISOString()
+      });
+      
+      // Keep only last 50 commands
+      if (history.length > 50) {
+        history.splice(50);
+      }
+      
+      localStorage.setItem('nox-command-history', JSON.stringify(history));
+    } catch (error) {
+      console.error('Failed to store command history:', error);
+    }
+  }
+
+  async executeCommand(command: string): Promise<CommandResponse> {
+    const cmd = command.toLowerCase().trim();
+
+    // Weather commands
+    if (this.matchesPattern(cmd, voiceService.getCommandPatterns().weather)) {
+      return this.handleWeatherCommand(cmd);
+    }
+
+    // Time commands
+    if (this.matchesPattern(cmd, voiceService.getCommandPatterns().time)) {
+      return this.handleTimeCommand(cmd);
+    }
+
+    // Calendar commands
+    if (this.matchesPattern(cmd, voiceService.getCommandPatterns().calendar)) {
+      return this.handleCalendarCommand(cmd);
+    }
+
+    // Music commands
+    if (this.matchesPattern(cmd, voiceService.getCommandPatterns().music)) {
+      return this.handleMusicCommand(cmd);
+    }
+
+    // App control commands
+    if (this.matchesPattern(cmd, voiceService.getCommandPatterns().apps)) {
+      return this.handleAppCommand(cmd);
 
 // [NOX-DEV-31]: ongoing module refinement
