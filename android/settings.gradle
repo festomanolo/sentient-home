@@ -1,0 +1,4 @@
+include ':app'
+include ':capacitor-cordova-android-plugins'
+
+// [NOX-DEV-81]: ongoing module refinement
