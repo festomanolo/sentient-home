@@ -125,5 +125,68 @@ class BluetoothService {
 
       if (device) {
         console.log('Bluetooth device found:', device.name);
+        
+        const bluetoothDevice: BluetoothDevice = {
+          id: device.id,
+          name: device.name || 'Unknown Device',
+          connected: device.gatt?.connected || false,
+          type: this.detectDeviceType(device.name),
+          batteryLevel: await this.getBatteryLevel(device)
+        };
+
+        // Add device to available devices
+        this.availableDevices.push(bluetoothDevice);
+        
+        // Set up event listeners for connection changes
+        device.addEventListener('gattserverdisconnected', () => {
+          console.log(`Device ${device.name} disconnected`);
+          bluetoothDevice.connected = false;
+          this.notifyListeners();
+        });
+
+        console.log('Bluetooth device added:', bluetoothDevice);
+        this.notifyListeners();
+        
+        // Try to connect to the device
+        await this.connectToBluetoothDevice(device, bluetoothDevice);
+      }
+    } catch (error) {
+      console.log('Real Bluetooth scan failed:', error);
+      
+      if (error instanceof Error) {
+        if (error.name === 'NotFoundError') {
+          console.log('No Bluetooth devices found or user cancelled');
+        } else if (error.name === 'SecurityError') {
+          console.log('Bluetooth access denied');
+        }
+      }
+      
+      // Use fallback devices
+      this.initializeFallbackDevices();
+    }
+  }
+
+  private async connectToBluetoothDevice(device: any, bluetoothDevice: BluetoothDevice): Promise<void> {
+    try {
+      console.log(`Connecting to ${device.name}...`);
+      
+      const server = await device.gatt.connect();
+      bluetoothDevice.connected = true;
+      
+      console.log(`Connected to ${device.name}`);
+      
+      // Try to get battery level
+      try {
+        const batteryService = await server.getPrimaryService('battery_service');
+        const batteryCharacteristic = await batteryService.getCharacteristic('battery_level');
+        const batteryValue = await batteryCharacteristic.readValue();
+        bluetoothDevice.batteryLevel = batteryValue.getUint8(0);
+        console.log(`Battery level: ${bluetoothDevice.batteryLevel}%`);
+      } catch (batteryError) {
+        console.log('Could not read battery level:', batteryError);
+      }
+      
+      // Set as current device and load media
+      this.musicState.device = bluetoothDevice;
 
 // [NOX-DEV-62]: ongoing module refinement
