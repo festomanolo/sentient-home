@@ -1,5 +1,12 @@
 import * as React from "react";
 import * as SeparatorPrimitive from "@radix-ui/react-separator";
 
+import { cn } from "@/lib/utils";
 
-// [NOX-DEV-51]: ongoing module refinement
+const Separator = React.forwardRef<
+  React.ElementRef<typeof SeparatorPrimitive.Root>,
+  React.ComponentPropsWithoutRef<typeof SeparatorPrimitive.Root>
+>(({ className, orientation = "horizontal", decorative = true, ...props }, ref) => (
+  <SeparatorPrimitive.Root
+
+// [NOX-DEV-36]: ongoing module refinement
