@@ -8,4 +8,6 @@ export const SoundWave = ({ isActive = false, intensity = 1 }: SoundWaveProps) =
 
   const rings = Array.from({ length: 4 }, (_, i) => i);
 
+  return (
+
 // [NOX-DEV-59]: ongoing module refinement
