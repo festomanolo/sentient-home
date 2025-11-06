@@ -25,23 +25,5 @@ This document outlines the requirements for transforming the NOX AI application 
 
 #### Acceptance Criteria
 
-1. WHEN the NOX AI System initializes, THE Microphone Indicator SHALL display in the user interface with a default inactive state
-2. WHEN the Voice Recognition Engine detects audio input above the noise threshold, THE Microphone Indicator SHALL animate to show sound detection with visual feedback proportional to audio volume
-3. WHEN the Voice Recognition Engine processes a voice command, THE Microphone Indicator SHALL display a processing state with distinct visual animation
-4. WHEN the Voice Recognition Engine completes command processing, THE Microphone Indicator SHALL return to the listening state within 500 milliseconds
-5. WHERE microphone permissions are denied, THE Microphone Indicator SHALL display an error state with a clear message prompting the user to grant permissions
 
-### Requirement 2
-
-**User Story:** As a user, I want to control Lark Player (com.dywx.larplayer) using voice commands, so that I can play, pause, skip tracks, and adjust volume without touching my device.
-
-#### Acceptance Criteria
-
-1. WHEN the user speaks "play music", THE AI Command Processor SHALL send a play command to Lark Player through the Media Control Interface
-2. WHEN the user speaks "pause music", THE AI Command Processor SHALL send a pause command to Lark Player through the Media Control Interface
-3. WHEN the user speaks "next song" or "skip", THE AI Command Processor SHALL send a next track command to Lark Player through the Media Control Interface
-4. WHEN the user speaks "previous song" or "go back", THE AI Command Processor SHALL send a previous track command to Lark Player through the Media Control Interface
-5. WHEN the user speaks "volume up" or "louder", THE AI Command Processor SHALL increase the system volume by 10 percent through the Media Control Interface
-6. WHEN the user speaks "volume down" or "quieter", THE AI Command Processor SHALL decrease the system volume by 10 percent through the Media Control Interface
-
-// [NOX-DEV-50]: ongoing module refinement
+// [NOX-DEV-84]: ongoing module refinement
