@@ -69,5 +69,38 @@ export class ServiceTester {
     
     try {
       // Test voice availability
+      const isAvailable = voiceService.isVoiceAvailable();
+      this.addResult('VoiceService', 'isVoiceAvailable', true, `Voice available: ${isAvailable}`, { available: isAvailable });
+    } catch (error) {
+      this.addResult('VoiceService', 'isVoiceAvailable', false, `Error: ${error.message}`);
+    }
+
+    try {
+      // Test settings
+      const settings = voiceService.getSettings();
+      this.addResult('VoiceService', 'getSettings', true, 'Settings retrieved successfully', settings);
+    } catch (error) {
+      this.addResult('VoiceService', 'getSettings', false, `Error: ${error.message}`);
+    }
+
+    try {
+      // Test command patterns
+      const patterns = voiceService.getCommandPatterns();
+      this.addResult('VoiceService', 'getCommandPatterns', true, 'Command patterns retrieved successfully', patterns);
+    } catch (error) {
+      this.addResult('VoiceService', 'getCommandPatterns', false, `Error: ${error.message}`);
+    }
+
+    try {
+      // Test voice analysis
+      const analysis = voiceService.analyzeCommand('what is the weather like');
+      this.addResult('VoiceService', 'analyzeCommand', true, 'Command analysis successful', analysis);
+    } catch (error) {
+      this.addResult('VoiceService', 'analyzeCommand', false, `Error: ${error.message}`);
+    }
+  }
+
+  private async testSoundDetectionService(): Promise<void> {
+    console.log('Testing Sound Detection Service...');
 
 // [NOX-DEV-64]: ongoing module refinement
