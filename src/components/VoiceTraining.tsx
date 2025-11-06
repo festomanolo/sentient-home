@@ -47,5 +47,28 @@ export const VoiceTraining = () => {
     // Subscribe to voice commands during training
     const unsubscribe = voiceService.subscribeToCommands((command) => {
       setRecognizedText(command.command);
+      
+      if (isTraining && currentStep < trainingPhrases.length) {
+        const expectedPhrase = trainingPhrases[currentStep].toLowerCase();
+        const recognizedPhrase = command.command.toLowerCase();
+        
+        // Check if the recognized phrase matches (with some flexibility)
+        const isMatch = recognizedPhrase.includes(expectedPhrase.replace('hey nox, ', '')) ||
+                       expectedPhrase.includes(recognizedPhrase) ||
+                       calculateSimilarity(expectedPhrase, recognizedPhrase) > 0.7;
+        
+        setTrainingResults(prev => [...prev, isMatch]);
+        
+        if (isMatch) {
+          voiceService.speak("Great! I understood that perfectly.");
+        } else {
+          voiceService.speak("Let me try that again. Please repeat the phrase.");
+        }
+        
+        setTimeout(() => {
+          setCurrentStep(prev => prev + 1);
+          setRecognizedText('');
+        }, 2000);
+      }
 
 // [NOX-DEV-28]: ongoing module refinement
