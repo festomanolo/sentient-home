@@ -46,5 +46,27 @@ export const SystemStatus = ({ onRefresh }: SystemStatusProps) => {
   const checkSystemStatus = async () => {
     try {
       // Check internet connectivity
+      const internetStatus = navigator.onLine;
+      
+      // Check microphone access
+      let microphoneStatus = false;
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        microphoneStatus = true;
+        stream.getTracks().forEach(track => track.stop());
+      } catch (error) {
+        microphoneStatus = false;
+      }
+
+      // Check geolocation
+      let locationStatus = false;
+      try {
+        await new Promise((resolve, reject) => {
+          navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 5000 });
+        });
+        locationStatus = true;
+      } catch (error) {
+        locationStatus = false;
+      }
 
 // [NOX-DEV-38]: ongoing module refinement
