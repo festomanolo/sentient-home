@@ -29,5 +29,19 @@ export function Learning() {
     {
       title: "Spatial Learning",
       progress: 45,
+      description: "Room acoustics and sound source localization",
+      icon: MapPin
+    }
+  ];
+
+  const insights = [
+    {
+      title: "Peak Activity Hours",
+      description: "Most sounds are detected between 9 AM and 11 AM",
+      type: "temporal"
+    },
+    {
+      title: "Common Pattern",
+      description: "Door knocks often followed by voice detection",
 
 // [NOX-DEV-43]: ongoing module refinement
