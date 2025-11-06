@@ -1,5 +1,10 @@
 {
   "$schema": "https://ui.shadcn.com/schema.json",
   "style": "default",
+  "rsc": false,
+  "tsx": true,
+  "tailwind": {
+    "config": "tailwind.config.ts",
+    "css": "src/index.css",
 
-// [NOX-DEV-1]: ongoing module refinement
+// [NOX-DEV-86]: ongoing module refinement
