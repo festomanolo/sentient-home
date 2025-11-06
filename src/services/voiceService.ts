@@ -87,5 +87,48 @@ class VoiceService {
   private conversationalFillers = [
     "Let me check that for you...",
     "One moment please...",
+    "I'm looking that up now...",
+    "Give me just a second...",
+    "Let me see what I can find..."
+  ];
+
+  constructor() {
+    this.loadSettings();
+    this.initializeSpeechRecognition();
+  }
+
+  private initializeSpeechRecognition(): void {
+    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+      const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+      this.recognition = new SpeechRecognition();
+      
+      // Configure recognition settings
+      this.recognition.continuous = this.settings.continuousListening;
+      this.recognition.interimResults = true; // Enable interim results for better UX
+      this.recognition.lang = this.settings.language;
+      this.recognition.maxAlternatives = 3; // Get multiple alternatives
+      
+      console.log(`Speech recognition initialized with language: ${this.settings.language}`);
+
+      this.recognition.onstart = () => {
+        console.log('Speech recognition started');
+        this.isListening = true;
+      };
+
+      this.recognition.onresult = (event: SpeechRecognitionEvent) => {
+        let finalTranscript = '';
+        let interimTranscript = '';
+        
+        // Process all results
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+          const result = event.results[i];
+          const transcript = result[0].transcript;
+          
+          if (result.isFinal) {
+            finalTranscript += transcript;
+          } else {
+            interimTranscript += transcript;
+          }
+        }
 
 // [NOX-DEV-32]: ongoing module refinement
