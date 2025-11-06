@@ -26,5 +26,17 @@ export const WorldClock = () => {
   };
 
   const addTimezone = () => {
+    if (selectedTimezone) {
+      worldClockService.addTimezone(selectedTimezone);
+      setSelectedTimezone('');
+      updateClocks();
+    }
+  };
+
+  const removeTimezone = (timezone: string) => {
+    worldClockService.removeTimezone(timezone);
+    updateClocks();
+  };
+
 
 // [NOX-DEV-39]: ongoing module refinement
