@@ -85,5 +85,47 @@ class SoundDetectionService {
       
       console.log('Real-time sound detection started successfully');
       console.log(`Audio context sample rate: ${this.audioContext.sampleRate}Hz`);
+      console.log(`Analyser frequency bins: ${this.analyser.frequencyBinCount}`);
+      
+      // Notify listeners that detection started
+      this.notifyListeners({
+        id: Date.now().toString(),
+        type: "silence",
+        timestamp: new Date(),
+        confidence: 1.0,
+        volume: 0,
+        action: "Sound detection started"
+      });
+      
+    } catch (error) {
+      console.error('Failed to access microphone:', error);
+      
+      if (error instanceof Error) {
+        if (error.name === 'NotAllowedError') {
+          console.error('Microphone permission denied by user');
+          throw new Error('Microphone access denied. Please allow microphone access and try again.');
+        } else if (error.name === 'NotFoundError') {
+          console.error('No microphone found');
+          throw new Error('No microphone found. Please connect a microphone and try again.');
+        } else if (error.name === 'NotSupportedError') {
+          console.error('Microphone not supported');
+          throw new Error('Microphone not supported by this browser.');
+        }
+      }
+      
+      throw new Error(`Failed to start sound detection: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
+  }
+
+  stop() {
+    this.isActive = false;
+    
+    if (this.animationFrame) {
+      cancelAnimationFrame(this.animationFrame);
+      this.animationFrame = null;
+    }
+    
+    if (this.mediaStream) {
+      this.mediaStream.getTracks().forEach(track => track.stop());
 
 // [NOX-DEV-63]: ongoing module refinement
