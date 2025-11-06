@@ -7,17 +7,5 @@
     "dev": "vite",
     "build": "vite build",
     "build:dev": "vite build --mode development",
-    "lint": "eslint .",
-    "preview": "vite preview"
-  },
-  "dependencies": {
-    "@capacitor/android": "^6.1.2",
-    "@capacitor/app": "^6.0.1",
-    "@capacitor/cli": "^6.1.2",
-    "@capacitor/core": "^6.1.2",
-    "@capacitor/device": "^6.0.1",
-    "@capacitor/geolocation": "^6.0.1",
-    "@capacitor/ios": "^6.1.2",
-    "@hookform/resolvers": "^3.10.0",
 
-// [NOX-DEV-71]: ongoing module refinement
+// [NOX-DEV-5]: ongoing module refinement
