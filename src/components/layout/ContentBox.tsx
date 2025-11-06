@@ -4,10 +4,5 @@ import { motion } from "framer-motion";
 
 interface ContentBoxProps {
   children: React.ReactNode;
-  className?: string;
-}
 
-export function ContentBox({ children, className }: ContentBoxProps) {
-  const { theme } = useTheme();
-
-// [NOX-DEV-43]: ongoing module refinement
+// [NOX-DEV-77]: ongoing module refinement
