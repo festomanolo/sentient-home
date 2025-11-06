@@ -23,5 +23,17 @@ export const WeatherSetup = () => {
     try {
       // Save the API key
       weatherService.setApiKey(apiKey.trim());
+      
+      // Test the API key
+      const weather = await weatherService.getCurrentWeather();
+      
+      setTestResult({
+        success: true,
+        message: `Weather API configured successfully! Current temperature: ${weather.temperature}°F in ${weather.location}`
+      });
+      setIsConfigured(true);
+      setApiKey("");
+      
+    } catch (error) {
 
 // [NOX-DEV-33]: ongoing module refinement
