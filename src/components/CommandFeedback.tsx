@@ -27,4 +27,18 @@ export const CommandFeedback = ({
   const [history, setHistory] = useState<CommandHistoryEntry[]>([]);
   const [showFeedback, setShowFeedback] = useState(false);
 
+  useEffect(() => {
+    if (currentCommand) {
+      setShowFeedback(true);
+      
+      // Add to history
+      const entry: CommandHistoryEntry = {
+        id: Date.now().toString(),
+        transcript: currentCommand,
+        timestamp: new Date(),
+        status: isProcessing ? 'processing' : 'success',
+        response: lastResponse
+      };
+
+
 // [NOX-DEV-27]: ongoing module refinement
