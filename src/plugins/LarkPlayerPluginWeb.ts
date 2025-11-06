@@ -13,5 +13,12 @@ export class LarkPlayerPluginWeb extends WebPlugin implements LarkPlayerPlugin {
     return { running: false };
   }
 
+  async sendMediaCommand(options: { command: string }): Promise<{ success: boolean; message?: string }> {
+    console.log('LarkPlayer plugin - web fallback: sendMediaCommand', options);
+    
+    // Try to use Media Session API on web
+    if ('mediaSession' in navigator) {
+      try {
+        switch (options.command) {
 
 // [NOX-DEV-52]: ongoing module refinement
