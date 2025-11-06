@@ -1,5 +1,14 @@
 import * as React from "react"
 import * as ProgressPrimitive from "@radix-ui/react-progress"
 
+import { cn } from "@/lib/utils"
 
-// [NOX-DEV-46]: ongoing module refinement
+const Progress = React.forwardRef<
+  React.ElementRef<typeof ProgressPrimitive.Root>,
+  React.ComponentPropsWithoutRef<typeof ProgressPrimitive.Root>
+>(({ className, value, ...props }, ref) => (
+  <ProgressPrimitive.Root
+    ref={ref}
+    className={cn(
+
+// [NOX-DEV-31]: ongoing module refinement
