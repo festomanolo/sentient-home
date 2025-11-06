@@ -21,4 +21,57 @@ All colors MUST be HSL.
     --primary: 262 52% 47%;
     --primary-foreground: 210 40% 98%;
 
-// [NOX-DEV-68]: ongoing module refinement
+    --secondary: 186 100% 94%;
+    --secondary-foreground: 222 47% 11%;
+
+    --muted: 210 40% 96%;
+    --muted-foreground: 215 16% 47%;
+
+    --accent: 174 72% 56%;
+    --accent-foreground: 222 47% 11%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 262 52% 47%;
+
+    --radius: 1rem;
+
+    /* NOX AI Custom Tokens - Light */
+    --nox-violet: 262 52% 47%;
+    --nox-violet-light: 262 52% 57%;
+    --nox-blue: 221 83% 53%;
+    --nox-teal: 174 72% 56%;
+    --nox-glow: 262 100% 70%;
+    --nox-particle: 186 100% 60%;
+    
+    --gradient-orb: radial-gradient(circle at 50% 50%, hsl(262 52% 47% / 0.3), hsl(174 72% 56% / 0.2), transparent);
+    --gradient-header: linear-gradient(135deg, hsl(262 52% 97%), hsl(186 100% 97%));
+    --gradient-card: linear-gradient(145deg, hsl(0 0% 100% / 0.95), hsl(210 20% 98% / 0.9));
+    
+    --shadow-soft: 0 4px 24px hsl(262 52% 47% / 0.1);
+    --shadow-glow: 0 0 40px hsl(262 52% 47% / 0.3);
+    --shadow-neon: 0 0 20px hsl(174 72% 56% / 0.6);
+  }
+
+  .dark {
+    /* Dark Theme - Deep obsidian, violet-blue gradients, teal neon */
+    --background: 240 10% 4%;
+    --foreground: 210 40% 98%;
+
+    --card: 240 8% 8%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 240 8% 8%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 262 80% 65%;
+    --primary-foreground: 240 10% 4%;
+
+    --secondary: 240 6% 15%;
+    --secondary-foreground: 210 40% 98%;
+
+
+// [NOX-DEV-53]: ongoing module refinement
