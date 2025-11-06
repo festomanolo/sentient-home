@@ -1,0 +1,7 @@
+android {
+    compileOptions {
+        sourceCompatibility '17'
+        targetCompatibility '17'
+    }
+
+// [NOX-DEV-74]: ongoing module refinement
