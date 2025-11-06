@@ -20,34 +20,5 @@ Before building the native apps, ensure you have:
    cd sentient-home
    ```
 
-### 2. Install Dependencies
 
-```bash
-npm install
-```
-
-### 3. Initialize Capacitor (Already configured)
-
-The project already has `capacitor.config.ts` configured with:
-- App ID: `com.manolo.noxai`
-- App Name: `NOX AI`
-
-### 4. Add Native Platforms
-
-Add Android and/or iOS platforms:
-
-```bash
-# For Android
-npx cap add android
-
-# For iOS (macOS only)
-npx cap add ios
-```
-
-### 5. Build the Web Assets
-
-```bash
-npm run build
-```
-
-// [NOX-DEV-36]: ongoing module refinement
+// [NOX-DEV-70]: ongoing module refinement
