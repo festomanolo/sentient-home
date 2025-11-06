@@ -10,5 +10,11 @@ export const AIOrb = ({ isListening = false, size = "lg" }: AIOrbProps) => {
 
   useEffect(() => {
     const particleArray = Array.from({ length: 8 }, (_, i) => ({
+      id: i,
+      delay: i * 0.5,
+    }));
+    setParticles(particleArray);
+  }, []);
+
 
 // [NOX-DEV-26]: ongoing module refinement
