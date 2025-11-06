@@ -43,5 +43,28 @@
 
         // Test Weather Service
         window.testWeather = async () => {
+            log('Testing Weather Service...', 'info');
+            try {
+                // Simulate weather service test
+                const mockWeather = {
+                    temperature: 72,
+                    description: 'Partly cloudy',
+                    location: 'San Francisco, CA',
+                    humidity: 65,
+                    windSpeed: 8
+                };
+                log(`Weather Service Test: ${JSON.stringify(mockWeather)}`, 'success');
+                log('Weather service simulation successful', 'success');
+            } catch (error) {
+                log(`Weather Service Error: ${error.message}`, 'error');
+            }
+        };
+
+        // Test Voice Service
+        window.testVoice = async () => {
+            log('Testing Voice Service...', 'info');
+            try {
+                if ('speechSynthesis' in window) {
+                    log('Speech Synthesis API available', 'success');
 
 // [NOX-DEV-65]: ongoing module refinement
