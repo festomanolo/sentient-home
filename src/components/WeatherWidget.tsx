@@ -31,5 +31,19 @@ export const WeatherWidget = () => {
       setLastUpdated(new Date());
     } catch (error) {
       console.error('Failed to load weather data:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const getWeatherIcon = (iconCode: string) => {
+    // Map OpenWeatherMap icon codes to appropriate icons
+    const iconMap: Record<string, string> = {
+      '01d': '☀️', '01n': '🌙',
+      '02d': '⛅', '02n': '☁️',
+      '03d': '☁️', '03n': '☁️',
+      '04d': '☁️', '04n': '☁️',
+      '09d': '🌧️', '09n': '🌧️',
+      '10d': '🌦️', '10n': '🌧️',
 
 // [NOX-DEV-34]: ongoing module refinement
