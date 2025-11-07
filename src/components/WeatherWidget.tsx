@@ -45,5 +45,49 @@ export const WeatherWidget = () => {
       '04d': '☁️', '04n': '☁️',
       '09d': '🌧️', '09n': '🌧️',
       '10d': '🌦️', '10n': '🌧️',
+      '11d': '⛈️', '11n': '⛈️',
+      '13d': '❄️', '13n': '❄️',
+      '50d': '🌫️', '50n': '🌫️'
+    };
+    
+    return iconMap[iconCode] || '🌤️';
+  };
+
+  if (isLoading && !weather) {
+    return (
+      <GlassCard>
+        <div className="flex items-center gap-3 mb-4">
+          <div className="p-2 rounded-lg bg-primary/10">
+            <CloudSun className="w-5 h-5 text-primary" />
+          </div>
+          <h2 className="text-lg font-semibold">Weather</h2>
+        </div>
+        <div className="text-center py-8">
+          <RefreshCw className="w-8 h-8 mx-auto mb-4 animate-spin text-muted-foreground" />
+          <p className="text-muted-foreground">Loading weather data...</p>
+        </div>
+      </GlassCard>
+    );
+  }
+
+  return (
+    <GlassCard>
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center gap-3">
+          <div className="p-2 rounded-lg bg-primary/10">
+            <CloudSun className="w-5 h-5 text-primary" />
+          </div>
+          <h2 className="text-lg font-semibold">Weather</h2>
+        </div>
+        
+        <Button
+          size="sm"
+          variant="ghost"
+          onClick={loadWeatherData}
+          disabled={isLoading}
+        >
+          <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
+        </Button>
+      </div>
 
 // [NOX-DEV-34]: ongoing module refinement
