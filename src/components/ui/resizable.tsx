@@ -7,15 +7,5 @@ const ResizablePanelGroup = ({ className, ...props }: React.ComponentProps<typeo
   <ResizablePrimitive.PanelGroup
     className={cn("flex h-full w-full data-[panel-group-direction=vertical]:flex-col", className)}
     {...props}
-  />
-);
 
-const ResizablePanel = ResizablePrimitive.Panel;
-
-const ResizableHandle = ({
-  withHandle,
-  className,
-  ...props
-}: React.ComponentProps<typeof ResizablePrimitive.PanelResizeHandle> & {
-
-// [NOX-DEV-33]: ongoing module refinement
+// [NOX-DEV-48]: ongoing module refinement
