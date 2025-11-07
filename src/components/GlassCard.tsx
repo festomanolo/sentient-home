@@ -15,5 +15,10 @@ export const GlassCard = ({ children, className, hover = true }: GlassCardProps)
         hover && "hover:scale-[1.02] hover:border-primary/40 hover:shadow-glow",
         "relative overflow-hidden",
         className
-
-// [NOX-DEV-58]: ongoing module refinement
+      )}
+    >
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+      {children}
+    </div>
+  );
+};

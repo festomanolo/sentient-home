@@ -80,5 +80,86 @@ export const CommandFeedback = ({
   const formatTimeAgo = (date: Date) => {
     const seconds = Math.floor((new Date().getTime() - date.getTime()) / 1000);
     if (seconds < 60) return `${seconds}s ago`;
+    const minutes = Math.floor(seconds / 60);
+    if (minutes < 60) return `${minutes}m ago`;
+    const hours = Math.floor(minutes / 60);
+    return `${hours}h ago`;
+  };
 
-// [NOX-DEV-27]: ongoing module refinement
+  return (
+    <div className="space-y-4">
+      {/* Current Command Feedback */}
+      {showFeedback && currentCommand && (
+        <div className={`p-4 rounded-lg border-2 ${getStatusColor(isProcessing ? 'processing' : 'success')} 
+          backdrop-blur-sm animate-slide-up`}>
+          <div className="flex items-start gap-3">
+            <div className="mt-0.5">
+              {getStatusIcon(isProcessing ? 'processing' : 'success')}
+            </div>
+            <div className="flex-1">
+              <div className="flex items-center gap-2 mb-1">
+                <p className="text-sm font-medium">
+                  {isProcessing ? 'Processing...' : 'Command Recognized'}
+                </p>
+                <Badge variant="outline" className="text-xs">
+                  {isProcessing ? 'Analyzing' : 'Complete'}
+                </Badge>
+              </div>
+              <p className="text-sm text-muted-foreground">
+                "{currentCommand}"
+              </p>
+              {lastResponse && !isProcessing && (
+                <p className="text-xs text-accent mt-2">
+                  {lastResponse}
+                </p>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Command History */}
+      {showHistory && history.length > 0 && (
+        <div className="p-4 rounded-lg border border-border/50 backdrop-blur-sm bg-background/30">
+          <div className="flex items-center gap-2 mb-3">
+            <MessageSquare className="w-4 h-4 text-accent" />
+            <h3 className="text-sm font-semibold">Command History</h3>
+            <Badge variant="secondary" className="text-xs ml-auto">
+              {history.length}
+            </Badge>
+          </div>
+          
+          <ScrollArea className="h-48">
+            <div className="space-y-2">
+              {history.map((entry) => (
+                <div
+                  key={entry.id}
+                  className="p-2 rounded-md bg-background/50 border border-border/30 hover:bg-background/70 transition-colors"
+                >
+                  <div className="flex items-start gap-2">
+                    <div className="mt-0.5">
+                      {getStatusIcon(entry.status)}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-xs font-medium truncate">
+                        {entry.transcript}
+                      </p>
+                      {entry.response && (
+                        <p className="text-xs text-muted-foreground mt-1">
+                          {entry.response}
+                        </p>
+                      )}
+                      <p className="text-xs text-muted-foreground/60 mt-1">
+                        {formatTimeAgo(entry.timestamp)}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </ScrollArea>
+        </div>
+      )}
+    </div>
+  );
+};

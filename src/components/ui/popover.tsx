@@ -26,5 +26,4 @@ const PopoverContent = React.forwardRef<
 ));
 PopoverContent.displayName = PopoverPrimitive.Content.displayName;
 
-
-// [NOX-DEV-42]: ongoing module refinement
+export { Popover, PopoverTrigger, PopoverContent };

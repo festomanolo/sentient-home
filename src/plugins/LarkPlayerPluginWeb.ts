@@ -40,5 +40,31 @@ export class LarkPlayerPluginWeb extends WebPlugin implements LarkPlayerPlugin {
       }
     }
     
+    return { success: false, message: 'Media Session API not available on web' };
+  }
 
-// [NOX-DEV-52]: ongoing module refinement
+  async getPlaybackState(): Promise<PlaybackState> {
+    console.log('LarkPlayer plugin - web fallback: getPlaybackState');
+    return {
+      isPlaying: false,
+      currentTrack: 'N/A (Web)',
+      artist: 'N/A',
+    };
+  }
+
+  async launchApp(): Promise<{ success: boolean; message?: string }> {
+    console.log('LarkPlayer plugin - web fallback: launchApp');
+    return { success: false, message: 'Cannot launch Android apps from web' };
+  }
+
+  async setVolume(options: { level: number }): Promise<{ success: boolean }> {
+    console.log('LarkPlayer plugin - web fallback: setVolume', options);
+    // On web, we can't control system volume
+    return { success: false };
+  }
+
+  async adjustVolume(options: { direction: 'up' | 'down'; amount?: number }): Promise<{ success: boolean; newLevel: number }> {
+    console.log('LarkPlayer plugin - web fallback: adjustVolume', options);
+    return { success: false, newLevel: 50 };
+  }
+}

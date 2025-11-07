@@ -24,5 +24,10 @@ export const PageLayout = ({ children, background }: PageLayoutProps) => {
         className="relative z-10 container mx-auto mobile-container"
         initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-
-// [NOX-DEV-92]: ongoing module refinement
+        transition={{ delay: 0.2, duration: 0.3 }}
+      >
+        {children}
+      </motion.div>
+    </motion.div>
+  );
+};

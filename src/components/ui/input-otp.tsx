@@ -53,5 +53,9 @@ const InputOTPSeparator = React.forwardRef<React.ElementRef<"div">, React.Compon
   ({ ...props }, ref) => (
     <div ref={ref} role="separator" {...props}>
       <Dot />
+    </div>
+  ),
+);
+InputOTPSeparator.displayName = "InputOTPSeparator";
 
-// [NOX-DEV-36]: ongoing module refinement
+export { InputOTP, InputOTPGroup, InputOTPSlot, InputOTPSeparator };

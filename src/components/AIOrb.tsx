@@ -33,5 +33,39 @@ export const AIOrb = ({ isListening = false, size = "lg" }: AIOrbProps) => {
       
       {/* Particles */}
       {isListening && particles.map((particle) => (
+        <div
+          key={particle.id}
+          className="absolute w-2 h-2 rounded-full bg-accent animate-particle-drift"
+          style={{
+            animationDelay: `${particle.delay}s`,
+            left: `${50 + Math.cos((particle.id * Math.PI) / 4) * 40}%`,
+            top: `${50 + Math.sin((particle.id * Math.PI) / 4) * 40}%`,
+          }}
+        />
+      ))}
 
-// [NOX-DEV-26]: ongoing module refinement
+      {/* Main orb */}
+      <div
+        className={`${sizeClasses[size]} rounded-full backdrop-blur-xl ${glowIntensity} relative overflow-hidden`}
+        style={{
+          background: "var(--gradient-orb)",
+          boxShadow: isListening 
+            ? "0 0 80px hsl(var(--nox-violet) / 0.6), 0 0 120px hsl(var(--nox-teal) / 0.4)" 
+            : "var(--shadow-glow)",
+        }}
+      >
+        {/* Inner core */}
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="w-1/2 h-1/2 rounded-full bg-gradient-to-br from-primary to-accent animate-breathe" />
+        </div>
+
+        {/* Scanning line effect when listening */}
+        {isListening && (
+          <div className="absolute inset-0 overflow-hidden">
+            <div className="absolute w-full h-1 bg-accent/50 blur-sm animate-float" />
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};

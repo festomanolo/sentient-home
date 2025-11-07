@@ -335,5 +335,115 @@ export const useNoxAssistant = () => {
           break;
 
         case 'get_next_event':
+          try {
+            const nextEvent = await calendarService.getNextEvent();
+            if (nextEvent) {
+              const timeUntil = Math.round((nextEvent.startTime.getTime() - Date.now()) / (1000 * 60));
+              await voiceService.speak(`Your next event is ${nextEvent.title} in ${timeUntil} minutes.`);
+            } else {
+              await voiceService.speak("You have no upcoming events.");
+            }
+          } catch (error) {
+            await voiceService.speak("I couldn't find your next event.");
+          }
+          break;
 
-// [NOX-DEV-96]: ongoing module refinement
+        case 'open_app':
+          if (intent.entities.app) {
+            const appResult = await appControlService.controlApp(intent.entities.app, 'open');
+            if (appResult) {
+              await voiceService.speak(`Opening ${intent.entities.app}.`);
+            } else {
+              await voiceService.speak(`I couldn't open ${intent.entities.app}.`);
+            }
+          }
+          break;
+
+        case 'unknown':
+          await voiceService.speak("I'm not sure how to help with that. Try asking about weather, time, calendar, or music control.");
+          break;
+
+        default:
+          await voiceService.speak("I understood your command, but I'm not sure how to execute it yet.");
+      }
+    } catch (error) {
+      console.error('Error executing command:', error);
+      await voiceService.speak("Sorry, I encountered an error.");
+    }
+  };
+
+  const processTextCommand = async (command: string) => {
+    setState(prev => ({
+      ...prev,
+      isProcessingCommand: true,
+      lastCommand: command
+    }));
+
+    try {
+      const intent = await aiCommandProcessor.processCommand(command);
+      console.log('Text command intent:', intent);
+
+      if (intent.confidence < 0.6) {
+        await voiceService.speak("I'm not sure I understood that. Could you try again?");
+        return { success: false, message: "Low confidence" };
+      }
+
+      await executeCommandIntent(intent);
+      return { success: true, message: "Command executed" };
+    } catch (error) {
+      console.error('Failed to process command:', error);
+      await voiceService.speak("Sorry, I couldn't process that command.");
+      return { success: false, message: "Error processing command" };
+    } finally {
+      setState(prev => ({
+        ...prev,
+        isProcessingCommand: false
+      }));
+    }
+  };
+
+  const speak = async (text: string, interrupt = false) => {
+    await voiceService.speak(text, interrupt);
+  };
+
+  const getQuickInfo = () => {
+    const info = [];
+    
+    if (state.weather) {
+      info.push(`${state.weather.temperature}°F, ${state.weather.description}`);
+    }
+    
+    if (state.upcomingEvents.length > 0) {
+      const nextEvent = state.upcomingEvents[0];
+      const timeUntil = Math.round((nextEvent.startTime.getTime() - Date.now()) / (1000 * 60));
+      if (timeUntil > 0 && timeUntil < 120) {
+        info.push(`${nextEvent.title} in ${timeUntil} minutes`);
+      }
+    }
+
+    return info;
+  };
+
+  const getSystemStatus = () => {
+    return {
+      voiceEnabled: voiceService.getSettings().voiceResponseEnabled,
+      listeningEnabled: voiceService.getSettings().continuousListening,
+      weatherLastUpdated: state.weather ? new Date() : null,
+      calendarSynced: state.upcomingEvents.length > 0,
+      appsConnected: appControlService.getControllableApps().length
+    };
+  };
+
+  return {
+    state,
+    startListening,
+    stopListening,
+    toggleListening,
+    processTextCommand,
+    speak,
+    updateWeather,
+    updateCalendar,
+    getQuickInfo,
+    getSystemStatus
+  };
+};

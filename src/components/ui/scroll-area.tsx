@@ -35,4 +35,4 @@ const ScrollBar = React.forwardRef<
 ));
 ScrollBar.displayName = ScrollAreaPrimitive.ScrollAreaScrollbar.displayName;
 
-// [NOX-DEV-46]: ongoing module refinement
+export { ScrollArea, ScrollBar };

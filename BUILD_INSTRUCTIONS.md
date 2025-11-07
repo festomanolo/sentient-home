@@ -183,4 +183,79 @@ npx cap sync android
 
 #### Capacitor Sync Issues
 
-// [NOX-DEV-85]: ongoing module refinement
+```bash
+npm run build
+npx cap copy android
+npx cap update android
+```
+
+#### Plugin Not Found
+
+Make sure the plugin is registered in `capacitor.config.ts` and `android/app/src/main/assets/capacitor.plugins.json`
+
+## Performance Optimization
+
+### Reduce App Size
+
+1. Enable ProGuard in release builds
+2. Remove unused dependencies
+3. Optimize images and assets
+
+### Improve Voice Recognition
+
+1. Adjust microphone sensitivity in Settings
+2. Use in quiet environment
+3. Enable continuous listening for better response
+
+### Battery Optimization
+
+1. Disable continuous listening when not needed
+2. Reduce weather update frequency
+3. Pause sound detection when app is backgrounded
+
+## Deployment
+
+### Google Play Store
+
+1. Create a Google Play Developer account
+2. Generate a signed release APK
+3. Create app listing with screenshots
+4. Upload APK and submit for review
+
+### Privacy Policy
+
+Include information about:
+- Microphone usage for voice commands
+- Location usage for weather
+- No data collection or storage
+- Local processing of voice commands
+
+## Support
+
+For issues or questions:
+- Check the troubleshooting section above
+- Review the code comments in service files
+- Check browser/Android console for error messages
+
+## Next Steps
+
+### Recommended Enhancements
+
+1. **Google Calendar OAuth** - Implement full OAuth flow for real calendar sync
+2. **Spotify Integration** - Add Spotify control alongside Lark Player
+3. **Smart Home** - Integrate with smart home devices
+4. **Routines** - Create automated routines based on time/location
+5. **Multi-language** - Add support for multiple languages
+6. **Voice Profiles** - Recognize different users by voice
+
+### Code Improvements
+
+1. Add unit tests for services
+2. Implement error boundaries in React components
+3. Add analytics for command usage
+4. Optimize bundle size with code splitting
+5. Add offline support with service workers
+
+---
+
+**NOX AI** - Your intelligent voice assistant is ready! 🎤🤖

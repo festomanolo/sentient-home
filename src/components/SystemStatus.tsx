@@ -136,5 +136,121 @@ export const SystemStatus = ({ onRefresh }: SystemStatusProps) => {
 
   const getStatusText = (isActive: boolean) => {
     return isActive ? 'Connected' : 'Disconnected';
+  };
 
-// [NOX-DEV-38]: ongoing module refinement
+  const StatusItem = ({ 
+    icon: Icon, 
+    label, 
+    isActive, 
+    details 
+  }: { 
+    icon: React.ElementType; 
+    label: string; 
+    isActive: boolean; 
+    details?: string;
+  }) => (
+    <div className="flex items-center justify-between p-3 rounded-lg bg-background/30 border border-border/20">
+      <div className="flex items-center gap-3">
+        <Icon className="w-5 h-5 text-muted-foreground" />
+        <div>
+          <p className="font-medium text-sm">{label}</p>
+          {details && <p className="text-xs text-muted-foreground">{details}</p>}
+        </div>
+      </div>
+      <div className="flex items-center gap-2">
+        <div className={`w-2 h-2 rounded-full ${getStatusColor(isActive)}`} />
+        <Badge variant={isActive ? "default" : "secondary"} className="text-xs">
+          {getStatusText(isActive)}
+        </Badge>
+      </div>
+    </div>
+  );
+
+  return (
+    <GlassCard>
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center gap-3">
+          <div className="p-2 rounded-lg bg-primary/10">
+            <Signal className="w-5 h-5 text-primary" />
+          </div>
+          <h2 className="text-lg font-semibold">System Status</h2>
+        </div>
+        
+        <Button
+          size="sm"
+          variant="ghost"
+          onClick={handleRefresh}
+          disabled={isRefreshing}
+        >
+          <RefreshCw className={`w-4 h-4 ${isRefreshing ? 'animate-spin' : ''}`} />
+        </Button>
+      </div>
+
+      <div className="space-y-3">
+        <StatusItem
+          icon={Wifi}
+          label="Internet Connection"
+          isActive={status.internet}
+          details={status.internet ? "Online" : "Check your connection"}
+        />
+        
+        <StatusItem
+          icon={Mic}
+          label="Microphone Access"
+          isActive={status.microphone}
+          details={status.microphone ? "Voice commands ready" : "Grant microphone permission"}
+        />
+        
+        <StatusItem
+          icon={MapPin}
+          label="Location Services"
+          isActive={status.location}
+          details={status.location ? "GPS available" : "Enable location for weather"}
+        />
+        
+        <StatusItem
+          icon={Bluetooth}
+          label="Bluetooth"
+          isActive={status.bluetooth}
+          details={status.bluetooth ? "Device control ready" : "Bluetooth not available"}
+        />
+        
+        <StatusItem
+          icon={Cloud}
+          label="Weather Service"
+          isActive={status.weather}
+          details={status.weather ? "Weather data available" : "Check API key"}
+        />
+        
+        <StatusItem
+          icon={Calendar}
+          label="Calendar Integration"
+          isActive={status.calendar}
+          details={status.calendar ? "Events synchronized" : "No calendar data"}
+        />
+        
+        <StatusItem
+          icon={Smartphone}
+          label="App Control"
+          isActive={status.apps > 0}
+          details={`${status.apps} apps connected`}
+        />
+
+        {status.battery !== null && (
+          <StatusItem
+            icon={Battery}
+            label="Device Battery"
+            isActive={status.battery > 20}
+            details={`${status.battery}% remaining`}
+          />
+        )}
+      </div>
+
+      <div className="mt-4 pt-4 border-t border-border/30">
+        <p className="text-xs text-muted-foreground text-center">
+          Last updated: {status.lastUpdate.toLocaleTimeString()}
+        </p>
+      </div>
+    </GlassCard>
+  );
+};

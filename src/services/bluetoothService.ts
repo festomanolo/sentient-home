@@ -377,4 +377,231 @@ class BluetoothService {
     this.setVolume(this.musicState.volume + delta);
   }
 
-// [NOX-DEV-62]: ongoing module refinement
+  togglePlayback() {
+    this.musicState.isPlaying = !this.musicState.isPlaying;
+    this.saveState();
+    this.notifyListeners();
+  }
+
+  play() {
+    if (!this.musicState.device?.connected) {
+      // Auto-connect to first available device
+      const availableDevice = this.availableDevices.find(d => !d.connected);
+      if (availableDevice) {
+        this.connectDevice(availableDevice.id);
+      }
+    }
+
+    this.musicState.isPlaying = true;
+    if (this.musicState.track === "No media playing") {
+      this.loadTrack(0);
+    }
+    this.saveState();
+    this.notifyListeners();
+  }
+
+  pause() {
+    this.musicState.isPlaying = false;
+    this.saveState();
+    this.notifyListeners();
+  }
+
+  next() {
+    if (this.musicState.shuffle) {
+      this.currentTrackIndex = Math.floor(Math.random() * this.currentPlaylist.length);
+    } else {
+      this.currentTrackIndex = (this.currentTrackIndex + 1) % this.currentPlaylist.length;
+    }
+    this.loadTrack(this.currentTrackIndex);
+  }
+
+  previous() {
+    this.currentTrackIndex = this.currentTrackIndex === 0 
+      ? this.currentPlaylist.length - 1 
+      : this.currentTrackIndex - 1;
+    this.loadTrack(this.currentTrackIndex);
+  }
+
+  toggleShuffle() {
+    this.musicState.shuffle = !this.musicState.shuffle;
+    this.saveState();
+    this.notifyListeners();
+  }
+
+  toggleRepeat() {
+    const modes: ('none' | 'one' | 'all')[] = ['none', 'one', 'all'];
+    const currentIndex = modes.indexOf(this.musicState.repeat);
+    this.musicState.repeat = modes[(currentIndex + 1) % modes.length];
+    this.saveState();
+    this.notifyListeners();
+  }
+
+  seek(position: number) {
+    if (this.musicState.duration) {
+      this.musicState.position = Math.max(0, Math.min(this.musicState.duration, position));
+      this.saveState();
+      this.notifyListeners();
+    }
+  }
+
+  private loadTrack(index: number) {
+    if (index >= 0 && index < this.currentPlaylist.length) {
+      const track = this.currentPlaylist[index];
+      this.musicState.track = track.title;
+      this.musicState.artist = track.artist;
+      this.musicState.album = track.album;
+      this.musicState.duration = track.duration;
+      this.musicState.position = 0;
+      this.saveState();
+      this.notifyListeners();
+    }
+  }
+
+  private startPositionTracking() {
+    this.positionInterval = setInterval(() => {
+      if (this.musicState.isPlaying && this.musicState.duration && this.musicState.position !== undefined) {
+        this.musicState.position += 1;
+        
+        // Auto-advance to next track when current ends
+        if (this.musicState.position >= this.musicState.duration) {
+          if (this.musicState.repeat === 'one') {
+            this.musicState.position = 0;
+          } else if (this.musicState.repeat === 'all' || this.currentTrackIndex < this.currentPlaylist.length - 1) {
+            this.next();
+          } else {
+            this.pause();
+            this.musicState.position = 0;
+          }
+        }
+        
+        this.notifyListeners();
+      }
+    }, 1000);
+  }
+
+  subscribe(callback: (state: MusicState) => void) {
+    this.listeners.push(callback);
+    return () => {
+      this.listeners = this.listeners.filter((l) => l !== callback);
+    };
+  }
+
+  private notifyListeners() {
+    this.listeners.forEach((listener) => listener(this.getMusicState()));
+  }
+
+  async connectDevice(deviceId: string): Promise<boolean> {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        // Disconnect all other devices
+        this.availableDevices.forEach(device => {
+          device.connected = false;
+        });
+
+        // Connect the selected device
+        const device = this.availableDevices.find(d => d.id === deviceId);
+        if (device) {
+          device.connected = true;
+          this.musicState.device = { ...device };
+          
+          // Update track info to show connected device
+          if (this.musicState.track === "No media playing") {
+            this.loadTrack(0);
+          }
+          
+          this.saveState();
+          this.notifyListeners();
+          resolve(true);
+        } else {
+          resolve(false);
+        }
+      }, 1000);
+    });
+  }
+
+  async disconnectDevice(deviceId: string): Promise<boolean> {
+    const device = this.availableDevices.find(d => d.id === deviceId);
+    if (device) {
+      device.connected = false;
+      if (this.musicState.device?.id === deviceId) {
+        this.musicState.device = null;
+        this.pause();
+      }
+      this.saveState();
+      this.notifyListeners();
+      return true;
+    }
+    return false;
+  }
+
+  getAvailableDevices(): BluetoothDevice[] {
+    return [...this.availableDevices];
+  }
+
+  getConnectedDevices(): BluetoothDevice[] {
+    return this.availableDevices.filter(device => device.connected);
+  }
+
+  async scanForDevices(): Promise<BluetoothDevice[]> {
+    // Simulate scanning for new devices
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        // In a real implementation, this would use Web Bluetooth API or Capacitor Bluetooth plugin
+        resolve(this.availableDevices);
+      }, 2000);
+    });
+  }
+
+  // Media session integration (for system media controls)
+  updateMediaSession() {
+    if ('mediaSession' in navigator) {
+      navigator.mediaSession.metadata = new MediaMetadata({
+        title: this.musicState.track,
+        artist: this.musicState.artist,
+        album: this.musicState.album || 'Unknown Album'
+      });
+
+      navigator.mediaSession.setActionHandler('play', () => this.play());
+      navigator.mediaSession.setActionHandler('pause', () => this.pause());
+      navigator.mediaSession.setActionHandler('previoustrack', () => this.previous());
+      navigator.mediaSession.setActionHandler('nexttrack', () => this.next());
+    }
+  }
+
+  private saveState() {
+    const stateToSave = {
+      volume: this.musicState.volume,
+      shuffle: this.musicState.shuffle,
+      repeat: this.musicState.repeat,
+      currentTrackIndex: this.currentTrackIndex,
+      connectedDeviceId: this.musicState.device?.id
+    };
+    localStorage.setItem('nox-bluetooth-state', JSON.stringify(stateToSave));
+  }
+
+  private loadState() {
+    const saved = localStorage.getItem('nox-bluetooth-state');
+    if (saved) {
+      try {
+        const state = JSON.parse(saved);
+        this.musicState.volume = state.volume || 75;
+        this.musicState.shuffle = state.shuffle || false;
+        this.musicState.repeat = state.repeat || 'none';
+        this.currentTrackIndex = state.currentTrackIndex || 0;
+        
+        if (state.connectedDeviceId) {
+          const device = this.availableDevices.find(d => d.id === state.connectedDeviceId);
+          if (device) {
+            device.connected = true;
+            this.musicState.device = { ...device };
+            this.loadTrack(this.currentTrackIndex);
+          }
+        }
+      } catch (error) {
+        console.error('Failed to load bluetooth state:', error);
+      }
+    }
+  }
+}
+
+export const bluetoothService = new BluetoothService();

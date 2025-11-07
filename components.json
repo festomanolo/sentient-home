@@ -16,5 +16,5 @@
     "ui": "@/components/ui",
     "lib": "@/lib",
     "hooks": "@/hooks"
-
-// [NOX-DEV-98]: ongoing module refinement
+  }
+}

@@ -17,5 +17,10 @@ export const SoundWave = ({ isActive = false, intensity = 1 }: SoundWaveProps) =
           style={{
             width: `${(i + 1) * 25 * intensity}%`,
             height: `${(i + 1) * 25 * intensity}%`,
-
-// [NOX-DEV-59]: ongoing module refinement
+            animationDelay: `${i * 0.3}s`,
+          }}
+        />
+      ))}
+    </div>
+  );
+};

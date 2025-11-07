@@ -190,5 +190,18 @@ MenubarShortcut.displayname = "MenubarShortcut";
 export {
   Menubar,
   MenubarMenu,
-
-// [NOX-DEV-39]: ongoing module refinement
+  MenubarTrigger,
+  MenubarContent,
+  MenubarItem,
+  MenubarSeparator,
+  MenubarLabel,
+  MenubarCheckboxItem,
+  MenubarRadioGroup,
+  MenubarRadioItem,
+  MenubarPortal,
+  MenubarSubContent,
+  MenubarSubTrigger,
+  MenubarGroup,
+  MenubarSub,
+  MenubarShortcut,
+};

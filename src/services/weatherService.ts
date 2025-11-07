@@ -202,5 +202,195 @@ class WeatherService {
       return "It's quite hot! Stay hydrated and seek shade.";
     } else if (temp < 32) {
       return "Bundle up! It's freezing outside.";
+    } else if (condition.includes('sunny') || condition.includes('clear')) {
+      return "Perfect weather to get outside!";
+    } else if (condition.includes('cloud')) {
+      return "Nice and comfortable weather today.";
+    }
+    
+    return "Have a great day!";
+  }
 
-// [NOX-DEV-35]: ongoing module refinement
+  private async getCurrentPosition(): Promise<GeolocationPosition> {
+    console.log('Attempting to get current position...');
+    
+    try {
+      // Try Capacitor Geolocation first (for mobile app)
+      if ('Capacitor' in window && (window as any).Capacitor?.isNativePlatform?.()) {
+        console.log('Using Capacitor geolocation...');
+        const coordinates = await Geolocation.getCurrentPosition({
+          enableHighAccuracy: true,
+          timeout: 15000,
+          maximumAge: 300000 // 5 minutes cache
+        });
+        console.log('Capacitor geolocation success:', coordinates);
+        this.saveLocation(coordinates.coords.latitude, coordinates.coords.longitude);
+        return coordinates;
+      }
+
+      // Fallback to browser geolocation
+      if ('geolocation' in navigator) {
+        console.log('Using browser geolocation...');
+        return new Promise((resolve, reject) => {
+          navigator.geolocation.getCurrentPosition(
+            (position) => {
+              console.log('Browser geolocation success:', position);
+              this.saveLocation(position.coords.latitude, position.coords.longitude);
+              resolve(position);
+            },
+            (error) => {
+              console.error('Browser geolocation error:', error);
+              reject(new Error(`Geolocation failed: ${error.message}`));
+            },
+            {
+              enableHighAccuracy: true,
+              timeout: 15000,
+              maximumAge: 300000 // 5 minutes
+            }
+          );
+        });
+      }
+
+      throw new Error('Geolocation not supported by this device/browser');
+    } catch (error) {
+      console.error('Primary geolocation failed:', error);
+      
+      // Try to get location from IP geolocation as fallback
+      try {
+        console.log('Trying IP-based geolocation...');
+        const ipLocation = await this.getLocationFromIP();
+        if (ipLocation) {
+          console.log('IP geolocation success:', ipLocation);
+          this.saveLocation(ipLocation.lat, ipLocation.lon, ipLocation.city);
+          return {
+            coords: {
+              latitude: ipLocation.lat,
+              longitude: ipLocation.lon,
+              accuracy: 10000, // Low accuracy for IP location
+              altitude: null,
+              altitudeAccuracy: null,
+              heading: null,
+              speed: null
+            },
+            timestamp: Date.now()
+          };
+        }
+      } catch (ipError) {
+        console.error('IP geolocation failed:', ipError);
+      }
+
+      // Final fallback to user's saved location
+      const savedLocation = this.getSavedLocation();
+      if (savedLocation) {
+        console.log('Using saved location:', savedLocation);
+        return {
+          coords: {
+            latitude: savedLocation.lat,
+            longitude: savedLocation.lon,
+            accuracy: 0,
+            altitude: null,
+            altitudeAccuracy: null,
+            heading: null,
+            speed: null
+          },
+          timestamp: Date.now()
+        };
+      }
+
+      throw new Error('Unable to determine location. Please enable location services or set a manual location.');
+    }
+  }
+
+  private async getLocationFromIP(): Promise<{lat: number, lon: number, city: string} | null> {
+    try {
+      // Use a free IP geolocation service
+      const response = await fetch('https://ipapi.co/json/');
+      const data = await response.json();
+      
+      if (data.latitude && data.longitude) {
+        // Save this location for future use
+        localStorage.setItem('nox-location', JSON.stringify({
+          lat: data.latitude,
+          lon: data.longitude,
+          city: data.city || 'Unknown'
+        }));
+        
+        return {
+          lat: data.latitude,
+          lon: data.longitude,
+          city: data.city || 'Unknown'
+        };
+      }
+      
+      return null;
+    } catch (error) {
+      console.error('IP geolocation failed:', error);
+      return null;
+    }
+  }
+
+  private saveLocation(lat: number, lon: number, city?: string) {
+    try {
+      const locationData = { lat, lon, city: city || 'Unknown', timestamp: Date.now() };
+      localStorage.setItem('nox-location', JSON.stringify(locationData));
+      console.log('Location saved:', locationData);
+    } catch (error) {
+      console.error('Failed to save location:', error);
+    }
+  }
+
+  private getSavedLocation(): {lat: number, lon: number, city?: string} | null {
+    try {
+      const saved = localStorage.getItem('nox-location');
+      if (saved) {
+        const location = JSON.parse(saved);
+        // Check if saved location is not too old (24 hours)
+        if (Date.now() - (location.timestamp || 0) < 24 * 60 * 60 * 1000) {
+          return { lat: location.lat, lon: location.lon, city: location.city };
+        }
+      }
+    } catch (error) {
+      console.error('Failed to load saved location:', error);
+    }
+    
+    return null;
+  }
+
+  async setManualLocation(city: string): Promise<void> {
+    try {
+      // Use geocoding to get coordinates for the city
+      const response = await axios.get(`${this.BASE_URL}/weather`, {
+        params: {
+          q: city,
+          appid: this.API_KEY,
+          units: 'imperial'
+        },
+        timeout: 10000
+      });
+
+      if (response.data && response.data.coord) {
+        this.saveLocation(response.data.coord.lat, response.data.coord.lon, city);
+        // Clear cached weather to force refresh
+        this.cachedWeather = null;
+        console.log(`Manual location set to: ${city}`);
+      } else {
+        throw new Error('City not found');
+      }
+    } catch (error) {
+      console.error('Failed to set manual location:', error);
+      throw new Error(`Failed to find location for: ${city}`);
+    }
+  }
+
+  private getMockForecast(): WeatherForecast[] {
+    return [
+      { date: 'Today', high: 75, low: 62, description: 'sunny', icon: '01d', precipitation: 0 },
+      { date: 'Thu', high: 73, low: 59, description: 'partly cloudy', icon: '02d', precipitation: 10 },
+      { date: 'Fri', high: 68, low: 55, description: 'rainy', icon: '10d', precipitation: 80 },
+      { date: 'Sat', high: 71, low: 58, description: 'cloudy', icon: '03d', precipitation: 20 },
+      { date: 'Sun', high: 76, low: 63, description: 'sunny', icon: '01d', precipitation: 5 }
+    ];
+  }
+}
+
+export const weatherService = new WeatherService();

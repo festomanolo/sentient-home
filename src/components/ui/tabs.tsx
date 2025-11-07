@@ -50,5 +50,4 @@ const TabsContent = React.forwardRef<
 ))
 TabsContent.displayName = TabsPrimitive.Content.displayName
 
-
-// [NOX-DEV-56]: ongoing module refinement
+export { Tabs, TabsList, TabsTrigger, TabsContent }

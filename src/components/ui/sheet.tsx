@@ -103,5 +103,5 @@ export {
   SheetOverlay,
   SheetPortal,
   SheetTitle,
-
-// [NOX-DEV-49]: ongoing module refinement
+  SheetTrigger,
+};

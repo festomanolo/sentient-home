@@ -69,5 +69,66 @@ export const WeatherSetup = () => {
             Remove API Key
           </Button>
         </CardContent>
+      </Card>
+    );
+  }
 
-// [NOX-DEV-33]: ongoing module refinement
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2">
+          <Key className="w-5 h-5" />
+          Weather API Setup
+        </CardTitle>
+        <CardDescription>
+          Configure your OpenWeatherMap API key to enable real weather data and forecasts.
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        <Alert>
+          <AlertDescription>
+            <div className="space-y-2">
+              <p>To get real weather data, you need a free API key from OpenWeatherMap:</p>
+              <ol className="list-decimal list-inside space-y-1 text-sm">
+                <li>Visit <a href="https://openweathermap.org/api" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline inline-flex items-center gap-1">
+                  OpenWeatherMap API <ExternalLink className="w-3 h-3" />
+                </a></li>
+                <li>Sign up for a free account</li>
+                <li>Generate an API key</li>
+                <li>Enter it below</li>
+              </ol>
+            </div>
+          </AlertDescription>
+        </Alert>
+
+        <div className="flex gap-2">
+          <Input
+            type="password"
+            placeholder="Enter your OpenWeatherMap API key"
+            value={apiKey}
+            onChange={(e) => setApiKey(e.target.value)}
+            disabled={isTestingKey}
+          />
+          <Button 
+            onClick={handleSaveApiKey}
+            disabled={!apiKey.trim() || isTestingKey}
+          >
+            {isTestingKey ? "Testing..." : "Save & Test"}
+          </Button>
+        </div>
+
+        {testResult && (
+          <Alert variant={testResult.success ? "default" : "destructive"}>
+            <AlertDescription>
+              {testResult.message}
+            </AlertDescription>
+          </Alert>
+        )}
+
+        <div className="text-sm text-muted-foreground">
+          <p><strong>Note:</strong> Without an API key, NOX AI will use simulated weather data for demonstration purposes.</p>
+        </div>
+      </CardContent>
+    </Card>
+  );
+};

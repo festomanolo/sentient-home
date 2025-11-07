@@ -40,5 +40,112 @@ All colors MUST be HSL.
     --radius: 1rem;
 
     /* NOX AI Custom Tokens - Light */
+    --nox-violet: 262 52% 47%;
+    --nox-violet-light: 262 52% 57%;
+    --nox-blue: 221 83% 53%;
+    --nox-teal: 174 72% 56%;
+    --nox-glow: 262 100% 70%;
+    --nox-particle: 186 100% 60%;
+    
+    --gradient-orb: radial-gradient(circle at 50% 50%, hsl(262 52% 47% / 0.3), hsl(174 72% 56% / 0.2), transparent);
+    --gradient-header: linear-gradient(135deg, hsl(262 52% 97%), hsl(186 100% 97%));
+    --gradient-card: linear-gradient(145deg, hsl(0 0% 100% / 0.95), hsl(210 20% 98% / 0.9));
+    
+    --shadow-soft: 0 4px 24px hsl(262 52% 47% / 0.1);
+    --shadow-glow: 0 0 40px hsl(262 52% 47% / 0.3);
+    --shadow-neon: 0 0 20px hsl(174 72% 56% / 0.6);
+  }
 
-// [NOX-DEV-68]: ongoing module refinement
+  .dark {
+    /* Dark Theme - Deep obsidian, violet-blue gradients, teal neon */
+    --background: 240 10% 4%;
+    --foreground: 210 40% 98%;
+
+    --card: 240 8% 8%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 240 8% 8%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 262 80% 65%;
+    --primary-foreground: 240 10% 4%;
+
+    --secondary: 240 6% 15%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 240 6% 15%;
+    --muted-foreground: 215 20% 65%;
+
+    --accent: 174 72% 56%;
+    --accent-foreground: 240 10% 4%;
+
+    --destructive: 0 63% 31%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 240 6% 15%;
+    --input: 240 6% 15%;
+    --ring: 262 80% 65%;
+
+    /* NOX AI Custom Tokens - Dark */
+    --nox-violet: 262 80% 65%;
+    --nox-violet-light: 262 80% 75%;
+    --nox-blue: 221 83% 53%;
+    --nox-teal: 174 72% 56%;
+    --nox-glow: 262 100% 70%;
+    --nox-particle: 174 100% 70%;
+    
+    --gradient-orb: radial-gradient(circle at 50% 50%, hsl(262 80% 65% / 0.4), hsl(174 72% 56% / 0.3), transparent);
+    --gradient-header: linear-gradient(135deg, hsl(240 10% 4%), hsl(240 8% 8%));
+    --gradient-card: linear-gradient(145deg, hsl(240 8% 8% / 0.8), hsl(240 6% 10% / 0.6));
+    
+    --shadow-soft: 0 4px 24px hsl(262 80% 65% / 0.2);
+    --shadow-glow: 0 0 60px hsl(262 80% 65% / 0.5);
+    --shadow-neon: 0 0 30px hsl(174 72% 56% / 0.8);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+
+  button, input, select, textarea {
+    @apply rounded-[12px];
+  }
+}
+
+@layer base {
+  html, body {
+    @apply overflow-x-hidden;
+    height: 100%;
+    width: 100%;
+  }
+}
+
+@layer components {
+  .macos-card {
+    @apply rounded-[24px] bg-card/80 backdrop-blur-xl border border-border/5;
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+  }
+
+  .glass-container {
+    @apply rounded-[24px] bg-gradient-to-b from-card/90 to-card/70 backdrop-blur-xl border border-border/10;
+    box-shadow: 0 2px 24px rgba(0, 0, 0, 0.08);
+  }
+
+  .smooth-transition {
+    @apply transition-all duration-300 ease-out;
+  }
+
+  .mobile-container {
+    @apply px-4 py-6 md:px-6 md:py-8 max-w-full w-full overflow-x-hidden;
+  }
+
+  .page-container {
+    @apply min-h-screen w-full max-w-full relative overflow-hidden;
+  }
+}

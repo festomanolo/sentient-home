@@ -173,5 +173,134 @@ const Settings = () => {
           <GlassCard>
             <h2 className="text-xl font-semibold mb-6 flex items-center gap-3">
               <Brain className="w-5 h-5 text-primary" />
+              Intelligence & Control
+            </h2>
+            <div className="space-y-6">
+              <SettingItem
+                icon={Brain}
+                label="Learning Mode"
+                description="Allow NOX AI to learn from your patterns and preferences"
+                checked={settings.learningMode}
+                onCheckedChange={() => toggleSetting("learningMode")}
+                disabled={settings.privacyMode}
+              />
+              <SettingItem
+                icon={Volume2}
+                label="Adaptive Volume"
+                description="Automatically adjust volume based on detected sounds"
+                checked={settings.adaptiveVolume}
+                onCheckedChange={() => toggleSetting("adaptiveVolume")}
+              />
+              <SettingItem
+                icon={Smartphone}
+                label="App Control"
+                description="Allow NOX AI to control other apps like Lark Player, Spotify"
+                checked={settings.appControl}
+                onCheckedChange={() => toggleSetting("appControl")}
+              />
+              <SettingItem
+                icon={Bluetooth}
+                label="Bluetooth Management"
+                description="Manage and control Bluetooth devices automatically"
+                checked={settings.bluetoothControl}
+                onCheckedChange={() => toggleSetting("bluetoothControl")}
+              />
+            </div>
+          </GlassCard>
 
-// [NOX-DEV-50]: ongoing module refinement
+          {/* Environment Settings */}
+          <GlassCard>
+            <h2 className="text-xl font-semibold mb-6 flex items-center gap-3">
+              <Moon className="w-5 h-5 text-primary" />
+              Environment
+            </h2>
+            <div className="space-y-6">
+              <SettingItem
+                icon={Moon}
+                label="Night Mode"
+                description="Reduce sensitivity and notifications during night hours (10 PM - 7 AM)"
+                checked={settings.nightMode}
+                onCheckedChange={() => toggleSetting("nightMode")}
+              />
+              <SettingItem
+                icon={Bell}
+                label="Environment Awareness"
+                description="Monitor and react to sounds in your environment"
+                checked={settings.environmentAwareness}
+                onCheckedChange={() => toggleSetting("environmentAwareness")}
+              />
+            </div>
+          </GlassCard>
+
+          {/* Weather API Configuration */}
+          <WeatherSetup />
+
+          {/* Privacy & Notifications */}
+          <GlassCard>
+            <h2 className="text-xl font-semibold mb-6 flex items-center gap-3">
+              <Shield className="w-5 h-5 text-primary" />
+              Privacy & Notifications
+            </h2>
+            <div className="space-y-6">
+              <SettingItem
+                icon={Bell}
+                label="Notifications"
+                description="Receive alerts for detected sounds and automated actions"
+                checked={settings.notifications}
+                onCheckedChange={() => toggleSetting("notifications")}
+              />
+              <SettingItem
+                icon={Shield}
+                label="Privacy Mode"
+                description="Disable all learning and data collection (disables Learning Mode)"
+                checked={settings.privacyMode}
+                onCheckedChange={() => toggleSetting("privacyMode")}
+              />
+            </div>
+          </GlassCard>
+        </div>
+
+        {/* Save Button */}
+        <div className="flex justify-center mt-8 animate-fade-in">
+          <Button size="lg" className="px-12" onClick={handleSave}>
+            Save Changes
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+interface SettingItemProps {
+  icon: React.ElementType;
+  label: string;
+  description: string;
+  checked: boolean;
+  onCheckedChange: () => void;
+  disabled?: boolean;
+}
+
+const SettingItem = ({ icon: Icon, label, description, checked, onCheckedChange, disabled }: SettingItemProps) => {
+  return (
+    <div className={`flex items-start gap-4 ${disabled ? "opacity-50" : ""}`}>
+      <div className="p-2 rounded-lg bg-primary/10 mt-1">
+        <Icon className="w-4 h-4 text-primary" />
+      </div>
+      <div className="flex-1">
+        <Label htmlFor={label} className="text-base font-medium cursor-pointer">
+          {label}
+        </Label>
+        <p className="text-sm text-muted-foreground mt-1">{description}</p>
+      </div>
+      <Switch
+        id={label}
+        checked={checked}
+        onCheckedChange={onCheckedChange}
+        disabled={disabled}
+        className="mt-1"
+      />
+    </div>
+  );
+};
+
+export default Settings;

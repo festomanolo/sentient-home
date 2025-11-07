@@ -12,5 +12,5 @@ export const useIsMobile = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-
-// [NOX-DEV-93]: ongoing module refinement
+  return isMobile;
+};

@@ -16,5 +16,4 @@ export function useIsMobile() {
   }, []);
 
   return !!isMobile;
-
-// [NOX-DEV-94]: ongoing module refinement
+}

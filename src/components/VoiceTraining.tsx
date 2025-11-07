@@ -139,5 +139,145 @@ export const VoiceTraining = () => {
     voiceService.stopListening();
     
     const successRate = trainingResults.filter(result => result).length / trainingResults.length;
+    
+    if (successRate > 0.8) {
+      voiceService.speak("Excellent! Your voice training is complete. I can understand you very well.");
+    } else if (successRate > 0.6) {
+      voiceService.speak("Good job! Your voice training is complete. I should be able to understand most of your commands.");
+    } else {
+      voiceService.speak("Training complete. You might want to try again in a quieter environment for better results.");
+    }
+  };
 
-// [NOX-DEV-28]: ongoing module refinement
+  const restartTraining = () => {
+    setCurrentStep(0);
+    setTrainingResults([]);
+    setRecognizedText('');
+    
+    if (trainingPhrases[0]) {
+      voiceService.speak(`Let's try again. Please say: ${trainingPhrases[0]}`);
+    }
+  };
+
+  const testVoice = async () => {
+    await voiceService.speak("Hello Manolo! This is how I sound. You can adjust my voice settings in the configuration above.");
+  };
+
+  const progress = isTraining ? (currentStep / trainingPhrases.length) * 100 : 0;
+  const isComplete = currentStep >= trainingPhrases.length && isTraining;
+
+  useEffect(() => {
+    if (isComplete) {
+      stopTraining();
+    }
+  }, [isComplete]);
+
+  return (
+    <GlassCard>
+      <div className="flex items-center gap-3 mb-6">
+        <div className="p-2 rounded-lg bg-primary/10">
+          <Mic className="w-5 h-5 text-primary" />
+        </div>
+        <h2 className="text-lg font-semibold">Voice Training</h2>
+      </div>
+
+      {!isTraining ? (
+        <div className="space-y-6">
+          <div>
+            <h3 className="font-medium mb-3">Training Tips</h3>
+            <div className="grid gap-2">
+              {trainingTips.slice(0, 4).map((tip, index) => (
+                <div key={index} className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <CheckCircle className="w-4 h-4 text-green-500" />
+                  <span>{tip}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="flex gap-3">
+            <Button onClick={startTraining} className="flex-1">
+              <Mic className="w-4 h-4 mr-2" />
+              Start Voice Training
+            </Button>
+            <Button variant="outline" onClick={testVoice}>
+              <Play className="w-4 h-4 mr-2" />
+              Test Voice
+            </Button>
+          </div>
+
+          {trainingResults.length > 0 && (
+            <div className="p-4 rounded-lg bg-background/30 border border-border/20">
+              <h4 className="font-medium mb-2">Last Training Results</h4>
+              <div className="flex gap-2 mb-2">
+                {trainingResults.map((result, index) => (
+                  <div
+                    key={index}
+                    className={`w-6 h-6 rounded-full flex items-center justify-center ${
+                      result ? 'bg-green-500' : 'bg-red-500'
+                    }`}
+                  >
+                    {result ? (
+                      <CheckCircle className="w-4 h-4 text-white" />
+                    ) : (
+                      <XCircle className="w-4 h-4 text-white" />
+                    )}
+                  </div>
+                ))}
+              </div>
+              <p className="text-sm text-muted-foreground">
+                Success Rate: {Math.round((trainingResults.filter(r => r).length / trainingResults.length) * 100)}%
+              </p>
+            </div>
+          )}
+        </div>
+      ) : (
+        <div className="space-y-6">
+          <div>
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-sm font-medium">Training Progress</span>
+              <span className="text-sm text-muted-foreground">
+                {currentStep} / {trainingPhrases.length}
+              </span>
+            </div>
+            <Progress value={progress} className="h-2" />
+          </div>
+
+          {currentStep < trainingPhrases.length && (
+            <div className="p-4 rounded-lg bg-primary/10 border border-primary/20">
+              <div className="flex items-center gap-2 mb-2">
+                <Badge variant="outline">Step {currentStep + 1}</Badge>
+                {isListening && (
+                  <div className="flex items-center gap-1 text-green-600">
+                    <Mic className="w-4 h-4" />
+                    <span className="text-sm">Listening...</span>
+                  </div>
+                )}
+              </div>
+              <p className="font-medium mb-2">Please say:</p>
+              <p className="text-lg">{trainingPhrases[currentStep]}</p>
+              
+              {recognizedText && (
+                <div className="mt-3 p-2 rounded bg-background/50">
+                  <p className="text-sm text-muted-foreground">I heard:</p>
+                  <p className="font-medium">{recognizedText}</p>
+                </div>
+              )}
+            </div>
+          )}
+
+          <div className="flex gap-3">
+            <Button variant="outline" onClick={restartTraining}>
+              <RotateCcw className="w-4 h-4 mr-2" />
+              Restart
+            </Button>
+            <Button variant="outline" onClick={stopTraining}>
+              <MicOff className="w-4 h-4 mr-2" />
+              Stop Training
+            </Button>
+          </div>
+        </div>
+      )}
+    </GlassCard>
+  );
+};

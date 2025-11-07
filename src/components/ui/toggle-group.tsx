@@ -46,5 +46,4 @@ const ToggleGroupItem = React.forwardRef<
 
 ToggleGroupItem.displayName = ToggleGroupPrimitive.Item.displayName;
 
-
-// [NOX-DEV-60]: ongoing module refinement
+export { ToggleGroup, ToggleGroupItem };

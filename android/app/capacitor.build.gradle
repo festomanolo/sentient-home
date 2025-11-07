@@ -16,4 +16,6 @@ dependencies {
 }
 
 
-// [NOX-DEV-69]: ongoing module refinement
+if (hasProperty('postBuildExtras')) {
+  postBuildExtras()
+}

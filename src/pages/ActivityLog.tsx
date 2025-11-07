@@ -73,5 +73,63 @@ export function ActivityLog() {
                   ? "bg-violet-500/10 border border-violet-500/20"
                   : "bg-blue-50 border border-blue-200/20"
               }`}
+            >
+              <div className="flex items-start gap-4">
+                <div className={`p-2 rounded-lg ${
+                  theme === "dark" 
+                    ? "bg-violet-500/20" 
+                    : "bg-blue-100"
+                }`}>
+                  <Icon 
+                    size={20} 
+                    className={
+                      theme === "dark" ? "text-violet-400" : "text-blue-600"
+                    } 
+                  />
+                </div>
+                <div className="flex-1">
+                  <div className="flex items-center justify-between">
+                    <h3 className={`font-semibold ${
+                      theme === "dark" ? "text-white" : "text-gray-900"
+                    }`}>
+                      {event.title}
+                    </h3>
+                    <span className={`text-sm ${
+                      theme === "dark" ? "text-gray-400" : "text-gray-600"
+                    }`}>
+                      {formatTimeAgo(event.timestamp)}
+                    </span>
+                  </div>
+                  <p className={`mt-1 text-sm ${
+                    theme === "dark" ? "text-gray-400" : "text-gray-600"
+                  }`}>
+                    {event.description}
+                  </p>
+                  {event.result && (
+                    <p className={`mt-2 text-sm ${
+                      theme === "dark" ? "text-violet-400" : "text-blue-600"
+                    }`}>
+                      Result: {event.result}
+                    </p>
+                  )}
+                </div>
+              </div>
+            </motion.div>
+          );
+        })}
 
-// [NOX-DEV-42]: ongoing module refinement
+        {recentEvents.length === 0 && (
+          <div className={`text-center py-12 ${
+            theme === "dark" ? "text-gray-400" : "text-gray-600"
+          }`}>
+            <Clock className="w-12 h-12 mx-auto mb-4 opacity-50" />
+            <p className="text-lg font-semibold mb-2">No Activity Yet</p>
+            <p className="text-sm">
+              NOX AI will log smart reactions and automated actions here
+            </p>
+          </div>
+        )}
+      </div>
+    </PageLayout>
+  );
+}

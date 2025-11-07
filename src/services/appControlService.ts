@@ -375,5 +375,265 @@ class AppControlService {
         try {
           const commandMap: Record<string, string> = {
             'PLAY': 'play',
+            'PAUSE': 'pause',
+            'NEXT': 'next',
+            'PREVIOUS': 'previous'
+          };
+          
+          const pluginCommand = commandMap[command];
+          if (pluginCommand) {
+            const result = await LarkPlayer.sendMediaCommand({ command: pluginCommand });
+            if (result.success) {
+              console.log(`Successfully sent ${pluginCommand} command to Lark Player`);
+              return true;
+            } else {
+              console.warn(`Failed to send command: ${result.message}`);
+              
+              // If Lark Player isn't running, try to launch it
+              if (command === 'PLAY') {
+                console.log('Attempting to launch Lark Player...');
+                const launchResult = await LarkPlayer.launchApp();
+                if (launchResult.success) {
+                  // Wait a bit for app to start, then try play again
+                  await new Promise(resolve => setTimeout(resolve, 2000));
+                  const retryResult = await LarkPlayer.sendMediaCommand({ command: 'play' });
+                  return retryResult.success;
+                }
+              }
+              return false;
+            }
+          }
+        } catch (error) {
+          console.error('Native plugin error:', error);
+        }
+      }
+      
+      // Fallback to Media Session API for web
+      if ('mediaSession' in navigator) {
+        switch (command) {
+          case 'PLAY':
+            if (navigator.mediaSession.playbackState !== 'playing') {
+              navigator.mediaSession.playbackState = 'playing';
+            }
+            break;
+          case 'PAUSE':
+            if (navigator.mediaSession.playbackState !== 'paused') {
+              navigator.mediaSession.playbackState = 'paused';
+            }
+            break;
+        }
+        return true;
+      }
 
-// [NOX-DEV-53]: ongoing module refinement
+      return false;
+    } catch (error) {
+      console.error('Failed to control Lark Player:', error);
+      return false;
+    }
+  }
+
+  private async simulateMediaKeyEvent(keyCode: number): Promise<void> {
+    // In a real implementation, this would send actual Android key events
+    console.log(`Simulating media key event: ${keyCode}`);
+    
+    // Create a custom event to simulate the media key
+    const mediaEvent = new CustomEvent('mediakey', {
+      detail: { keyCode, timestamp: Date.now() }
+    });
+    
+    window.dispatchEvent(mediaEvent);
+  }
+
+  private async sendBroadcastIntent(packageName: string, action: string): Promise<boolean> {
+    try {
+      console.log(`Sending broadcast intent to ${packageName}: ${action}`);
+      
+      // In a real Capacitor app, this would send Android broadcast intents
+      if ('Capacitor' in window && (window as any).Capacitor?.isNativePlatform?.()) {
+        // This would be implemented with a custom Capacitor plugin
+        const intent = {
+          action: `${packageName}.${action}`,
+          package: packageName,
+          extras: {
+            command: action,
+            source: 'nox-ai'
+          }
+        };
+        
+        console.log('Broadcasting intent:', intent);
+        // In real implementation: await CapacitorIntents.sendBroadcast(intent);
+        return true;
+      }
+      
+      return false;
+    } catch (error) {
+      console.error('Failed to send broadcast intent:', error);
+      return false;
+    }
+  }
+
+  private async triggerSystemMediaApp(packageName: string): Promise<boolean> {
+    try {
+      // Try to detect and control system media
+      if ('mediaSession' in navigator) {
+        // Set up media session for the app
+        navigator.mediaSession.metadata = new MediaMetadata({
+          title: 'Controlled via NOX AI',
+          artist: 'Voice Assistant',
+          album: 'System Control'
+        });
+      }
+
+      return true;
+    } catch (error) {
+      console.error('Failed to trigger system media app:', error);
+      return false;
+    }
+  }
+
+  private async adjustSystemVolume(direction: number): Promise<boolean> {
+    try {
+      // Use native plugin if available
+      if ('Capacitor' in window && (window as any).Capacitor?.isNativePlatform?.()) {
+        try {
+          const result = await LarkPlayer.adjustVolume({ 
+            direction: direction > 0 ? 'up' : 'down',
+            amount: 1
+          });
+          if (result.success) {
+            console.log(`Volume adjusted to ${result.newLevel}%`);
+            return true;
+          }
+        } catch (error) {
+          console.error('Native volume control error:', error);
+        }
+      }
+      
+      // Fallback for web
+      if ('mediaSession' in navigator) {
+        console.log(`Adjusting system volume: ${direction > 0 ? 'up' : 'down'}`);
+        
+        // Simulate volume change
+        const currentVolume = parseInt(localStorage.getItem('system-volume') || '50');
+        const newVolume = Math.max(0, Math.min(100, currentVolume + (direction * 10)));
+        localStorage.setItem('system-volume', newVolume.toString());
+        
+        return true;
+      }
+
+      return false;
+    } catch (error) {
+      console.error(`Failed to adjust system volume:`, error);
+      return false;
+    }
+  }
+
+  private async triggerCameraAction(mode: 'photo' | 'video'): Promise<boolean> {
+    try {
+      console.log(`Triggering camera: ${mode}`);
+      // Would integrate with Capacitor Camera plugin
+      return true;
+    } catch (error) {
+      console.error(`Failed to trigger camera:`, error);
+      return false;
+    }
+  }
+
+  private async sendWhatsAppMessage(contact?: string, message?: string): Promise<boolean> {
+    if (!contact || !message) return false;
+    
+    try {
+      console.log(`Sending WhatsApp message to ${contact}: ${message}`);
+      // Would use WhatsApp Business API or deep linking
+      return true;
+    } catch (error) {
+      console.error(`Failed to send WhatsApp message:`, error);
+      return false;
+    }
+  }
+
+  private async searchInApp(packageName: string, query?: string): Promise<boolean> {
+    if (!query) return false;
+    
+    try {
+      console.log(`Searching in ${packageName}: ${query}`);
+      // Would use app-specific search intents
+      return true;
+    } catch (error) {
+      console.error(`Failed to search in app:`, error);
+      return false;
+    }
+  }
+
+  private findApp(appName: string): AppInfo | null {
+    const normalizedName = appName.toLowerCase().replace(/\s+/g, '_');
+    
+    // Direct match
+    if (this.knownApps[normalizedName]) {
+      return this.knownApps[normalizedName];
+    }
+    
+    // Fuzzy match
+    for (const [key, app] of Object.entries(this.knownApps)) {
+      if (app.appName.toLowerCase().includes(appName.toLowerCase()) ||
+          key.includes(normalizedName) ||
+          appName.toLowerCase().includes(app.appName.toLowerCase())) {
+        return app;
+      }
+    }
+    
+    return null;
+  }
+
+  getInstalledApps(): AppInfo[] {
+    return Object.values(this.knownApps).filter(app => app.isInstalled);
+  }
+
+  getControllableApps(): AppInfo[] {
+    return Object.values(this.knownApps).filter(app => app.isInstalled && app.canControl);
+  }
+
+  getActionHistory(): AppAction[] {
+    return [...this.actionHistory];
+  }
+
+  getSupportedActions(appName: string): string[] {
+    const app = this.findApp(appName);
+    return app ? app.supportedActions : [];
+  }
+
+  // Voice command helpers
+  parseAppCommand(command: string): { app: string; action: string; parameters?: Record<string, any> } | null {
+    const patterns = [
+      { regex: /(?:open|launch|start)\s+(.+)/i, action: 'open' },
+      { regex: /(?:play|resume)\s+(?:in\s+)?(.+)/i, action: 'play' },
+      { regex: /(?:pause|stop)\s+(?:in\s+)?(.+)/i, action: 'pause' },
+      { regex: /(?:next|skip)\s+(?:in\s+)?(.+)/i, action: 'next' },
+      { regex: /(?:previous|back)\s+(?:in\s+)?(.+)/i, action: 'previous' },
+      { regex: /(?:volume\s+up|louder)\s+(?:in\s+)?(.+)/i, action: 'volume_up' },
+      { regex: /(?:volume\s+down|quieter)\s+(?:in\s+)?(.+)/i, action: 'volume_down' },
+      { regex: /(?:take\s+(?:a\s+)?photo|camera)/i, action: 'take_photo', app: 'camera' },
+      { regex: /(?:record\s+video|video)/i, action: 'record_video', app: 'camera' },
+      { regex: /search\s+(.+)\s+(?:in\s+)?(.+)/i, action: 'search' }
+    ];
+
+    for (const pattern of patterns) {
+      const match = command.match(pattern.regex);
+      if (match) {
+        let app = pattern.app || match[1];
+        let parameters: Record<string, any> | undefined;
+
+        if (pattern.action === 'search' && match[2]) {
+          app = match[2];
+          parameters = { query: match[1] };
+        }
+
+        return { app: app.trim(), action: pattern.action, parameters };
+      }
+    }
+
+    return null;
+  }
+}
+
+export const appControlService = new AppControlService();

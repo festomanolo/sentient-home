@@ -8,5 +8,7 @@ User-agent: Twitterbot
 Allow: /
 
 User-agent: facebookexternalhit
+Allow: /
 
-// [NOX-DEV-5]: ongoing module refinement
+User-agent: *
+Allow: /

@@ -32,5 +32,7 @@ const AvatarFallback = React.forwardRef<
     className={cn("flex h-full w-full items-center justify-center rounded-full bg-muted", className)}
     {...props}
   />
+));
+AvatarFallback.displayName = AvatarPrimitive.Fallback.displayName;
 
-// [NOX-DEV-22]: ongoing module refinement
+export { Avatar, AvatarImage, AvatarFallback };

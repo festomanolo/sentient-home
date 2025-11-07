@@ -23,4 +23,4 @@ const Checkbox = React.forwardRef<
 ));
 Checkbox.displayName = CheckboxPrimitive.Root.displayName;
 
-// [NOX-DEV-27]: ongoing module refinement
+export { Checkbox };

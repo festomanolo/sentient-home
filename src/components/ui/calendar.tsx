@@ -48,5 +48,7 @@ function Calendar({ className, classNames, showOutsideDays = true, ...props }: C
       {...props}
     />
   );
+}
+Calendar.displayName = "Calendar";
 
-// [NOX-DEV-24]: ongoing module refinement
+export { Calendar };

@@ -106,5 +106,28 @@ export default {
         },
         "orb-pulse": {
           "0%, 100%": { 
-
-// [NOX-DEV-11]: ongoing module refinement
+            boxShadow: "0 0 40px hsl(var(--nox-violet) / 0.4), 0 0 80px hsl(var(--nox-teal) / 0.2)",
+            transform: "scale(1)"
+          },
+          "50%": { 
+            boxShadow: "0 0 60px hsl(var(--nox-violet) / 0.6), 0 0 120px hsl(var(--nox-teal) / 0.4)",
+            transform: "scale(1.02)"
+          },
+        },
+      },
+      animation: {
+        "accordion-down": "accordion-down 0.2s ease-out",
+        "accordion-up": "accordion-up 0.2s ease-out",
+        "breathe": "breathe 4s ease-in-out infinite",
+        "pulse-glow": "pulse-glow 2s ease-in-out infinite",
+        "ripple": "ripple 2s ease-out infinite",
+        "float": "float 6s ease-in-out infinite",
+        "particle-drift": "particle-drift 8s linear infinite",
+        "fade-in": "fade-in 0.6s ease-out",
+        "slide-up": "slide-up 0.5s ease-out",
+        "orb-pulse": "orb-pulse 3s ease-in-out infinite",
+      },
+    },
+  },
+  plugins: [require("tailwindcss-animate")],
+} satisfies Config;

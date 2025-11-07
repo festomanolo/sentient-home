@@ -30,5 +30,26 @@ export interface LarkPlayerPlugin {
    */
   getPlaybackState(): Promise<PlaybackState>;
 
+  /**
+   * Launch Lark Player app
+   */
+  launchApp(): Promise<{ success: boolean; message?: string }>;
 
-// [NOX-DEV-51]: ongoing module refinement
+  /**
+   * Set system volume
+   * @param options - Volume level (0-100)
+   */
+  setVolume(options: { level: number }): Promise<{ success: boolean }>;
+
+  /**
+   * Adjust system volume
+   * @param options - Direction (up or down) and amount
+   */
+  adjustVolume(options: { direction: 'up' | 'down'; amount?: number }): Promise<{ success: boolean; newLevel: number }>;
+}
+
+const LarkPlayer = registerPlugin<LarkPlayerPlugin>('LarkPlayer', {
+  web: () => import('./LarkPlayerPluginWeb').then(m => new m.LarkPlayerPluginWeb()),
+});
+
+export default LarkPlayer;

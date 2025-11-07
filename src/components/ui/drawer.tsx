@@ -77,5 +77,11 @@ export {
   Drawer,
   DrawerPortal,
   DrawerOverlay,
-
-// [NOX-DEV-32]: ongoing module refinement
+  DrawerTrigger,
+  DrawerClose,
+  DrawerContent,
+  DrawerHeader,
+  DrawerFooter,
+  DrawerTitle,
+  DrawerDescription,
+};

@@ -204,4 +204,118 @@ export class ServiceTester {
     }
   }
 
-// [NOX-DEV-64]: ongoing module refinement
+  private async testCommandProcessor(): Promise<void> {
+    console.log('Testing Command Processor...');
+    
+    try {
+      // Test weather command
+      const weatherResponse = await commandProcessor.executeCommand('what is the weather');
+      this.addResult('CommandProcessor', 'weatherCommand', weatherResponse.success, weatherResponse.message, weatherResponse);
+    } catch (error) {
+      this.addResult('CommandProcessor', 'weatherCommand', false, `Error: ${error.message}`);
+    }
+
+    try {
+      // Test time command
+      const timeResponse = await commandProcessor.executeCommand('what time is it');
+      this.addResult('CommandProcessor', 'timeCommand', timeResponse.success, timeResponse.message, timeResponse);
+    } catch (error) {
+      this.addResult('CommandProcessor', 'timeCommand', false, `Error: ${error.message}`);
+    }
+
+    try {
+      // Test greeting command
+      const greetingResponse = await commandProcessor.executeCommand('hello');
+      this.addResult('CommandProcessor', 'greetingCommand', greetingResponse.success, greetingResponse.message, greetingResponse);
+    } catch (error) {
+      this.addResult('CommandProcessor', 'greetingCommand', false, `Error: ${error.message}`);
+    }
+  }
+
+  private async checkMicrophonePermission(): Promise<boolean> {
+    try {
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        return false;
+      }
+      
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      stream.getTracks().forEach(track => track.stop());
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
+
+  private addResult(service: string, test: string, success: boolean, message: string, data?: any): void {
+    const result: TestResult = { service, test, success, message, data };
+    this.results.push(result);
+    
+    const emoji = success ? '✅' : '❌';
+    console.log(`${emoji} ${service}.${test}: ${message}`);
+  }
+
+  getResults(): TestResult[] {
+    return [...this.results];
+  }
+
+  getSuccessRate(): number {
+    const successful = this.results.filter(r => r.success).length;
+    return this.results.length > 0 ? (successful / this.results.length) * 100 : 0;
+  }
+
+  getFailedTests(): TestResult[] {
+    return this.results.filter(r => !r.success);
+  }
+
+  printSummary(): void {
+    const successRate = this.getSuccessRate();
+    const failed = this.getFailedTests();
+    
+    console.log('\n📊 NOX AI Service Test Summary');
+    console.log('================================');
+    console.log(`Total Tests: ${this.results.length}`);
+    console.log(`Success Rate: ${successRate.toFixed(1)}%`);
+    console.log(`Failed Tests: ${failed.length}`);
+    
+    if (failed.length > 0) {
+      console.log('\n❌ Failed Tests:');
+      failed.forEach(test => {
+        console.log(`  - ${test.service}.${test.test}: ${test.message}`);
+      });
+    }
+    
+    console.log('\n🎯 Service Status:');
+    const serviceGroups = this.results.reduce((acc, result) => {
+      if (!acc[result.service]) {
+        acc[result.service] = { total: 0, success: 0 };
+      }
+      acc[result.service].total++;
+      if (result.success) acc[result.service].success++;
+      return acc;
+    }, {} as Record<string, { total: number; success: number }>);
+    
+    Object.entries(serviceGroups).forEach(([service, stats]) => {
+      const rate = (stats.success / stats.total) * 100;
+      const status = rate === 100 ? '🟢' : rate >= 75 ? '🟡' : '🔴';
+      console.log(`  ${status} ${service}: ${stats.success}/${stats.total} (${rate.toFixed(1)}%)`);
+    });
+  }
+}
+
+// Export singleton instance
+export const serviceTester = new ServiceTester();
+
+// Global function for easy testing
+declare global {
+  interface Window {
+    testNoxServices: () => Promise<TestResult[]>;
+  }
+}
+
+if (typeof window !== 'undefined') {
+  window.testNoxServices = async () => {
+    const results = await serviceTester.runAllTests();
+    serviceTester.printSummary();
+    return results;
+  };
+}

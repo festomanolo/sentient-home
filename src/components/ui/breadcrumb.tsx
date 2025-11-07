@@ -77,5 +77,14 @@ const BreadcrumbEllipsis = ({ className, ...props }: React.ComponentProps<"span"
     <span className="sr-only">More</span>
   </span>
 );
+BreadcrumbEllipsis.displayName = "BreadcrumbElipssis";
 
-// [NOX-DEV-23]: ongoing module refinement
+export {
+  Breadcrumb,
+  BreadcrumbList,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+  BreadcrumbEllipsis,
+};

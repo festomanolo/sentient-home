@@ -22,5 +22,6 @@ const HoverCardContent = React.forwardRef<
     {...props}
   />
 ));
+HoverCardContent.displayName = HoverCardPrimitive.Content.displayName;
 
-// [NOX-DEV-35]: ongoing module refinement
+export { HoverCard, HoverCardTrigger, HoverCardContent };

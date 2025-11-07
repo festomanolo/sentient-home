@@ -224,5 +224,232 @@ class AICommandProcessor {
         if (confidence > highestConfidence) {
           highestConfidence = confidence;
           
+          const entities: CommandEntities = pattern.extractEntities 
+            ? pattern.extractEntities(match) 
+            : {};
 
-// [NOX-DEV-30]: ongoing module refinement
+          bestMatch = {
+            action: pattern.action,
+            confidence,
+            entities,
+            requiresConfirmation: confidence < 0.7,
+            originalTranscript: transcript
+          };
+        }
+      }
+    }
+
+    // If no match found, try fuzzy matching for app names
+    if (!bestMatch) {
+      const appMatch = this.fuzzyMatchApp(cleanTranscript);
+      if (appMatch) {
+        bestMatch = {
+          action: 'open_app',
+          confidence: appMatch.confidence,
+          entities: { app: appMatch.app },
+          requiresConfirmation: appMatch.confidence < 0.7,
+          originalTranscript: transcript
+        };
+      }
+    }
+
+    // If still no match, check context
+    if (!bestMatch && this.contextStack.length > 0) {
+      const contextualMatch = this.matchWithContext(cleanTranscript);
+      if (contextualMatch) {
+        bestMatch = contextualMatch;
+      }
+    }
+
+    // Default to unknown
+    if (!bestMatch) {
+      bestMatch = {
+        action: 'unknown',
+        confidence: 0,
+        entities: {},
+        requiresConfirmation: false,
+        originalTranscript: transcript
+      };
+    }
+
+    // Add to context stack
+    this.addToContext(bestMatch);
+
+    return bestMatch;
+  }
+
+  extractEntities(transcript: string): CommandEntities {
+    const entities: CommandEntities = {};
+    const cleanTranscript = transcript.toLowerCase();
+
+    // Extract volume numbers
+    const volumeMatch = cleanTranscript.match(/(\d+)\s*%?/);
+    if (volumeMatch) {
+      entities.volume = parseInt(volumeMatch[1]);
+    }
+
+    // Extract locations (simple heuristic)
+    const locationMatch = cleanTranscript.match(/in\s+([a-z\s]+)/i);
+    if (locationMatch) {
+      entities.location = locationMatch[1].trim();
+    }
+
+    // Extract day references
+    const dayMatch = cleanTranscript.match(/(today|tomorrow|monday|tuesday|wednesday|thursday|friday|saturday|sunday)/i);
+    if (dayMatch) {
+      entities.day = dayMatch[1].toLowerCase();
+    }
+
+    return entities;
+  }
+
+  getCommandSuggestions(partialCommand: string): string[] {
+    const suggestions: string[] = [];
+    const partial = partialCommand.toLowerCase();
+
+    const commonCommands = [
+      "play music",
+      "pause music",
+      "next song",
+      "volume up",
+      "volume down",
+      "what's the weather",
+      "what time is it",
+      "what's on my calendar",
+      "open lark player",
+      "weather forecast"
+    ];
+
+    for (const command of commonCommands) {
+      if (command.startsWith(partial) || command.includes(partial)) {
+        suggestions.push(command);
+      }
+    }
+
+    return suggestions.slice(0, 5);
+  }
+
+  learnFromFeedback(command: string, wasSuccessful: boolean): void {
+    const lastIntent = this.commandHistory[this.commandHistory.length - 1];
+    if (lastIntent && lastIntent.command === command) {
+      lastIntent.success = wasSuccessful;
+    }
+  }
+
+  private fuzzyMatchApp(transcript: string): { app: string; confidence: number } | null {
+    const knownApps = [
+      { name: 'lark player', aliases: ['lark', 'player', 'music player'], key: 'lark_player' },
+      { name: 'spotify', aliases: ['spot'], key: 'spotify' },
+      { name: 'youtube', aliases: ['tube', 'you tube'], key: 'youtube' },
+      { name: 'camera', aliases: ['cam', 'photo'], key: 'camera' },
+      { name: 'settings', aliases: ['setting'], key: 'settings' },
+    ];
+
+    for (const app of knownApps) {
+      // Check exact match
+      if (transcript.includes(app.name)) {
+        return { app: app.key, confidence: 0.9 };
+      }
+
+      // Check aliases
+      for (const alias of app.aliases) {
+        if (transcript.includes(alias)) {
+          return { app: app.key, confidence: 0.75 };
+        }
+      }
+
+      // Check fuzzy match (Levenshtein distance)
+      const distance = this.levenshteinDistance(transcript, app.name);
+      if (distance <= 2) {
+        return { app: app.key, confidence: 0.7 };
+      }
+    }
+
+    return null;
+  }
+
+  private matchWithContext(transcript: string): CommandIntent | null {
+    const lastContext = this.contextStack[this.contextStack.length - 1];
+    
+    // Handle contextual commands like "louder" after "play music"
+    if (lastContext.action === 'play_music' || lastContext.action === 'pause_music') {
+      if (transcript.match(/^(louder|up)$/i)) {
+        return {
+          action: 'volume_up',
+          confidence: 0.8,
+          entities: {},
+          requiresConfirmation: false,
+          originalTranscript: transcript
+        };
+      }
+      if (transcript.match(/^(quieter|down)$/i)) {
+        return {
+          action: 'volume_down',
+          confidence: 0.8,
+          entities: {},
+          requiresConfirmation: false,
+          originalTranscript: transcript
+        };
+      }
+    }
+
+    return null;
+  }
+
+  private addToContext(intent: CommandIntent): void {
+    this.contextStack.push(intent);
+    if (this.contextStack.length > this.MAX_CONTEXT) {
+      this.contextStack.shift();
+    }
+
+    this.commandHistory.push({
+      command: intent.originalTranscript,
+      intent,
+      timestamp: new Date(),
+      success: true
+    });
+
+    if (this.commandHistory.length > this.MAX_HISTORY) {
+      this.commandHistory.shift();
+    }
+  }
+
+  private levenshteinDistance(str1: string, str2: string): number {
+    const matrix: number[][] = [];
+
+    for (let i = 0; i <= str2.length; i++) {
+      matrix[i] = [i];
+    }
+
+    for (let j = 0; j <= str1.length; j++) {
+      matrix[0][j] = j;
+    }
+
+    for (let i = 1; i <= str2.length; i++) {
+      for (let j = 1; j <= str1.length; j++) {
+        if (str2.charAt(i - 1) === str1.charAt(j - 1)) {
+          matrix[i][j] = matrix[i - 1][j - 1];
+        } else {
+          matrix[i][j] = Math.min(
+            matrix[i - 1][j - 1] + 1,
+            matrix[i][j - 1] + 1,
+            matrix[i - 1][j] + 1
+          );
+        }
+      }
+    }
+
+    return matrix[str2.length][str1.length];
+  }
+
+  getCommandHistory(): Array<{ command: string; intent: CommandIntent; timestamp: Date; success: boolean }> {
+    return [...this.commandHistory];
+  }
+
+  clearHistory(): void {
+    this.commandHistory = [];
+    this.contextStack = [];
+  }
+}
+
+export const aiCommandProcessor = new AICommandProcessor();

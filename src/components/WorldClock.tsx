@@ -75,5 +75,65 @@ export const WorldClock = () => {
                 ))}
             </SelectContent>
           </Select>
+          <Button
+            size="sm"
+            onClick={addTimezone}
+            disabled={!selectedTimezone}
+          >
+            <Plus className="w-4 h-4" />
+          </Button>
+        </div>
+      </div>
 
-// [NOX-DEV-39]: ongoing module refinement
+      <div className="grid gap-4">
+        {clocks.map((clock) => (
+          <div
+            key={clock.id}
+            className="flex items-center justify-between p-4 rounded-lg bg-background/50 border border-border/30"
+          >
+            <div className="flex items-center gap-3">
+              {getTimeIcon(clock.isDaytime)}
+              <div>
+                <h3 className="font-medium">{clock.name}</h3>
+                <p className="text-sm text-muted-foreground">{clock.offset}</p>
+              </div>
+            </div>
+            
+            <div className="flex items-center gap-3">
+              <div className="text-right">
+                <p className="text-xl font-mono font-bold">{formatTime(clock)}</p>
+                <p className="text-xs text-muted-foreground">
+                  {new Date().toLocaleDateString('en-US', { 
+                    timeZone: clock.timezone,
+                    weekday: 'short',
+                    month: 'short',
+                    day: 'numeric'
+                  })}
+                </p>
+              </div>
+              
+              {clocks.length > 1 && (
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  onClick={() => removeTimezone(clock.timezone)}
+                  className="text-muted-foreground hover:text-destructive"
+                >
+                  <X className="w-4 h-4" />
+                </Button>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {clocks.length === 0 && (
+        <div className="text-center py-8 text-muted-foreground">
+          <Clock className="w-12 h-12 mx-auto mb-4 opacity-50" />
+          <p>No world clocks configured</p>
+          <p className="text-sm mt-1">Add a timezone to get started</p>
+        </div>
+      )}
+    </GlassCard>
+  );
+};

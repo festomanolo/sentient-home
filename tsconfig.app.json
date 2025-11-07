@@ -24,5 +24,7 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
-
-// [NOX-DEV-12]: ongoing module refinement
+    }
+  },
+  "include": ["src"]
+}

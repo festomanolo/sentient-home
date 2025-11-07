@@ -11,5 +11,7 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-
-// [NOX-DEV-15]: ongoing module refinement
+      "@": path.resolve(__dirname, "./src"),
+    },
+  },
+});

@@ -18,5 +18,16 @@ export const useBluetoothControl = () => {
 
   const adjustVolume = (delta: number) => {
     bluetoothService.adjustVolume(delta);
+  };
 
-// [NOX-DEV-60]: ongoing module refinement
+  const togglePlayback = () => {
+    bluetoothService.togglePlayback();
+  };
+
+  return {
+    musicState,
+    setVolume,
+    adjustVolume,
+    togglePlayback,
+  };
+};

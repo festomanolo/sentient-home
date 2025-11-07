@@ -44,4 +44,125 @@ npx cap add android
 npx cap add ios
 ```
 
-// [NOX-DEV-70]: ongoing module refinement
+### 5. Build the Web Assets
+
+```bash
+npm run build
+```
+
+### 6. Sync Capacitor
+
+Sync the web build with native platforms:
+
+```bash
+npx cap sync
+```
+
+**Important**: Run `npx cap sync` after every `git pull` to keep native platforms updated.
+
+### 7. Update Native Platform Dependencies
+
+```bash
+# For Android
+npx cap update android
+
+# For iOS
+npx cap update ios
+```
+
+## Building and Running
+
+### For Android
+
+#### Run on Emulator or Device
+
+```bash
+npx cap run android
+```
+
+This will:
+1. Open Android Studio
+2. Build the project
+3. Install and run on connected device/emulator
+
+#### Build APK Manually
+
+1. Open Android Studio:
+   ```bash
+   npx cap open android
+   ```
+
+2. In Android Studio:
+   - Go to **Build > Build Bundle(s) / APK(s) > Build APK(s)**
+   - APK will be generated in `android/app/build/outputs/apk/`
+
+### For iOS
+
+```bash
+npx cap run ios
+```
+
+This will open Xcode where you can:
+- Configure signing
+- Build and run on simulator or device
+
+## Development Workflow
+
+1. **Edit code locally**: `npm run dev`
+2. **Sync Capacitor**: `npm run build && npx cap sync`
+3. **Run on device**: `npx cap run android` or `npx cap run ios`
+
+## Production Build
+
+For production release:
+
+1. Ensure configuration in `capacitor.config.ts`:
+   ```typescript
+   const config: CapacitorConfig = {
+     appId: 'com.manolo.noxai',
+     appName: 'NOX AI',
+     webDir: 'dist',
+     server: {
+       androidScheme: 'http',
+       cleartext: true
+     },
+   };
+   ```
+
+2. Build and sync:
+   ```bash
+   npm run build
+   npx cap sync
+   ```
+
+3. Build APK/IPA through Android Studio/Xcode or run `./deploy-android.sh`
+
+## Native Features
+
+NOX AI integrates:
+- Sound pattern detection (Web Audio API)
+- Real voice recognition & synthesis (Web Speech API)
+- Android App launcher & media intents
+- OpenWeatherMap integration
+- Bluetooth BLE audio synchronization
+
+## Troubleshooting
+
+### Build Fails
+- Ensure all dependencies are installed: `npm install`
+- Clean and rebuild: `npm run build && npx cap sync`
+
+### Android Studio Issues
+- Update Android Studio to latest version
+- Sync Gradle files
+- Invalidate caches: **File > Invalidate Caches / Restart**
+
+### iOS Code Signing
+- Configure your Apple Developer account in Xcode
+- Select appropriate provisioning profile
+
+## Resources
+
+- [Capacitor Documentation](https://capacitorjs.com/docs)
+- [Android Studio Download](https://developer.android.com/studio)
+- [Xcode Download](https://developer.apple.com/xcode/)

@@ -108,5 +108,95 @@ export const CalendarWidget = () => {
           <div className="flex items-center gap-1">
             <MapPin className="w-3 h-3" />
             <span>{event.location}</span>
+          </div>
+        )}
+        
+        {event.description && (
+          <p className="text-xs mt-1 opacity-75 line-clamp-2">
+            {event.description}
+          </p>
+        )}
+      </div>
+    </div>
+  );
 
-// [NOX-DEV-41]: ongoing module refinement
+  return (
+    <GlassCard>
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center gap-3">
+          <div className="p-2 rounded-lg bg-primary/10">
+            <Calendar className="w-5 h-5 text-primary" />
+          </div>
+          <h2 className="text-lg font-semibold">Calendar</h2>
+        </div>
+        
+        <Button
+          size="sm"
+          variant="ghost"
+          onClick={loadCalendarData}
+          disabled={isLoading}
+        >
+          <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
+        </Button>
+      </div>
+
+      {isLoading ? (
+        <div className="text-center py-8">
+          <RefreshCw className="w-8 h-8 mx-auto mb-4 animate-spin text-muted-foreground" />
+          <p className="text-muted-foreground">Loading calendar...</p>
+        </div>
+      ) : (
+        <div className="space-y-6">
+          {/* Today's Events */}
+          <div>
+            <h3 className="font-semibold mb-3 flex items-center gap-2">
+              <span>Today</span>
+              <span className="text-sm text-muted-foreground">
+                ({new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' })})
+              </span>
+            </h3>
+            
+            {todayEvents.length > 0 ? (
+              <div className="space-y-2">
+                {todayEvents.map((event) => (
+                  <EventCard key={event.id} event={event} />
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-4 text-muted-foreground">
+                <Calendar className="w-8 h-8 mx-auto mb-2 opacity-50" />
+                <p className="text-sm">No events today</p>
+              </div>
+            )}
+          </div>
+
+          {/* Upcoming Events */}
+          {upcomingEvents.length > 0 && (
+            <div>
+              <h3 className="font-semibold mb-3">Upcoming</h3>
+              <div className="space-y-2 max-h-64 overflow-y-auto">
+                {upcomingEvents.slice(0, 5).map((event) => (
+                  <EventCard key={event.id} event={event} showDate />
+                ))}
+              </div>
+              
+              {upcomingEvents.length > 5 && (
+                <p className="text-xs text-muted-foreground text-center mt-2">
+                  +{upcomingEvents.length - 5} more events
+                </p>
+              )}
+            </div>
+          )}
+
+          {todayEvents.length === 0 && upcomingEvents.length === 0 && (
+            <div className="text-center py-8 text-muted-foreground">
+              <Calendar className="w-12 h-12 mx-auto mb-4 opacity-50" />
+              <p>No upcoming events</p>
+              <p className="text-sm mt-1">Your calendar is clear!</p>
+            </div>
+          )}
+        </div>
+      )}
+    </GlassCard>
+  );
+};

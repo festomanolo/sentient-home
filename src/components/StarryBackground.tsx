@@ -42,4 +42,41 @@ export const StarryBackground = () => {
       alpha: Math.random() * 0.5 + 0.3
     }));
 
-// [NOX-DEV-36]: ongoing module refinement
+    let animationFrameId: number;
+    let lastTime = 0;
+    const fps = 30; // Limit FPS for performance
+    const frameInterval = 1000 / fps;
+
+    const animate = (currentTime: number) => {
+      animationFrameId = requestAnimationFrame(animate);
+
+      // Throttle frame rate
+      const deltaTime = currentTime - lastTime;
+      if (deltaTime < frameInterval) return;
+      lastTime = currentTime - (deltaTime % frameInterval);
+
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      starsRef.current.forEach(star => {
+        star.alpha = 0.3 + Math.sin(currentTime * star.speed * 0.001) * 0.2;
+        drawStar(ctx, star.x, star.y, star.size, star.alpha);
+      });
+    };
+
+    animate(0);
+
+    return () => {
+      window.removeEventListener('resize', setCanvasSize);
+      cancelAnimationFrame(animationFrameId);
+    };
+  }, []);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      className="absolute inset-0 w-full h-full bg-gradient-to-b from-background to-black/50"
+      style={{ opacity: 0.6 }}
+    />
+  );
+};

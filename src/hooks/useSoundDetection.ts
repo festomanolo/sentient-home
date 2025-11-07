@@ -16,5 +16,14 @@ export const useSoundDetection = (enabled: boolean) => {
 
       return () => {
         unsubscribe();
+        soundDetectionService.stop();
+        setIsListening(false);
+      };
+    } else {
+      soundDetectionService.stop();
+      setIsListening(false);
+    }
+  }, [enabled]);
 
-// [NOX-DEV-61]: ongoing module refinement
+  return { recentEvents, isListening };
+};

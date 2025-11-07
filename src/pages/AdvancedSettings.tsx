@@ -280,5 +280,215 @@ const AdvancedSettings = () => {
 
               {/* Intelligence Settings */}
               <TabsContent value="intelligence" className="space-y-6">
+                <GlassCard>
+                  <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                    <Brain className="w-5 h-5" />
+                    AI Intelligence
+                  </h3>
+                  
+                  <div className="space-y-6">
+                    <SettingItem
+                      icon={Brain}
+                      label="Learning Mode"
+                      description="Allow NOX AI to learn from your patterns and improve responses"
+                    >
+                      <Switch
+                        checked={settings.learningMode}
+                        onCheckedChange={(checked) => updateSetting("learningMode", checked)}
+                        disabled={settings.privacyMode}
+                      />
+                    </SettingItem>
 
-// [NOX-DEV-48]: ongoing module refinement
+                    <SettingItem
+                      icon={Zap}
+                      label="Smart Reactions"
+                      description="Automatically react to environmental sounds and events"
+                    >
+                      <Switch
+                        checked={settings.smartReactions}
+                        onCheckedChange={(checked) => updateSetting("smartReactions", checked)}
+                      />
+                    </SettingItem>
+
+                    <SettingItem
+                      icon={Volume2}
+                      label="Sound Sensitivity"
+                      description="How sensitive NOX AI is to environmental sounds"
+                    >
+                      <div className="flex items-center gap-4">
+                        <span className="text-sm">Low</span>
+                        <input
+                          type="range"
+                          min="0.1"
+                          max="1.0"
+                          step="0.1"
+                          value={settings.soundSensitivity}
+                          onChange={(e) => updateSetting("soundSensitivity", parseFloat(e.target.value))}
+                          className="flex-1"
+                        />
+                        <span className="text-sm">High</span>
+                      </div>
+                    </SettingItem>
+                  </div>
+                </GlassCard>
+              </TabsContent>
+
+              {/* App Control Settings */}
+              <TabsContent value="apps" className="space-y-6">
+                <GlassCard>
+                  <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                    <Smartphone className="w-5 h-5" />
+                    App Control
+                  </h3>
+                  
+                  <div className="space-y-6">
+                    <SettingItem
+                      icon={Smartphone}
+                      label="App Control"
+                      description="Allow NOX AI to control other apps like Lark Player, Spotify"
+                    >
+                      <Switch
+                        checked={settings.appControl}
+                        onCheckedChange={(checked) => updateSetting("appControl", checked)}
+                      />
+                    </SettingItem>
+
+                    <SettingItem
+                      icon={Bluetooth}
+                      label="Bluetooth Management"
+                      description="Control Bluetooth devices and audio playback"
+                    >
+                      <Switch
+                        checked={settings.bluetoothControl}
+                        onCheckedChange={(checked) => updateSetting("bluetoothControl", checked)}
+                      />
+                    </SettingItem>
+
+                    <SettingItem
+                      icon={Volume2}
+                      label="System Volume Control"
+                      description="Allow NOX AI to adjust system volume levels"
+                    >
+                      <Switch
+                        checked={settings.systemVolumeControl}
+                        onCheckedChange={(checked) => updateSetting("systemVolumeControl", checked)}
+                      />
+                    </SettingItem>
+                  </div>
+                </GlassCard>
+              </TabsContent>
+
+              {/* Privacy Settings */}
+              <TabsContent value="privacy" className="space-y-6">
+                <GlassCard>
+                  <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                    <Shield className="w-5 h-5" />
+                    Privacy & Security
+                  </h3>
+                  
+                  <div className="space-y-6">
+                    <SettingItem
+                      icon={Shield}
+                      label="Privacy Mode"
+                      description="Disable all learning and data collection features"
+                    >
+                      <Switch
+                        checked={settings.privacyMode}
+                        onCheckedChange={(checked) => updateSetting("privacyMode", checked)}
+                      />
+                    </SettingItem>
+
+                    <SettingItem
+                      icon={Cloud}
+                      label="Cloud Sync"
+                      description="Synchronize settings and preferences across devices"
+                    >
+                      <Switch
+                        checked={settings.cloudSync}
+                        onCheckedChange={(checked) => updateSetting("cloudSync", checked)}
+                        disabled={settings.privacyMode}
+                      />
+                    </SettingItem>
+                  </div>
+                </GlassCard>
+              </TabsContent>
+
+              {/* System Settings */}
+              <TabsContent value="system" className="space-y-6">
+                <GlassCard>
+                  <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                    <Settings className="w-5 h-5" />
+                    System Configuration
+                  </h3>
+                  
+                  <div className="space-y-6">
+                    <SettingItem
+                      icon={Cloud}
+                      label="Weather API Key"
+                      description="Your OpenWeatherMap API key for real weather data"
+                    >
+                      <div className="flex gap-2">
+                        <Input
+                          type={apiKeyVisible ? "text" : "password"}
+                          value={settings.weatherApiKey}
+                          onChange={(e) => updateSetting("weatherApiKey", e.target.value)}
+                          placeholder="Enter your API key"
+                        />
+                        <Button
+                          variant="outline"
+                          onClick={() => setApiKeyVisible(!apiKeyVisible)}
+                        >
+                          {apiKeyVisible ? "Hide" : "Show"}
+                        </Button>
+                      </div>
+                    </SettingItem>
+
+                    <SettingItem
+                      icon={Moon}
+                      label="Night Mode"
+                      description="Reduce sensitivity and notifications during night hours"
+                    >
+                      <div className="space-y-3">
+                        <Switch
+                          checked={settings.nightMode}
+                          onCheckedChange={(checked) => updateSetting("nightMode", checked)}
+                        />
+                        {settings.nightMode && (
+                          <div className="flex gap-2">
+                            <Input
+                              type="time"
+                              value={settings.quietHours.start}
+                              onChange={(e) => updateSetting("quietHours", { ...settings.quietHours, start: e.target.value })}
+                            />
+                            <span className="text-sm text-muted-foreground self-center">to</span>
+                            <Input
+                              type="time"
+                              value={settings.quietHours.end}
+                              onChange={(e) => updateSetting("quietHours", { ...settings.quietHours, end: e.target.value })}
+                            />
+                          </div>
+                        )}
+                      </div>
+                    </SettingItem>
+                  </div>
+                </GlassCard>
+              </TabsContent>
+            </Tabs>
+          </div>
+        </div>
+
+        {/* Action Buttons */}
+        <div className="flex justify-center gap-4 mt-8">
+          <Button size="lg" onClick={handleSave}>
+            Save All Settings
+          </Button>
+          <Button size="lg" variant="outline" onClick={handleReset}>
+            Reset to Defaults
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default AdvancedSettings;

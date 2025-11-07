@@ -254,5 +254,154 @@ class SoundDetectionService {
       
       detectedType = "appliance";
       confidence = Math.min(0.7, consistency * 0.5 + (lowFreq / 100) * 0.3);
+    }
+    
+    // Alarm detection (very high frequency, consistent)
+    else if (highFreq > 80 && midHighFreq > 70 && 
+             consistency > 0.7 && totalEnergy > 120) {
+      
+      detectedType = "alarm";
+      confidence = Math.min(0.95, consistency * 0.6 + (highFreq / 100) * 0.4);
+    }
+    
+    // Only trigger if confidence exceeds sensitivity threshold
+    if (detectedType && confidence > this.settings.sensitivity) {
+      this.lastSoundTime = now;
+      
+      const event: SoundEvent = {
+        id: Date.now().toString(),
+        type: detectedType,
+        timestamp: new Date(),
+        confidence: Math.round(confidence * 100) / 100, // Round to 2 decimal places
+        volume: Math.round(volume),
+        frequency: Math.round(totalEnergy / 5), // Average frequency energy
+        action: this.getActionForSound(detectedType),
+      };
+      
+      console.log(`Sound detected: ${detectedType} (confidence: ${confidence.toFixed(2)})`);
+      this.notifyListeners(event);
+    }
+  }
 
-// [NOX-DEV-63]: ongoing module refinement
+  private getFrequencyRange(data: Uint8Array, startHz: number, endHz: number): number {
+    const sampleRate = 44100;
+    const nyquist = sampleRate / 2;
+    const startBin = Math.floor((startHz / nyquist) * data.length);
+    const endBin = Math.floor((endHz / nyquist) * data.length);
+    
+    let sum = 0;
+    for (let i = startBin; i < endBin && i < data.length; i++) {
+      sum += data[i];
+    }
+    
+    return sum / (endBin - startBin);
+  }
+
+  private calculateVariation(): number {
+    if (this.soundBuffer.length < 10) return 0;
+    
+    const recent = this.soundBuffer.slice(-10);
+    const avg = recent.reduce((a, b) => a + b, 0) / recent.length;
+    const variance = recent.reduce((sum, val) => sum + Math.pow(val - avg, 2), 0) / recent.length;
+    
+    return Math.sqrt(variance) / avg;
+  }
+
+  private calculateSharpness(): number {
+    if (this.soundBuffer.length < 5) return 0;
+    
+    const recent = this.soundBuffer.slice(-5);
+    const current = recent[recent.length - 1];
+    const previous = recent[recent.length - 2];
+    
+    return Math.min(1, (current - previous) / current);
+  }
+
+  private calculateConsistency(): number {
+    if (this.soundBuffer.length < 10) return 0;
+    
+    const recent = this.soundBuffer.slice(-10);
+    const avg = recent.reduce((a, b) => a + b, 0) / recent.length;
+    const deviations = recent.map(val => Math.abs(val - avg));
+    const avgDeviation = deviations.reduce((a, b) => a + b, 0) / deviations.length;
+    
+    return Math.max(0, 1 - (avgDeviation / avg));
+  }
+
+  private startSimulation() {
+    // Fallback simulation mode
+    this.isActive = true;
+    const simulationInterval = setInterval(() => {
+      if (!this.isActive) {
+        clearInterval(simulationInterval);
+        return;
+      }
+      
+      if (Math.random() > 0.8) {
+        const soundTypes: SoundType[] = ["door_knock", "phone_ring", "voice", "music"];
+        const type = soundTypes[Math.floor(Math.random() * soundTypes.length)];
+        
+        const event: SoundEvent = {
+          id: Date.now().toString(),
+          type,
+          timestamp: new Date(),
+          confidence: 0.75 + Math.random() * 0.25,
+          volume: Math.floor(Math.random() * 100) + 30,
+          action: this.getActionForSound(type),
+        };
+        
+        this.notifyListeners(event);
+      }
+    }, 8000);
+  }
+
+  subscribe(callback: (event: SoundEvent) => void) {
+    this.listeners.push(callback);
+    return () => {
+      this.listeners = this.listeners.filter((l) => l !== callback);
+    };
+  }
+
+  private notifyListeners(event: SoundEvent) {
+    this.listeners.forEach((listener) => listener(event));
+  }
+
+  private getActionForSound(type: SoundType): string {
+    switch (type) {
+      case "door_knock":
+        return "Volume lowered automatically";
+      case "phone_ring":
+        return "Music paused";
+      case "voice":
+        return "Listening for command";
+      case "music":
+        return "Music detected";
+      case "tv":
+        return "TV audio detected";
+      case "appliance":
+        return "Appliance sound detected";
+      case "alarm":
+        return "Alarm detected";
+      default:
+        return "Monitoring";
+    }
+  }
+
+  updateSettings(newSettings: Partial<AudioSettings>) {
+    this.settings = { ...this.settings, ...newSettings };
+  }
+
+  getSettings(): AudioSettings {
+    return { ...this.settings };
+  }
+
+  isRunning() {
+    return this.isActive;
+  }
+
+  getCurrentVolume(): number {
+    return this.soundBuffer.length > 0 ? this.soundBuffer[this.soundBuffer.length - 1] : 0;
+  }
+}
+
+export const soundDetectionService = new SoundDetectionService();

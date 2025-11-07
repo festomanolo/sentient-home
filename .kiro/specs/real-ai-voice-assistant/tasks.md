@@ -56,5 +56,123 @@
   - Add playback state monitoring to verify command execution
   - Handle errors when Lark Player is not installed or not running with user-friendly messages
   - Implement automatic app launching when user says "play music" and app isn't running
+  - _Requirements: 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 2.7, 8.1, 8.2, 8.4, 8.5_
 
-// [NOX-DEV-85]: ongoing module refinement
+- [x] 6. Integrate AI Command Processor with Voice Service
+  - Update `voiceService.ts` to use `aiCommandProcessor` for command interpretation
+  - Modify `onresult` handler to pass transcripts to AI processor for intent extraction
+  - Implement confidence threshold checking (only execute commands with confidence > 0.6)
+  - Add clarification requests when confidence is low ("I didn't quite catch that, could you repeat?")
+  - Route commands to appropriate services based on extracted intent (app control, weather, calendar)
+  - Add voice feedback for command execution success/failure
+  - _Requirements: 3.1, 3.2, 3.3, 9.1, 9.2, 9.3_
+
+- [x] 7. Implement Real-Time Processing Feedback UI
+  - Create `CommandFeedback.tsx` component to display recognized commands and execution status
+  - Show recognized transcript text in real-time as speech is processed
+  - Display processing indicator when AI is analyzing command
+  - Show success/failure messages for 2 seconds after command execution
+  - Add command history log accessible from UI showing past commands and outcomes
+  - Integrate with microphone indicator to show coordinated feedback
+  - _Requirements: 9.1, 9.2, 9.3, 9.4, 9.5_
+
+- [x] 8. Configure Weather Service with API Key Management
+  - Add API key configuration UI in Settings page for OpenWeatherMap
+  - Update `weatherService.ts` to use configured API key from settings
+  - Implement better error handling for missing API key with clear user instructions
+  - Add voice-optimized weather response formatting with natural language
+  - Enhance caching to store weather data for 10 minutes as specified
+  - Implement location-based weather queries ("weather in Tokyo")
+  - _Requirements: 4.1, 4.2, 4.3, 4.4, 4.5_
+
+- [x] 9. Integrate Google Calendar API
+- [x] 9.1 Set up Google Calendar OAuth authentication
+  - Install `@codetrix-studio/capacitor-google-auth` package
+  - Configure Google Cloud Console project with Calendar API enabled
+  - Implement OAuth 2.0 flow in Settings page for calendar connection
+  - Store access and refresh tokens securely using Capacitor Preferences
+  - Add authentication status indicator in UI
+  - _Requirements: 5.5, 10.4_
+
+- [x] 9.2 Implement calendar synchronization service
+  - Create `googleCalendarService.ts` with Google Calendar API integration
+  - Implement `syncEvents()` method to fetch events from Google Calendar API
+  - Add automatic sync every 5 minutes to keep calendar data fresh
+  - Convert Google Calendar event format to app's `CalendarEvent` interface
+  - Handle API rate limits and errors gracefully
+  - Update `calendarService.ts` to use real Google Calendar data instead of mock events
+  - _Requirements: 5.1, 5.2, 5.3, 5.4, 5.6_
+
+- [x] 9.3 Add voice-optimized calendar responses
+  - Implement natural language formatting for calendar events in voice responses
+  - Add support for "what's on my calendar", "next meeting", "schedule today" queries
+  - Format event times in conversational format ("at 2 PM" instead of "14:00")
+  - Include relevant event details (location, attendees) in voice responses
+  - _Requirements: 5.1, 5.2, 5.3, 5.4_
+
+- [x] 10. Implement Continuous Wake Word Detection
+  - Update `voiceService.ts` to enable continuous listening mode by default
+  - Implement wake word detection for "Hey NOX" using pattern matching on transcripts
+  - Add 10-second command listening window after wake word detection
+  - Implement automatic return to wake word listening after timeout
+  - Add settings toggle for always-listening mode (no wake word required)
+  - Ensure listening persists when app is backgrounded or screen is off
+  - _Requirements: 6.1, 6.2, 6.3, 6.4, 6.5, 6.6_
+
+- [x] 11. Enhance Voice Response System with Natural Language
+  - Update `voiceService.ts` to use more natural, conversational response templates
+  - Implement dynamic response generation based on command context
+  - Add confirmation messages for successful actions ("I've started playing music for you")
+  - Add helpful error messages that guide users ("Lark Player isn't installed. Would you like to install it?")
+  - Implement voice settings (rate, pitch, volume) configuration in Settings page
+  - Add voice response enable/disable toggle in settings
+  - _Requirements: 7.1, 7.2, 7.3, 7.4, 7.5_
+
+- [x] 12. Add Permission Management System
+  - Create `permissionsService.ts` to handle Android permission requests
+  - Implement microphone permission request with explanation dialog
+  - Add location permission request for weather features
+  - Implement notification listener permission request for media control
+  - Create UI in Settings to show permission status and guide users to grant permissions
+  - Handle permission denial gracefully with clear instructions for enabling in device settings
+  - _Requirements: 1.5, 8.5, 10.4, 10.5_
+
+- [x] 13. Integrate All Components in SmartDashboard
+  - Update `SmartDashboard.tsx` to include new `MicrophoneIndicator` component
+  - Add `CommandFeedback` component to show real-time command processing
+  - Connect voice service to start listening on component mount
+  - Implement command routing to appropriate services (app control, weather, calendar)
+  - Add error boundary to handle and display errors gracefully
+  - Ensure all services are initialized and connected properly
+  - _Requirements: 1.1, 1.2, 1.3, 9.1, 9.2, 9.3, 9.4_
+
+- [x] 14. Update Settings Page with New Configuration Options
+  - Add OpenWeatherMap API key input field with validation
+  - Add Google Calendar connection button with OAuth flow
+  - Add voice settings section (rate, pitch, volume, voice response toggle)
+  - Add wake word configuration input
+  - Add continuous listening toggle
+  - Add microphone sensitivity slider
+  - Add permission status indicators with action buttons
+  - _Requirements: 4.5, 5.5, 6.5, 7.4, 7.5, 10.5_
+
+- [x] 15. Implement Error Handling and Recovery
+  - Add comprehensive error handling in voice service for all speech recognition errors
+  - Implement retry logic for transient errors (no-speech, network)
+  - Add user-friendly error messages for permission denials
+  - Implement fallback behavior when APIs are unavailable (use cached data)
+  - Add error logging for debugging and improvement
+  - Create error recovery UI that guides users to fix issues
+  - _Requirements: 1.5, 2.7, 4.4, 8.5, 10.5_
+
+- [x] 16. Build and Test Android APK
+  - Run `npm run build` to create production build
+  - Sync Capacitor with `npx cap sync android`
+  - Open Android Studio and build signed APK
+  - Test on physical Android device with Lark Player installed
+  - Verify all voice commands work correctly
+  - Test microphone indicator animations
+  - Verify Lark Player control (play, pause, next, volume)
+  - Test weather and calendar integrations
+  - Verify permissions are requested properly
+  - _Requirements: All requirements_

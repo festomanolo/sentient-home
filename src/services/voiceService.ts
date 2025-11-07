@@ -261,5 +261,258 @@ class VoiceService {
     if (!this.settings.voiceResponseEnabled) return;
 
     try {
+      if (interrupt && 'speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
 
-// [NOX-DEV-32]: ongoing module refinement
+      if ('speechSynthesis' in window) {
+        this.currentState = 'speaking';
+        
+        // Get the best available voice
+        const voices = window.speechSynthesis.getVoices();
+        const preferredVoice = this.selectBestVoice(voices);
+        
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = this.settings.language;
+        utterance.rate = this.settings.voiceRate * 0.9; // Slightly slower for more natural speech
+        utterance.pitch = this.settings.voicePitch * 0.95; // Slightly lower pitch
+        utterance.volume = this.settings.volume;
+        
+        if (preferredVoice) {
+          utterance.voice = preferredVoice;
+        }
+
+        // Add natural pauses and emphasis
+        const naturalText = this.addNaturalSpeechPatterns(text);
+        utterance.text = naturalText;
+        
+        // Handle speech end
+        utterance.onend = () => {
+          if (this.isListening) {
+            this.currentState = 'listening';
+          } else {
+            this.currentState = 'inactive';
+          }
+        };
+        
+        utterance.onerror = () => {
+          if (this.isListening) {
+            this.currentState = 'listening';
+          } else {
+            this.currentState = 'inactive';
+          }
+        };
+        
+        window.speechSynthesis.speak(utterance);
+      } else {
+        console.warn('Speech synthesis not supported');
+      }
+    } catch (error) {
+      console.error('Text-to-speech error:', error);
+      if (this.isListening) {
+        this.currentState = 'listening';
+      } else {
+        this.currentState = 'inactive';
+      }
+    }
+  }
+
+  private selectBestVoice(voices: SpeechSynthesisVoice[]): SpeechSynthesisVoice | null {
+    // Prefer female voices for a more Alexa-like experience
+    const femaleVoices = voices.filter(voice => 
+      voice.name.toLowerCase().includes('female') || 
+      voice.name.toLowerCase().includes('samantha') ||
+      voice.name.toLowerCase().includes('karen') ||
+      voice.name.toLowerCase().includes('susan') ||
+      voice.name.toLowerCase().includes('zira')
+    );
+
+    // Prefer English voices
+    const englishVoices = voices.filter(voice => 
+      voice.lang.startsWith('en-') && voice.localService
+    );
+
+    // Return the best match
+    if (femaleVoices.length > 0) return femaleVoices[0];
+    if (englishVoices.length > 0) return englishVoices[0];
+    return voices.length > 0 ? voices[0] : null;
+  }
+
+  private addNaturalSpeechPatterns(text: string): string {
+    let naturalText = text;
+    
+    // Add pauses after greetings
+    naturalText = naturalText.replace(/(Hello|Hi|Hey|Welcome back),?\s*/gi, '$1... ');
+    
+    // Add pauses before important information
+    naturalText = naturalText.replace(/\b(It's|The|Your|I've|Right now)\b/gi, '... $1');
+    
+    // Add emphasis to numbers and times
+    naturalText = naturalText.replace(/\b(\d+)\s*(degrees?|AM|PM|o'clock)\b/gi, '$1 $2');
+    
+    // Add natural breathing pauses
+    naturalText = naturalText.replace(/\.\s+/g, '... ');
+    naturalText = naturalText.replace(/,\s+/g, ', ');
+    
+    return naturalText;
+  }
+
+  getNaturalResponse(type: keyof typeof this.naturalResponses, data?: any): string {
+    const templates = this.naturalResponses[type];
+    if (!templates || templates.length === 0) return '';
+    
+    const template = templates[Math.floor(Math.random() * templates.length)];
+    
+    if (!data) return template;
+    
+    // Replace placeholders with actual data
+    return template.replace(/\{(\w+)\}/g, (match, key) => {
+      return data[key] || match;
+    });
+  }
+
+  getConversationalFiller(): string {
+    return this.conversationalFillers[Math.floor(Math.random() * this.conversationalFillers.length)];
+  }
+
+  async speakWelcome(): Promise<void> {
+    const greeting = this.greetings[Math.floor(Math.random() * this.greetings.length)];
+    await this.speak(greeting);
+  }
+
+  subscribeToCommands(callback: (command: VoiceCommand) => void): () => void {
+    this.commandListeners.push(callback);
+    return () => {
+      this.commandListeners = this.commandListeners.filter(l => l !== callback);
+    };
+  }
+
+  updateSettings(newSettings: Partial<VoiceSettings>): void {
+    this.settings = { ...this.settings, ...newSettings };
+    this.saveSettings();
+    
+    // Update recognition settings if they changed
+    if (this.recognition) {
+      this.recognition.lang = this.settings.language;
+      this.recognition.continuous = this.settings.continuousListening;
+    }
+  }
+
+  getSettings(): VoiceSettings {
+    return { ...this.settings };
+  }
+
+  isCurrentlyListening(): boolean {
+    return this.isListening;
+  }
+
+  // Command processing helpers
+  processCommand(command: VoiceCommand): string | null {
+    const cmd = command.command.toLowerCase();
+    
+    // Check for wake word
+    if (this.isWakeWordDetected(cmd)) {
+      // Remove wake word and return clean command
+      const cleanCommand = cmd.replace(this.settings.wakeWord.toLowerCase(), '').trim();
+      
+      if (cleanCommand.length === 0) {
+        // Just wake word, no command
+        return null;
+      }
+      
+      return cleanCommand;
+    }
+    
+    // If continuous listening is enabled, process all commands
+    if (this.settings.continuousListening) {
+      return cmd;
+    }
+    
+    // Otherwise, ignore commands without wake word
+    return null;
+  }
+
+  isWakeWordDetected(command: string): boolean {
+    const wakeWord = this.settings.wakeWord.toLowerCase();
+    const cmd = command.toLowerCase();
+    
+    // Check for exact match or at the beginning
+    return cmd.includes(wakeWord) || cmd.startsWith(wakeWord);
+  }
+
+  // Predefined responses for common commands
+  async respondToCommand(command: string): Promise<void> {
+    const responses: Record<string, string> = {
+      'hello': "Hello! How can I help you?",
+      'hi': "Hi there! What can I do for you?",
+      'thank you': "You're welcome! Anything else I can help with?",
+      'thanks': "My pleasure! Let me know if you need anything else.",
+      'goodbye': "Goodbye! Have a great day!",
+      'bye': "See you later! Take care!",
+      'what time is it': `It's currently ${new Date().toLocaleTimeString()}`,
+      'what day is it': `Today is ${new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}`,
+    };
+
+    const response = responses[command.toLowerCase()];
+    if (response) {
+      await this.speak(response);
+    }
+  }
+
+  // Voice command patterns for different features
+  getCommandPatterns(): Record<string, RegExp[]> {
+    return {
+      weather: [
+        /what'?s the weather/i,
+        /weather (today|now)/i,
+        /how'?s the weather/i,
+        /temperature outside/i
+      ],
+      time: [
+        /what time is it/i,
+        /current time/i,
+        /time in (.+)/i,
+        /what'?s the time in (.+)/i
+      ],
+      calendar: [
+        /what'?s on my calendar/i,
+        /my schedule (today|tomorrow)/i,
+        /next (meeting|appointment|event)/i,
+        /calendar for (.+)/i
+      ],
+      music: [
+        /(play|pause|stop) music/i,
+        /volume (up|down)/i,
+        /set volume to (\d+)/i,
+        /(next|previous) (song|track)/i
+      ],
+      apps: [
+        /(open|launch|start) (.+)/i,
+        /control (.+)/i,
+        /(play|pause) in (.+)/i
+      ]
+    };
+  }
+
+  private notifyCommandListeners(command: VoiceCommand): void {
+    this.commandListeners.forEach(listener => listener(command));
+  }
+
+  private loadSettings(): void {
+    const stored = localStorage.getItem('nox-voice-settings');
+    if (stored) {
+      try {
+        const parsed = JSON.parse(stored);
+        this.settings = { ...this.settings, ...parsed };
+      } catch (error) {
+        console.error('Failed to load voice settings:', error);
+      }
+    }
+  }
+
+  private saveSettings(): void {
+    localStorage.setItem('nox-voice-settings', JSON.stringify(this.settings));
+  }
+}
+
+export const voiceService = new VoiceService();

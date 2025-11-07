@@ -18,5 +18,7 @@ dist-ssr
 .idea
 .DS_Store
 *.suo
-
-// [NOX-DEV-97]: ongoing module refinement
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

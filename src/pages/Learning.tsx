@@ -86,5 +86,72 @@ export function Learning() {
                     {stat.title}
                   </h3>
                   <p className={`text-sm ${
+                    theme === "dark" ? "text-gray-400" : "text-gray-600"
+                  }`}>
+                    {stat.description}
+                  </p>
+                </div>
+              </div>
+              <div className="space-y-2">
+                <Progress value={stat.progress} className={
+                  theme === "dark" 
+                    ? "bg-violet-500/20 [&>div]:bg-violet-500" 
+                    : "bg-blue-100 [&>div]:bg-blue-600"
+                } />
+                <p className={`text-right text-sm ${
+                  theme === "dark" ? "text-violet-400" : "text-blue-600"
+                }`}>
+                  {stat.progress}%
+                </p>
+              </div>
+            </motion.div>
+          );
+        })}
+      </div>
 
-// [NOX-DEV-43]: ongoing module refinement
+      {/* Recent Insights */}
+      <div className={`p-4 rounded-xl ${
+        theme === "dark"
+          ? "bg-violet-500/10 border border-violet-500/20"
+          : "bg-blue-50 border border-blue-200/20"
+      }`}>
+        <div className="flex items-center gap-3 mb-4">
+          <Sparkles className={
+            theme === "dark" ? "text-violet-400" : "text-blue-600"
+          } size={20} />
+          <h2 className={`font-semibold ${
+            theme === "dark" ? "text-white" : "text-gray-900"
+          }`}>
+            Recent Insights
+          </h2>
+        </div>
+        <div className="space-y-4">
+          {insights.map((insight, index) => (
+            <motion.div
+              key={insight.title}
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.3 + index * 0.1 }}
+              className={`p-3 rounded-lg ${
+                theme === "dark"
+                  ? "bg-violet-500/5 border border-violet-500/10"
+                  : "bg-blue-50/50 border border-blue-100/20"
+              }`}
+            >
+              <h4 className={`text-sm font-medium mb-1 ${
+                theme === "dark" ? "text-violet-400" : "text-blue-600"
+              }`}>
+                {insight.title}
+              </h4>
+              <p className={`text-sm ${
+                theme === "dark" ? "text-gray-400" : "text-gray-600"
+              }`}>
+                {insight.description}
+              </p>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </PageLayout>
+  );
+}

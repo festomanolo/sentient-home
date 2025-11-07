@@ -90,4 +90,81 @@ export const WeatherWidget = () => {
         </Button>
       </div>
 
-// [NOX-DEV-34]: ongoing module refinement
+      {weather && (
+        <>
+          {/* Current Weather */}
+          <div className="mb-6">
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <h3 className="text-2xl font-bold">{weather.temperature}°F</h3>
+                <p className="text-muted-foreground capitalize">{weather.description}</p>
+                <p className="text-sm text-muted-foreground flex items-center gap-1 mt-1">
+                  <span>📍</span>
+                  {weather.location}
+                </p>
+              </div>
+              <div className="text-4xl">
+                {getWeatherIcon(weather.icon)}
+              </div>
+            </div>
+
+            {/* Weather Details */}
+            <div className="grid grid-cols-2 gap-4">
+              <div className="flex items-center gap-2 text-sm">
+                <Thermometer className="w-4 h-4 text-orange-500" />
+                <span>Feels like {weather.feelsLike}°F</span>
+              </div>
+              <div className="flex items-center gap-2 text-sm">
+                <Droplets className="w-4 h-4 text-blue-500" />
+                <span>{weather.humidity}% humidity</span>
+              </div>
+              <div className="flex items-center gap-2 text-sm">
+                <Wind className="w-4 h-4 text-gray-500" />
+                <span>{weather.windSpeed} mph wind</span>
+              </div>
+              <div className="flex items-center gap-2 text-sm">
+                <Eye className="w-4 h-4 text-purple-500" />
+                <span>{weather.visibility} km visibility</span>
+              </div>
+            </div>
+          </div>
+
+          {/* 5-Day Forecast */}
+          {forecast.length > 0 && (
+            <div>
+              <h4 className="font-semibold mb-3">5-Day Forecast</h4>
+              <div className="grid grid-cols-5 gap-2">
+                {forecast.map((day, index) => (
+                  <div
+                    key={index}
+                    className="text-center p-2 rounded-lg bg-background/30 border border-border/20"
+                  >
+                    <p className="text-xs font-medium mb-1">{day.date}</p>
+                    <div className="text-lg mb-1">
+                      {getWeatherIcon(day.icon)}
+                    </div>
+                    <div className="text-xs">
+                      <p className="font-medium">{day.high}°</p>
+                      <p className="text-muted-foreground">{day.low}°</p>
+                    </div>
+                    {day.precipitation > 0 && (
+                      <p className="text-xs text-blue-500 mt-1">
+                        {day.precipitation}%
+                      </p>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {lastUpdated && (
+            <p className="text-xs text-muted-foreground mt-4 text-center">
+              Last updated: {lastUpdated.toLocaleTimeString()}
+            </p>
+          )}
+        </>
+      )}
+    </GlassCard>
+  );
+};

@@ -196,5 +196,85 @@ deploy() {
             install_apk
             open_android_studio
             ;;
+        *)
+            echo "❌ Invalid option"
+            exit 1
+            ;;
+    esac
+}
 
-// [NOX-DEV-83]: ongoing module refinement
+# Development mode
+dev_mode() {
+    echo "🔧 Starting development mode..."
+    
+    check_requirements
+    install_dependencies
+    init_capacitor
+    sync_capacitor
+    configure_permissions
+    
+    echo "🎨 Opening Android Studio for development..."
+    npx cap open android
+    
+    echo ""
+    echo "💡 Development Tips:"
+    echo "   - Make changes in your code editor"
+    echo "   - Run 'npm run build && npx cap sync' to update"
+    echo "   - Use Android Studio to build and test"
+}
+
+# Show usage
+usage() {
+    echo "Usage: $0 [OPTION]"
+    echo ""
+    echo "Options:"
+    echo "  deploy    Full deployment process (default)"
+    echo "  dev       Development mode setup"
+    echo "  build     Build web app and sync"
+    echo "  apk       Build APK only"
+    echo "  install   Install APK on device"
+    echo "  studio    Open Android Studio"
+    echo "  help      Show this help message"
+    echo ""
+    echo "Examples:"
+    echo "  $0 deploy    # Full deployment"
+    echo "  $0 dev       # Development setup"
+    echo "  $0 apk       # Build APK only"
+}
+
+# Parse command line arguments
+case "${1:-deploy}" in
+    deploy)
+        deploy
+        ;;
+    dev)
+        dev_mode
+        ;;
+    build)
+        check_requirements
+        install_dependencies
+        build_web_app
+        sync_capacitor
+        ;;
+    apk)
+        build_apk
+        ;;
+    install)
+        install_apk
+        ;;
+    studio)
+        open_android_studio
+        ;;
+    help|--help|-h)
+        usage
+        ;;
+    *)
+        echo "❌ Unknown option: $1"
+        usage
+        exit 1
+        ;;
+esac
+
+echo ""
+echo "🎉 NOX AI deployment script completed!"
+echo "📚 For more information, check the SETUP_GUIDE.md file"

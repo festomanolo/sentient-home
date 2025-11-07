@@ -58,5 +58,42 @@ export function DetectionFeed() {
               </span>
             </div>
             <div className="flex items-center gap-2">
+              <div className="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
+                <motion.div
+                  initial={{ width: 0 }}
+                  animate={{ width: `${event.confidence * 100}%` }}
+                  className={`h-full ${
+                    theme === "dark" ? "bg-violet-500" : "bg-blue-500"
+                  }`}
+                />
+              </div>
+              <span className={`text-sm ${
+                theme === "dark" ? "text-gray-400" : "text-gray-600"
+              }`}>
+                {Math.round(event.confidence * 100)}%
+              </span>
+            </div>
+            {event.action && (
+              <p className={`text-sm mt-2 ${
+                theme === "dark" ? "text-gray-400" : "text-gray-600"
+              }`}>
+                {event.action}
+              </p>
+            )}
+          </motion.div>
+        ))}
 
-// [NOX-DEV-49]: ongoing module refinement
+        {recentEvents.length === 0 && (
+          <div className={`text-center py-8 ${
+            theme === "dark" ? "text-gray-400" : "text-gray-600"
+          }`}>
+            <p>No sounds detected yet</p>
+            <p className="text-sm mt-2">
+              {isListening ? "Listening for sounds..." : "Detection is paused"}
+            </p>
+          </div>
+        )}
+      </div>
+    </PageLayout>
+  );
+}

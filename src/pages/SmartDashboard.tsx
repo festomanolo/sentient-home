@@ -245,5 +245,198 @@ const SmartDashboard = () => {
               {/* Connected Apps */}
               <GlassCard>
                 <div className="flex items-center gap-3 mb-4">
+                  <div className="p-2 rounded-lg bg-primary/10">
+                    <Smartphone className="w-5 h-5 text-primary" />
+                  </div>
+                  <h2 className="text-lg font-semibold">Connected Apps</h2>
+                </div>
+                
+                <div className="space-y-2">
+                  {connectedApps.slice(0, 5).map((app) => (
+                    <div key={app.packageName} className="flex items-center justify-between p-2 rounded-lg bg-background/30">
+                      <div className="flex items-center gap-2">
+                        <div className="w-2 h-2 rounded-full bg-green-500" />
+                        <span className="text-sm font-medium">{app.appName}</span>
+                      </div>
+                      <Badge variant="outline" className="text-xs">
+                        {app.supportedActions.length} actions
+                      </Badge>
+                    </div>
+                  ))}
+                  
+                  {connectedApps.length === 0 && (
+                    <div className="text-center py-4 text-muted-foreground">
+                      <Smartphone className="w-8 h-8 mx-auto mb-2 opacity-50" />
+                      <p className="text-sm">No apps connected</p>
+                    </div>
+                  )}
+                </div>
+              </GlassCard>
+            </div>
 
-// [NOX-DEV-44]: ongoing module refinement
+            {/* Right Column */}
+            <div className="space-y-6">
+              {/* Music Control */}
+              <GlassCard>
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="p-2 rounded-lg bg-primary/10">
+                    <Volume2 className="w-5 h-5 text-primary" />
+                  </div>
+                  <h2 className="text-lg font-semibold">Now Playing</h2>
+                </div>
+                
+                <div className="space-y-4">
+                  <div>
+                    <p className="font-medium">{musicState.track}</p>
+                    <p className="text-sm text-muted-foreground">{musicState.artist}</p>
+                    {musicState.album && (
+                      <p className="text-xs text-muted-foreground">{musicState.album}</p>
+                    )}
+                  </div>
+                  
+                  {/* Playback Controls */}
+                  <div className="flex items-center justify-center gap-2">
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={previous}
+                      disabled={!musicState.device?.connected}
+                    >
+                      <SkipBack className="w-4 h-4" />
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={togglePlayback}
+                      disabled={!musicState.device?.connected}
+                    >
+                      {musicState.isPlaying ? (
+                        <Pause className="w-4 h-4" />
+                      ) : (
+                        <Play className="w-4 h-4" />
+                      )}
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={next}
+                      disabled={!musicState.device?.connected}
+                    >
+                      <SkipForward className="w-4 h-4" />
+                    </Button>
+                  </div>
+                  
+                  {/* Volume Control */}
+                  <div className="flex items-center gap-2">
+                    <Volume2 className="w-4 h-4 text-accent" />
+                    <input
+                      type="range"
+                      min="0"
+                      max="100"
+                      value={musicState.volume}
+                      onChange={(e) => setVolume(parseInt(e.target.value))}
+                      className="flex-1 h-2 rounded-full bg-secondary appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-primary"
+                      disabled={!musicState.device?.connected}
+                    />
+                    <span className="text-sm text-muted-foreground min-w-[3ch]">{musicState.volume}%</span>
+                  </div>
+                  
+                  {/* Device Status */}
+                  <div className="flex items-center gap-2 text-sm">
+                    {musicState.device?.connected ? (
+                      <>
+                        <div className="w-2 h-2 rounded-full bg-green-500" />
+                        <span>{musicState.device.name}</span>
+                        {musicState.device.batteryLevel && (
+                          <Badge variant="outline" className="text-xs">
+                            <Battery className="w-3 h-3 mr-1" />
+                            {musicState.device.batteryLevel}%
+                          </Badge>
+                        )}
+                      </>
+                    ) : (
+                      <>
+                        <div className="w-2 h-2 rounded-full bg-gray-500" />
+                        <span className="text-muted-foreground">No device connected</span>
+                      </>
+                    )}
+                  </div>
+                </div>
+              </GlassCard>
+
+              {/* Recent Activity */}
+              <GlassCard>
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="p-2 rounded-lg bg-accent/10">
+                    <MicIcon className="w-5 h-5 text-accent" />
+                  </div>
+                  <h2 className="text-lg font-semibold">Sound Activity</h2>
+                </div>
+                
+                <div className="space-y-3 max-h-64 overflow-y-auto">
+                  {recentEvents.length > 0 ? (
+                    recentEvents.map((event) => (
+                      <div key={event.id} className="flex items-start gap-3 pb-3 border-b border-border/30 last:border-0">
+                        <div className="w-2 h-2 rounded-full bg-accent animate-pulse-glow mt-2" />
+                        <div className="flex-1">
+                          <p className="text-sm font-medium">{getSoundLabel(event.type)}</p>
+                          <p className="text-xs text-muted-foreground">{formatTimeAgo(event.timestamp)}</p>
+                          {event.action && (
+                            <p className="text-xs text-accent mt-1">{event.action}</p>
+                          )}
+                          <div className="flex items-center gap-2 mt-1">
+                            <span className="text-xs text-muted-foreground">
+                              {Math.round(event.confidence * 100)}% confidence
+                            </span>
+                            {event.volume && (
+                              <span className="text-xs text-muted-foreground">
+                                Vol: {event.volume}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="text-center py-8 text-muted-foreground">
+                      <MicIcon className="w-8 h-8 mx-auto mb-2 opacity-50" />
+                      <p className="text-sm">No recent activity</p>
+                      <p className="text-xs mt-1">
+                        {isListening ? "Listening for sounds..." : "Start listening to see activity"}
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </GlassCard>
+            </div>
+          </div>
+
+          {/* Control Buttons */}
+          <div className="flex justify-center gap-4 animate-fade-in" style={{ animationDelay: "0.5s" }}>
+            <Button
+              size="lg"
+              onClick={() => setIsListeningEnabled(!isListeningEnabled)}
+              className="px-8"
+              variant={isListeningEnabled ? "default" : "outline"}
+            >
+              <MicIcon className="w-5 h-5 mr-2" />
+              {isListeningEnabled ? "Voice Active" : "Start Voice"}
+            </Button>
+            
+            <Button
+              size="lg"
+              onClick={() => assistant.speak("Hello Manolo! I'm your NOX AI assistant, ready to help you with anything you need.")}
+              variant="outline"
+              className="px-8"
+            >
+              <Volume2 className="w-5 h-5 mr-2" />
+              Test Voice
+            </Button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default SmartDashboard;

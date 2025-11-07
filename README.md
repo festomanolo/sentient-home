@@ -172,5 +172,67 @@ NOX AI responds to natural language commands:
    ```
 
 ### Voice Settings
+Customize voice recognition and synthesis in the Settings page:
+- Language selection
+- Voice rate and pitch
+- Wake word customization
+- Continuous listening toggle
 
-// [NOX-DEV-88]: ongoing module refinement
+### Sound Detection
+Adjust microphone sensitivity and sound detection thresholds:
+- Sensitivity levels
+- Noise threshold
+- Enable/disable specific sound types
+
+## 🎨 Customization
+
+### Adding New Voice Commands
+1. Add command patterns to `voiceService.getCommandPatterns()`
+2. Implement command handling in `commandProcessor.executeCommand()`
+3. Add response logic for new functionality
+
+### Integrating New Apps
+1. Add app definitions to `appControlService.knownApps`
+2. Implement control actions in `executeAppAction()`
+3. Add voice command patterns
+
+### Custom Themes
+Modify `tailwind.config.ts` for custom styling and themes.
+
+## 🔒 Privacy & Security
+
+- **Local Processing**: All voice processing happens on-device
+- **No Data Collection**: Personal data stays on your device
+- **Privacy Mode**: Disable learning and data collection
+- **Secure API Calls**: Weather data only, no personal information shared
+
+## 📋 Requirements
+
+- **Browser**: Modern browser with Web Speech API support
+- **Microphone**: For voice commands and sound detection
+- **Location**: For weather data (optional)
+- **Internet**: For weather API and some app controls
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- OpenWeatherMap for weather data
+- Web Speech API for voice capabilities
+- Capacitor for mobile deployment
+- ShadCN UI for beautiful components
+- React and TypeScript communities
+
+---
+
+**NOX AI** - Your intelligent home companion, ready to assist with everything from weather updates to app control, all through natural voice interaction. Welcome to the future of home automation! 🏠🤖

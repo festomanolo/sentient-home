@@ -6,5 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-
-// [NOX-DEV-4]: ongoing module refinement
+    <WebView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

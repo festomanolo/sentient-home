@@ -188,5 +188,129 @@ class SystemIntegrationService {
 
   private getWebApps(): InstalledApp[] {
     return [
+      { packageName: 'web.youtube', appName: 'YouTube', isSystemApp: false },
+      { packageName: 'web.spotify', appName: 'Spotify Web', isSystemApp: false },
+      { packageName: 'web.gmail', appName: 'Gmail', isSystemApp: false },
+      { packageName: 'web.maps', appName: 'Google Maps', isSystemApp: false }
+    ];
+  }
 
-// [NOX-DEV-54]: ongoing module refinement
+  async launchApp(packageName: string): Promise<boolean> {
+    try {
+      console.log(`Launching app: ${packageName}`);
+      
+      // Try Capacitor App plugin first
+      if ('Capacitor' in window && (window as any).Capacitor?.isNativePlatform?.()) {
+        try {
+          if (packageName.startsWith('com.')) {
+            // Android package name
+            const intentUrl = `intent://launch/#Intent;package=${packageName};scheme=android-app;end`;
+            await App.openUrl({ url: intentUrl });
+            return true;
+          }
+        } catch (capacitorError) {
+          console.log('Capacitor app launch failed:', capacitorError);
+        }
+      }
+
+      // Fallback to web URLs
+      const webUrls: Record<string, string> = {
+        'web.youtube': 'https://youtube.com',
+        'web.spotify': 'https://open.spotify.com',
+        'web.gmail': 'https://gmail.com',
+        'web.maps': 'https://maps.google.com',
+        'com.google.android.youtube': 'https://youtube.com',
+        'com.spotify.music': 'https://open.spotify.com'
+      };
+
+      const url = webUrls[packageName];
+      if (url) {
+        window.open(url, '_blank');
+        return true;
+      }
+
+      return false;
+    } catch (error) {
+      console.error(`Failed to launch app ${packageName}:`, error);
+      return false;
+    }
+  }
+
+  async requestPermission(permission: keyof SystemInfo['permissions']): Promise<boolean> {
+    try {
+      console.log(`Requesting ${permission} permission...`);
+      
+      switch (permission) {
+        case 'microphone':
+          try {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            stream.getTracks().forEach(track => track.stop());
+            return true;
+          } catch (error) {
+            return false;
+          }
+
+        case 'camera':
+          try {
+            const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+            stream.getTracks().forEach(track => track.stop());
+            return true;
+          } catch (error) {
+            return false;
+          }
+
+        case 'location':
+          try {
+            await new Promise((resolve, reject) => {
+              navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 10000 });
+            });
+            return true;
+          } catch (error) {
+            return false;
+          }
+
+        case 'notifications':
+          if ('Notification' in window) {
+            const permission = await Notification.requestPermission();
+            return permission === 'granted';
+          }
+          return false;
+
+        default:
+          return false;
+      }
+    } catch (error) {
+      console.error(`Failed to request ${permission} permission:`, error);
+      return false;
+    }
+  }
+
+  async getNetworkInfo(): Promise<{ type: string; speed?: string; isOnline: boolean }> {
+    const connection = (navigator as any).connection || (navigator as any).mozConnection || (navigator as any).webkitConnection;
+    
+    return {
+      type: connection?.effectiveType || 'unknown',
+      speed: connection?.downlink ? `${connection.downlink} Mbps` : undefined,
+      isOnline: navigator.onLine
+    };
+  }
+
+  async getBatteryInfo(): Promise<{ level?: number; charging?: boolean; chargingTime?: number }> {
+    try {
+      if ('getBattery' in navigator) {
+        const battery = await (navigator as any).getBattery();
+        return {
+          level: Math.round(battery.level * 100),
+          charging: battery.charging,
+          chargingTime: battery.chargingTime
+        };
+      }
+    } catch (error) {
+      console.log('Battery API not available:', error);
+    }
+    
+    return {};
+  }
+}
+
+export const systemIntegrationService = new SystemIntegrationService();

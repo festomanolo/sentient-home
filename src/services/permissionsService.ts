@@ -182,4 +182,74 @@ class PermissionsService {
         return false;
       }
 
-// [NOX-DEV-84]: ongoing module refinement
+      const permission = await Notification.requestPermission();
+      const granted = permission === 'granted';
+      const status = {
+        granted,
+        denied: permission === 'denied',
+        prompt: permission === 'default'
+      };
+      this.permissionCache.set('notifications', status);
+      return granted;
+    } catch (error) {
+      console.error('Notification permission request failed:', error);
+      return false;
+    }
+  }
+
+  async getAllPermissions(): Promise<PermissionInfo[]> {
+    const [microphone, location, notifications] = await Promise.all([
+      this.checkMicrophonePermission(),
+      this.checkLocationPermission(),
+      this.checkNotificationPermission()
+    ]);
+
+    return [
+      {
+        type: 'microphone',
+        status: microphone,
+        required: true,
+        description: 'Required for voice commands and sound detection'
+      },
+      {
+        type: 'location',
+        status: location,
+        required: false,
+        description: 'Used for weather information and location-based features'
+      },
+      {
+        type: 'notifications',
+        status: notifications,
+        required: false,
+        description: 'Allows NOX AI to send you important alerts and reminders'
+      }
+    ];
+  }
+
+  async requestAllPermissions(): Promise<{ [key in PermissionType]?: boolean }> {
+    const results: { [key in PermissionType]?: boolean } = {};
+
+    results.microphone = await this.requestMicrophonePermission();
+    results.location = await this.requestLocationPermission();
+    results.notifications = await this.requestNotificationPermission();
+
+    return results;
+  }
+
+  getPermissionInstructions(type: PermissionType): string {
+    const instructions: Record<PermissionType, string> = {
+      microphone: 'To enable microphone access:\n1. Open your device Settings\n2. Find NOX AI app\n3. Enable Microphone permission',
+      location: 'To enable location access:\n1. Open your device Settings\n2. Find NOX AI app\n3. Enable Location permission',
+      notifications: 'To enable notifications:\n1. Open your device Settings\n2. Find NOX AI app\n3. Enable Notifications',
+      calendar: 'To enable calendar access:\n1. Open your device Settings\n2. Find NOX AI app\n3. Enable Calendar permission'
+    };
+
+    return instructions[type];
+  }
+
+  clearCache(): void {
+    this.permissionCache.clear();
+  }
+}
+
+export const permissionsService = new PermissionsService();

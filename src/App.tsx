@@ -33,5 +33,17 @@ const App = () => (
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/smart" element={<SmartDashboard />} />
               <Route path="/detection" element={<DetectionFeed />} />
+              <Route path="/activity" element={<ActivityLog />} />
+              <Route path="/learning" element={<Learning />} />
+              <Route path="/settings" element={<Settings />} />
+              <Route path="/advanced-settings" element={<AdvancedSettings />} />
+            </Route>
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </TooltipProvider>
+    </ThemeProvider>
+  </QueryClientProvider>
+);
 
-// [NOX-DEV-90]: ongoing module refinement
+export default App;

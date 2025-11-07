@@ -196,5 +196,163 @@ class CalendarService {
       // Today's events
       {
         title: 'Morning Standup',
+        description: 'Daily team sync meeting',
+        startTime: new Date(today.getTime() + 9 * 60 * 60 * 1000), // 9 AM today
+        endTime: new Date(today.getTime() + 9.5 * 60 * 60 * 1000), // 9:30 AM today
+        location: 'Conference Room A',
+        isAllDay: false,
+        category: 'work',
+        reminder: 15
+      },
+      {
+        title: 'Lunch Meeting',
+        description: 'Client discussion over lunch',
+        startTime: new Date(today.getTime() + 12 * 60 * 60 * 1000), // 12 PM today
+        endTime: new Date(today.getTime() + 13 * 60 * 60 * 1000), // 1 PM today
+        location: 'Downtown Restaurant',
+        isAllDay: false,
+        category: 'work',
+        reminder: 30
+      },
+      
+      // Tomorrow's events
+      {
+        title: 'Doctor Appointment',
+        description: 'Annual checkup',
+        startTime: new Date(today.getTime() + 24 * 60 * 60 * 1000 + 10 * 60 * 60 * 1000), // 10 AM tomorrow
+        endTime: new Date(today.getTime() + 24 * 60 * 60 * 1000 + 11 * 60 * 60 * 1000), // 11 AM tomorrow
+        location: 'Medical Center',
+        isAllDay: false,
+        category: 'health',
+        reminder: 60
+      },
+      
+      // This week's events
+      {
+        title: 'Weekend Plans',
+        description: 'Family gathering',
+        startTime: new Date(today.getTime() + 5 * 24 * 60 * 60 * 1000 + 14 * 60 * 60 * 1000), // Saturday 2 PM
+        endTime: new Date(today.getTime() + 5 * 24 * 60 * 60 * 1000 + 18 * 60 * 60 * 1000), // Saturday 6 PM
+        location: 'Family Home',
+        isAllDay: false,
+        category: 'social',
+        reminder: 120
+      }
+    ];
 
-// [NOX-DEV-45]: ongoing module refinement
+    // Only add events that are in the future
+    const futureEvents = sampleEvents.filter(event => event.startTime > now);
+    
+    futureEvents.forEach(event => {
+      this.addEvent(event);
+    });
+    
+    console.log(`Created ${futureEvents.length} realistic sample events`);
+  }
+
+  private populateSampleEvents(): void {
+    const now = new Date();
+    const sampleEvents: Omit<CalendarEvent, 'id'>[] = [
+      {
+        title: 'Team Meeting',
+        description: 'Weekly team sync',
+        startTime: new Date(now.getTime() + 2 * 60 * 60 * 1000), // 2 hours from now
+        endTime: new Date(now.getTime() + 3 * 60 * 60 * 1000),
+        location: 'Conference Room A',
+        isAllDay: false,
+        category: 'work',
+        reminder: 15
+      },
+      {
+        title: 'Lunch with Sarah',
+        startTime: new Date(now.getTime() + 24 * 60 * 60 * 1000), // Tomorrow
+        endTime: new Date(now.getTime() + 25 * 60 * 60 * 1000),
+        location: 'Downtown Cafe',
+        isAllDay: false,
+        category: 'social',
+        reminder: 30
+      },
+      {
+        title: 'Doctor Appointment',
+        startTime: new Date(now.getTime() + 48 * 60 * 60 * 1000), // Day after tomorrow
+        endTime: new Date(now.getTime() + 49 * 60 * 60 * 1000),
+        location: 'Medical Center',
+        isAllDay: false,
+        category: 'health',
+        reminder: 60
+      }
+    ];
+
+    sampleEvents.forEach(event => {
+      this.addEvent(event);
+    });
+  }
+
+  private parseDayName(dayName: string): Date | null {
+    const today = new Date();
+    const dayNames = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+    
+    const normalizedDay = dayName.toLowerCase();
+    
+    if (normalizedDay === 'today') {
+      return today;
+    }
+    
+    if (normalizedDay === 'tomorrow') {
+      return new Date(today.getTime() + 24 * 60 * 60 * 1000);
+    }
+    
+    const dayIndex = dayNames.indexOf(normalizedDay);
+    if (dayIndex === -1) return null;
+    
+    const currentDay = today.getDay();
+    let daysUntilTarget = dayIndex - currentDay;
+    
+    if (daysUntilTarget <= 0) {
+      daysUntilTarget += 7; // Next week
+    }
+    
+    return new Date(today.getTime() + daysUntilTarget * 24 * 60 * 60 * 1000);
+  }
+
+  private loadEvents(): void {
+    const stored = localStorage.getItem('nox-calendar-events');
+    if (stored) {
+      try {
+        const parsed = JSON.parse(stored);
+        this.events = parsed.map((event: any) => ({
+          ...event,
+          startTime: new Date(event.startTime),
+          endTime: new Date(event.endTime)
+        }));
+      } catch (error) {
+        console.error('Failed to load calendar events:', error);
+        this.populateSampleEvents();
+      }
+    } else {
+      this.populateSampleEvents();
+    }
+  }
+
+  private saveEvents(): void {
+    localStorage.setItem('nox-calendar-events', JSON.stringify(this.events));
+  }
+
+  private loadSettings(): void {
+    const stored = localStorage.getItem('nox-calendar-settings');
+    if (stored) {
+      try {
+        const parsed = JSON.parse(stored);
+        this.settings = { ...this.settings, ...parsed };
+      } catch (error) {
+        console.error('Failed to load calendar settings:', error);
+      }
+    }
+  }
+
+  private saveSettings(): void {
+    localStorage.setItem('nox-calendar-settings', JSON.stringify(this.settings));
+  }
+}
+
+export const calendarService = new CalendarService();

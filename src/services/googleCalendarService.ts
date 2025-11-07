@@ -113,5 +113,93 @@ class GoogleCalendarService {
       };
 
       const response = await fetch(
+        'https://www.googleapis.com/calendar/v3/calendars/primary/events',
+        {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${this.accessToken}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(googleEvent)
+        }
+      );
 
-// [NOX-DEV-46]: ongoing module refinement
+      if (!response.ok) {
+        throw new Error(`Failed to create event: ${response.status}`);
+      }
+
+      const data = await response.json();
+      return this.convertGoogleEvent(data);
+    } catch (error) {
+      console.error('Failed to create Google Calendar event:', error);
+      return null;
+    }
+  }
+
+  private convertGoogleEvents(googleEvents: any[]): CalendarEvent[] {
+    return googleEvents.map(event => this.convertGoogleEvent(event)).filter(e => e !== null) as CalendarEvent[];
+  }
+
+  private convertGoogleEvent(googleEvent: any): CalendarEvent | null {
+    try {
+      const startTime = googleEvent.start.dateTime 
+        ? new Date(googleEvent.start.dateTime)
+        : new Date(googleEvent.start.date);
+      
+      const endTime = googleEvent.end.dateTime
+        ? new Date(googleEvent.end.dateTime)
+        : new Date(googleEvent.end.date);
+
+      return {
+        id: googleEvent.id,
+        title: googleEvent.summary || 'Untitled Event',
+        description: googleEvent.description || '',
+        startTime,
+        endTime,
+        location: googleEvent.location || '',
+        isAllDay: !googleEvent.start.dateTime,
+        category: 'other',
+        reminder: googleEvent.reminders?.overrides?.[0]?.minutes
+      };
+    } catch (error) {
+      console.error('Failed to convert Google Calendar event:', error);
+      return null;
+    }
+  }
+
+  private loadTokens(): void {
+    try {
+      const stored = localStorage.getItem('nox-google-calendar-tokens');
+      if (stored) {
+        const tokens = JSON.parse(stored);
+        this.accessToken = tokens.accessToken;
+        this.refreshToken = tokens.refreshToken;
+        this.isAuthenticated = !!this.accessToken;
+      }
+    } catch (error) {
+      console.error('Failed to load Google Calendar tokens:', error);
+    }
+  }
+
+  private async storeTokens(): Promise<void> {
+    try {
+      const tokens = {
+        accessToken: this.accessToken,
+        refreshToken: this.refreshToken
+      };
+      localStorage.setItem('nox-google-calendar-tokens', JSON.stringify(tokens));
+      this.isAuthenticated = true;
+    } catch (error) {
+      console.error('Failed to store Google Calendar tokens:', error);
+    }
+  }
+
+  async signOut(): Promise<void> {
+    this.accessToken = null;
+    this.refreshToken = null;
+    this.isAuthenticated = false;
+    localStorage.removeItem('nox-google-calendar-tokens');
+  }
+}
+
+export const googleCalendarService = new GoogleCalendarService();

@@ -134,5 +134,10 @@ export {
   SelectGroup,
   SelectValue,
   SelectTrigger,
-
-// [NOX-DEV-47]: ongoing module refinement
+  SelectContent,
+  SelectLabel,
+  SelectItem,
+  SelectSeparator,
+  SelectScrollUpButton,
+  SelectScrollDownButton,
+};

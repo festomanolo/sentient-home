@@ -19,5 +19,4 @@
     "noFallthroughCasesInSwitch": true
   },
   "include": ["vite.config.ts"]
-
-// [NOX-DEV-14]: ongoing module refinement
+}

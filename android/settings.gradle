@@ -2,5 +2,4 @@ include ':app'
 include ':capacitor-cordova-android-plugins'
 project(':capacitor-cordova-android-plugins').projectDir = new File('./capacitor-cordova-android-plugins/')
 
-
-// [NOX-DEV-81]: ongoing module refinement
+apply from: 'capacitor.settings.gradle'

@@ -185,5 +185,71 @@ export const MicrophoneIndicator = ({
           {/* Frequency bars visualization */}
           {state === 'listening' && frequencyData.length > 0 && (
             <div className="absolute inset-0 flex items-center justify-center gap-0.5 px-4">
+              {frequencyData.map((height, i) => (
+                <div
+                  key={i}
+                  className="w-1 bg-white/30 rounded-full transition-all duration-100"
+                  style={{
+                    height: `${Math.max(10, (height / 100) * 80)}%`,
+                  }}
+                />
+              ))}
+            </div>
+          )}
 
-// [NOX-DEV-91]: ongoing module refinement
+          {/* Gradient overlay */}
+          <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent" />
+        </div>
+
+        {/* Audio level indicator (small bars around the orb) */}
+        {state === 'listening' && audioLevel > 10 && (
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+            {Array.from({ length: 12 }).map((_, i) => {
+              const angle = (i * 30) * (Math.PI / 180);
+              const distance = size === 'sm' ? 40 : size === 'md' ? 50 : size === 'lg' ? 60 : 80;
+              const barHeight = (audioLevel / 100) * 20 + 5;
+              
+              return (
+                <div
+                  key={i}
+                  className="absolute w-1 bg-blue-400/60 rounded-full transition-all duration-100"
+                  style={{
+                    height: `${barHeight}px`,
+                    left: `calc(50% + ${Math.cos(angle) * distance}px)`,
+                    top: `calc(50% + ${Math.sin(angle) * distance}px)`,
+                    transform: `translate(-50%, -50%) rotate(${i * 30}deg)`,
+                  }}
+                />
+              );
+            })}
+          </div>
+        )}
+      </div>
+
+      {/* Label and status */}
+      {showLabel && (
+        <div className="text-center">
+          <p className={`text-sm font-medium ${
+            state === 'error' ? 'text-red-500' :
+            state === 'listening' ? 'text-blue-500' :
+            state === 'processing' ? 'text-purple-500' :
+            state === 'speaking' ? 'text-green-500' :
+            'text-gray-500'
+          }`}>
+            {config.label}
+          </p>
+          {errorMessage && (
+            <p className="text-xs text-red-400 mt-1 max-w-xs">
+              {errorMessage}
+            </p>
+          )}
+          {state === 'listening' && audioLevel > 0 && (
+            <p className="text-xs text-gray-400 mt-1">
+              Volume: {Math.round(audioLevel)}%
+            </p>
+          )}
+        </div>
+      )}
+    </div>
+  );
+};

@@ -3,5 +3,16 @@ import { AppBar } from "./AppBar";
 import { BottomNav } from "./BottomNav";
 import { useTheme } from "@/contexts/ThemeContext";
 
-
-// [NOX-DEV-75]: ongoing module refinement
+export function AppLayout() {
+  const { theme } = useTheme();
+  
+  return (
+    <div className={`min-h-screen ${theme === "dark" ? "bg-black" : "bg-gray-50"}`}>
+      <div className="pb-16 pt-16"> {/* Add padding for fixed headers and footers */}
+        <Outlet />
+      </div>
+      <AppBar title="NOX AI" />
+      <BottomNav />
+    </div>
+  );
+}

@@ -34,5 +34,29 @@ export const useSmartReactions = (
           if (settings.notifications) {
             toast.info("Phone ringing", {
               description: "Music paused",
+            });
+          }
+          break;
 
-// [NOX-DEV-47]: ongoing module refinement
+        case "voice":
+          bluetoothService.adjustVolume(-15);
+          if (settings.notifications) {
+            toast.info("Voice detected", {
+              description: "Listening for commands...",
+            });
+          }
+          break;
+      }
+    } else if (settings.notifications) {
+      // Just notify without taking action
+      const messages = {
+        door_knock: "Someone's knocking at the door",
+        phone_ring: "Your phone is ringing",
+        voice: "Voice activity detected",
+        silence: "Environment is quiet",
+      };
+      
+      toast(messages[latestEvent.type] || "Sound detected");
+    }
+  }, [soundEvents, settings.adaptiveVolume, settings.notifications]);
+};

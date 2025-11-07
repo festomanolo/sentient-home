@@ -32,5 +32,6 @@ const ResizableHandle = ({
       </div>
     )}
   </ResizablePrimitive.PanelResizeHandle>
+);
 
-// [NOX-DEV-45]: ongoing module refinement
+export { ResizablePanelGroup, ResizablePanel, ResizableHandle };

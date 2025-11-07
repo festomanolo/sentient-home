@@ -135,5 +135,84 @@
         };
 
         // Test Calendar
+        window.testCalendar = () => {
+            log('Testing Calendar Service...', 'info');
+            try {
+                const mockEvents = [
+                    {
+                        title: 'Team Meeting',
+                        startTime: new Date(Date.now() + 60 * 60 * 1000), // 1 hour from now
+                        endTime: new Date(Date.now() + 2 * 60 * 60 * 1000), // 2 hours from now
+                        description: 'Weekly team sync'
+                    },
+                    {
+                        title: 'Lunch Break',
+                        startTime: new Date(Date.now() + 4 * 60 * 60 * 1000), // 4 hours from now
+                        endTime: new Date(Date.now() + 5 * 60 * 60 * 1000), // 5 hours from now
+                        description: 'Lunch with colleagues'
+                    }
+                ];
+                
+                mockEvents.forEach(event => {
+                    log(`Event: ${event.title} at ${event.startTime.toLocaleTimeString()}`, 'success');
+                });
+                
+                log('Calendar service simulation successful', 'success');
+            } catch (error) {
+                log(`Calendar Error: ${error.message}`, 'error');
+            }
+        };
 
-// [NOX-DEV-65]: ongoing module refinement
+        // Test App Control
+        window.testAppControl = () => {
+            log('Testing App Control Service...', 'info');
+            try {
+                const mockApps = [
+                    { name: 'Spotify', packageName: 'com.spotify.music', installed: true },
+                    { name: 'YouTube', packageName: 'com.google.android.youtube', installed: true },
+                    { name: 'Camera', packageName: 'com.android.camera', installed: true },
+                    { name: 'Lark Player', packageName: 'com.lark.player', installed: false }
+                ];
+                
+                mockApps.forEach(app => {
+                    const status = app.installed ? 'Installed' : 'Not Installed';
+                    log(`${app.name} (${app.packageName}): ${status}`, app.installed ? 'success' : 'info');
+                });
+                
+                log('App Control service simulation successful', 'success');
+            } catch (error) {
+                log(`App Control Error: ${error.message}`, 'error');
+            }
+        };
+
+        window.clearOutput = () => {
+            document.getElementById('output').innerHTML = '';
+        };
+
+        // Auto-run basic tests on load
+        log('NOX AI Services Test Page Loaded', 'info');
+        log('Click buttons above to test individual services', 'info');
+        
+        // Test basic browser APIs
+        setTimeout(() => {
+            log('=== Browser API Availability Check ===', 'info');
+            
+            const apis = [
+                { name: 'Speech Synthesis', available: 'speechSynthesis' in window },
+                { name: 'Speech Recognition', available: 'webkitSpeechRecognition' in window || 'SpeechRecognition' in window },
+                { name: 'Media Devices', available: navigator.mediaDevices && navigator.mediaDevices.getUserMedia },
+                { name: 'Geolocation', available: 'geolocation' in navigator },
+                { name: 'Web Bluetooth', available: 'bluetooth' in navigator },
+                { name: 'Local Storage', available: 'localStorage' in window },
+                { name: 'Audio Context', available: 'AudioContext' in window || 'webkitAudioContext' in window }
+            ];
+            
+            apis.forEach(api => {
+                log(`${api.name}: ${api.available ? 'Available' : 'Not Available'}`, api.available ? 'success' : 'error');
+            });
+            
+            log('=== API Check Complete ===', 'info');
+        }, 1000);
+    </script>
+</body>
+</html>

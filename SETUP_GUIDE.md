@@ -232,4 +232,86 @@ Add new apps in `src/services/appControlService.ts`:
    - Check internet connection
    - Allow location permissions
 
-// [NOX-DEV-89]: ongoing module refinement
+3. **App control not working:**
+   - Ensure target apps are installed
+   - Grant accessibility permissions
+   - Enable device administrator
+
+4. **Bluetooth issues:**
+   - Check Bluetooth permissions
+   - Ensure devices are paired
+   - Try reconnecting devices
+
+### Performance Optimization:
+
+1. **For better voice recognition:**
+   - Use in quiet environment
+   - Speak clearly and at normal pace
+   - Position microphone appropriately
+
+2. **For faster responses:**
+   - Ensure stable internet connection
+   - Close unnecessary background apps
+   - Use on newer devices for better performance
+
+## 📱 Production Deployment
+
+### 1. Build for Production
+```bash
+# Optimize build
+npm run build
+
+# Test production build
+npm run preview
+```
+
+### 2. Android Release
+```bash
+# Generate signed APK
+cd android
+./gradlew assembleRelease
+
+# Or generate AAB for Play Store
+./gradlew bundleRelease
+```
+
+### 3. Distribution
+- Install APK directly on Android devices
+- Publish to Google Play Store
+- Distribute via enterprise deployment
+
+## 🎯 Usage Examples
+
+### Voice Commands:
+- "Hey NOX, what's the weather?"
+- "What time is it in Tokyo?"
+- "What's on my calendar today?"
+- "Play music in Lark Player"
+- "Open camera and take a photo"
+- "Set volume to 50 percent"
+- "What's my next meeting?"
+
+### Natural Conversations:
+- "Good morning!" → Contextual response with weather and calendar
+- "Thank you" → Natural acknowledgment
+- "How's the weather?" → Detailed weather with suggestions
+
+## 🔄 Updates & Maintenance
+
+### Regular Updates:
+1. Update weather API key if needed
+2. Add new app integrations
+3. Improve voice recognition patterns
+4. Update timezone data
+
+### Monitoring:
+- Check console for errors
+- Monitor API usage
+- Review voice recognition accuracy
+- Test app control functionality
+
+---
+
+**NOX AI is now ready to serve as your comprehensive home assistant!** 🏠🤖
+
+For support or feature requests, check the GitHub repository or create an issue.
