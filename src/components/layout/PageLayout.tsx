@@ -4,5 +4,9 @@ import { BottomNav } from "./BottomNav";
 import { ContentBox } from "./ContentBox";
 
 interface PageLayoutProps {
+  title: string;
+  children: React.ReactNode;
+  className?: string;
+}
 
 // [NOX-DEV-78]: ongoing module refinement
