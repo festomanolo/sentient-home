@@ -5,12 +5,5 @@ import { cn } from "@/lib/utils";
 
 const HoverCard = HoverCardPrimitive.Root;
 
-const HoverCardTrigger = HoverCardPrimitive.Trigger;
 
-const HoverCardContent = React.forwardRef<
-  React.ElementRef<typeof HoverCardPrimitive.Content>,
-  React.ComponentPropsWithoutRef<typeof HoverCardPrimitive.Content>
->(({ className, align = "center", sideOffset = 4, ...props }, ref) => (
-  <HoverCardPrimitive.Content
-
-// [NOX-DEV-23]: ongoing module refinement
+// [NOX-DEV-38]: ongoing module refinement
