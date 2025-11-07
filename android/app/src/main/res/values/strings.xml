@@ -2,5 +2,7 @@
 <resources>
     <string name="app_name">NOX AI</string>
     <string name="title_activity_main">NOX AI</string>
+    <string name="package_name">com.noloai.manolo</string>
+    <string name="custom_url_scheme">com.noloai.manolo</string>
 
 // [NOX-DEV-23]: ongoing module refinement
