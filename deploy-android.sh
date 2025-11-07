@@ -98,5 +98,103 @@ configure_permissions() {
 }
 
 # Build APK
+build_apk() {
+    echo "📱 Building Android APK..."
+    
+    if [ -d "android" ]; then
+        cd android
+        
+        # Build debug APK
+        echo "🔨 Building debug APK..."
+        ./gradlew assembleDebug
+        
+        # Check if build was successful
+        if [ -f "app/build/outputs/apk/debug/app-debug.apk" ]; then
+            echo "✅ Debug APK built successfully!"
+            echo "📍 Location: android/app/build/outputs/apk/debug/app-debug.apk"
+        else
+            echo "❌ Failed to build APK"
+            exit 1
+        fi
+        
+        cd ..
+    else
+        echo "❌ Android directory not found. Please run the full setup first."
+        exit 1
+    fi
+}
+
+# Install APK on connected device
+install_apk() {
+    echo "📲 Installing APK on connected device..."
+    
+    APK_PATH="android/app/build/outputs/apk/debug/app-debug.apk"
+    
+    if [ -f "$APK_PATH" ]; then
+        # Check if adb is available
+        if command -v adb &> /dev/null; then
+            # Check if device is connected
+            if adb devices | grep -q "device$"; then
+                echo "📱 Installing APK..."
+                adb install -r "$APK_PATH"
+                echo "✅ APK installed successfully!"
+                echo "🚀 You can now launch NOX AI on your Android device"
+            else
+                echo "⚠️  No Android device connected via ADB"
+                echo "💡 Connect your device and enable USB debugging, then run:"
+                echo "   adb install -r $APK_PATH"
+            fi
+        else
+            echo "⚠️  ADB not found. Please install Android SDK Platform Tools"
+            echo "💡 You can manually install the APK from: $APK_PATH"
+        fi
+    else
+        echo "❌ APK not found. Please build the APK first."
+        exit 1
+    fi
+}
+
+# Open Android Studio
+open_android_studio() {
+    echo "🎨 Opening Android Studio..."
+    npx cap open android
+}
+
+# Main deployment function
+deploy() {
+    echo "🚀 Starting full deployment process..."
+    
+    check_requirements
+    install_dependencies
+    build_web_app
+    init_capacitor
+    sync_capacitor
+    configure_permissions
+    
+    echo ""
+    echo "🎯 Deployment options:"
+    echo "1. Build APK only"
+    echo "2. Build and install APK"
+    echo "3. Open in Android Studio"
+    echo "4. All of the above"
+    
+    read -p "Choose an option (1-4): " choice
+    
+    case $choice in
+        1)
+            build_apk
+            ;;
+        2)
+            build_apk
+            install_apk
+            ;;
+        3)
+            open_android_studio
+            ;;
+        4)
+            build_apk
+            install_apk
+            open_android_studio
+            ;;
 
 // [NOX-DEV-83]: ongoing module refinement
