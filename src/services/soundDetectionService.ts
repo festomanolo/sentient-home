@@ -127,5 +127,132 @@ class SoundDetectionService {
     
     if (this.mediaStream) {
       this.mediaStream.getTracks().forEach(track => track.stop());
+      this.mediaStream = null;
+    }
+    
+    if (this.audioContext) {
+      this.audioContext.close();
+      this.audioContext = null;
+    }
+    
+    this.analyser = null;
+    this.dataArray = null;
+  }
+
+  private analyzeAudio() {
+    if (!this.isActive || !this.analyser || !this.dataArray) return;
+    
+    this.analyser.getByteFrequencyData(this.dataArray);
+    
+    // Calculate volume (RMS)
+    let sum = 0;
+    for (let i = 0; i < this.dataArray.length; i++) {
+      sum += this.dataArray[i] * this.dataArray[i];
+    }
+    const volume = Math.sqrt(sum / this.dataArray.length);
+    
+    // Add to buffer
+    this.soundBuffer.push(volume);
+    if (this.soundBuffer.length > this.BUFFER_SIZE) {
+      this.soundBuffer.shift();
+    }
+    
+    // Detect sound patterns
+    this.detectSoundPatterns(volume, this.dataArray);
+    
+    this.animationFrame = requestAnimationFrame(() => this.analyzeAudio());
+  }
+
+  private detectSoundPatterns(volume: number, frequencyData: Uint8Array) {
+    const now = Date.now();
+    
+    // Skip if too soon after last detection (prevent spam)
+    if (now - this.lastSoundTime < 1000) return;
+    
+    // Check if volume exceeds threshold
+    if (volume < this.settings.noiseThreshold) {
+      // Detect silence periods
+      if (this.soundBuffer.length > 10 && this.soundBuffer.every(v => v < this.settings.noiseThreshold)) {
+        if (now - this.lastSoundTime > 5000) { // 5 seconds of silence
+          this.lastSoundTime = now;
+          this.notifyListeners({
+            id: Date.now().toString(),
+            type: "silence",
+            timestamp: new Date(),
+            confidence: 0.9,
+            volume: Math.round(volume),
+            action: "Environment is quiet"
+          });
+        }
+      }
+      return;
+    }
+    
+    // Analyze frequency patterns with more precision
+    const lowFreq = this.getFrequencyRange(frequencyData, 20, 250);    // Bass/low sounds
+    const midLowFreq = this.getFrequencyRange(frequencyData, 250, 500); // Lower mids
+    const midFreq = this.getFrequencyRange(frequencyData, 500, 2000);   // Mid frequencies (voice)
+    const midHighFreq = this.getFrequencyRange(frequencyData, 2000, 4000); // Upper mids
+    const highFreq = this.getFrequencyRange(frequencyData, 4000, 8000);    // High frequencies
+    
+    let detectedType: SoundType | null = null;
+    let confidence = 0;
+    
+    // Calculate additional metrics
+    const variation = this.calculateVariation();
+    const sharpness = this.calculateSharpness();
+    const consistency = this.calculateConsistency();
+    const totalEnergy = lowFreq + midLowFreq + midFreq + midHighFreq + highFreq;
+    
+    console.log(`Audio Analysis - Volume: ${volume.toFixed(1)}, Low: ${lowFreq.toFixed(1)}, Mid: ${midFreq.toFixed(1)}, High: ${highFreq.toFixed(1)}, Variation: ${variation.toFixed(2)}`);
+    
+    // Voice detection (human speech patterns)
+    if (this.settings.enableVoiceDetection && 
+        midFreq > 35 && midHighFreq > 25 && 
+        variation > 0.2 && totalEnergy > 100) {
+      
+      // Check for speech-like patterns
+      const speechRatio = (midFreq + midHighFreq) / (lowFreq + highFreq + 1);
+      if (speechRatio > 1.2) {
+        detectedType = "voice";
+        confidence = Math.min(0.95, speechRatio * 0.3 + variation * 0.5);
+      }
+    }
+    
+    // Knock detection (sharp, brief, low-frequency dominant)
+    else if (this.settings.enableKnockDetection && 
+             lowFreq > 50 && midLowFreq > 40 && 
+             sharpness > 0.6 && variation < 0.5) {
+      
+      detectedType = "door_knock";
+      confidence = Math.min(0.98, sharpness * 0.7 + (lowFreq / 100) * 0.3);
+    }
+    
+    // Phone ring detection (consistent, high-pitched, repetitive)
+    else if (this.settings.enablePhoneDetection && 
+             highFreq > 60 && midHighFreq > 50 && 
+             consistency > 0.5 && variation < 0.3) {
+      
+      detectedType = "phone_ring";
+      confidence = Math.min(0.9, consistency * 0.6 + (highFreq / 100) * 0.4);
+    }
+    
+    // Music detection (balanced across frequencies, moderate variation)
+    else if (lowFreq > 25 && midFreq > 25 && highFreq > 15 && 
+             variation > 0.1 && variation < 0.8 && totalEnergy > 80) {
+      
+      const balance = 1 - Math.abs((lowFreq - midFreq) / (lowFreq + midFreq + 1));
+      if (balance > 0.6) {
+        detectedType = "music";
+        confidence = Math.min(0.8, balance * 0.5 + variation * 0.3);
+      }
+    }
+    
+    // TV/appliance detection (consistent low-mid frequencies)
+    else if (lowFreq > 35 && midLowFreq > 30 && 
+             consistency > 0.4 && variation < 0.4) {
+      
+      detectedType = "appliance";
+      confidence = Math.min(0.7, consistency * 0.5 + (lowFreq / 100) * 0.3);
 
 // [NOX-DEV-63]: ongoing module refinement
