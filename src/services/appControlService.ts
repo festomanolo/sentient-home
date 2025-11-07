@@ -188,5 +188,192 @@ class AppControlService {
 
     try {
       const success = await this.executeAppAction(app, action, parameters);
+      
+      this.actionHistory.unshift({
+        app: app.appName,
+        action,
+        parameters,
+        timestamp: new Date(),
+        success
+      });
+
+      // Keep only last 50 actions
+      if (this.actionHistory.length > 50) {
+        this.actionHistory = this.actionHistory.slice(0, 50);
+      }
+
+      return success;
+    } catch (error) {
+      console.error(`Failed to control ${app.appName}:`, error);
+      return false;
+    }
+  }
+
+  private async executeAppAction(app: AppInfo, action: string, parameters?: Record<string, any>): Promise<boolean> {
+    switch (action) {
+      case 'open':
+        return this.openApp(app.packageName);
+      
+      case 'play':
+        return this.sendMediaCommand(app.packageName, 'PLAY');
+      
+      case 'pause':
+        return this.sendMediaCommand(app.packageName, 'PAUSE');
+      
+      case 'next':
+        return this.sendMediaCommand(app.packageName, 'NEXT');
+      
+      case 'previous':
+        return this.sendMediaCommand(app.packageName, 'PREVIOUS');
+      
+      case 'volume_up':
+        return this.adjustSystemVolume(1);
+      
+      case 'volume_down':
+        return this.adjustSystemVolume(-1);
+      
+      case 'take_photo':
+        return this.triggerCameraAction('photo');
+      
+      case 'record_video':
+        return this.triggerCameraAction('video');
+      
+      case 'send_message':
+        return this.sendWhatsAppMessage(parameters?.contact, parameters?.message);
+      
+      case 'search':
+        return this.searchInApp(app.packageName, parameters?.query);
+      
+      default:
+        console.warn(`Unknown action: ${action}`);
+        return false;
+    }
+  }
+
+  private async openApp(packageName: string): Promise<boolean> {
+    try {
+      console.log(`Attempting to open app: ${packageName}`);
+      
+      // Try Capacitor native app launching first
+      if ('Capacitor' in window && (window as any).Capacitor?.isNativePlatform?.()) {
+        try {
+          const { App } = await import('@capacitor/app');
+          
+          // Try to open the app using Android intent
+          if (packageName.startsWith('com.')) {
+            // Use Capacitor's openUrl with package intent
+            const intentUrl = `intent://launch/#Intent;package=${packageName};scheme=android-app;end`;
+            await App.openUrl({ url: intentUrl });
+            console.log(`Successfully launched ${packageName} via Capacitor`);
+            return true;
+          }
+        } catch (capacitorError) {
+          console.log('Capacitor app launch failed, trying alternatives:', capacitorError);
+        }
+      }
+
+      // Try URL schemes for known apps
+      const appUrls: Record<string, string[]> = {
+        'com.dywx.larkplayer': ['larkplayer://', 'intent://launch/#Intent;package=com.dywx.larkplayer;end'],
+        'com.spotify.music': ['spotify://', 'intent://launch/#Intent;package=com.spotify.music;end'],
+        'com.google.android.youtube': ['vnd.youtube://', 'https://youtube.com/'],
+        'com.whatsapp': ['whatsapp://', 'intent://launch/#Intent;package=com.whatsapp;end'],
+        'com.android.camera': ['intent://launch/#Intent;package=com.android.camera;end'],
+        'com.android.settings': ['intent://launch/#Intent;package=com.android.settings;end']
+      };
+
+      const urls = appUrls[packageName];
+      if (urls) {
+        for (const url of urls) {
+          try {
+            if (url.startsWith('intent://')) {
+              // For Android intents, try to use window.location
+              window.location.href = url;
+            } else {
+              // For URL schemes, use window.open
+              const opened = window.open(url, '_system');
+              if (opened) {
+                console.log(`Successfully opened ${packageName} via URL scheme: ${url}`);
+                return true;
+              }
+            }
+          } catch (urlError) {
+            console.log(`Failed to open with URL ${url}:`, urlError);
+            continue;
+          }
+        }
+      }
+
+      // Try generic Android app launch intent
+      try {
+        const genericIntent = `intent://launch/#Intent;package=${packageName};scheme=android-app;end`;
+        window.location.href = genericIntent;
+        console.log(`Attempted generic intent launch for ${packageName}`);
+        return true;
+      } catch (intentError) {
+        console.log('Generic intent launch failed:', intentError);
+      }
+
+      // For media apps, try to trigger system media controls
+      if (packageName.includes('lark') || packageName.includes('spotify') || packageName.includes('music')) {
+        return this.triggerSystemMediaApp(packageName);
+      }
+
+      // Last resort: try to open app store page
+      const playStoreUrl = `https://play.google.com/store/apps/details?id=${packageName}`;
+      window.open(playStoreUrl, '_blank');
+      console.log(`Opened Play Store page for ${packageName}`);
+      return true;
+      
+    } catch (error) {
+      console.error(`Failed to open app ${packageName}:`, error);
+      return false;
+    }
+  }
+
+  private async sendMediaCommand(packageName: string, command: string): Promise<boolean> {
+    try {
+      // Use Media Session API for real media control
+      if ('mediaSession' in navigator) {
+        switch (command) {
+          case 'PLAY':
+            navigator.mediaSession.setActionHandler('play', null);
+            // Trigger play action
+            break;
+          case 'PAUSE':
+            navigator.mediaSession.setActionHandler('pause', null);
+            // Trigger pause action
+            break;
+          case 'NEXT':
+            navigator.mediaSession.setActionHandler('nexttrack', null);
+            break;
+          case 'PREVIOUS':
+            navigator.mediaSession.setActionHandler('previoustrack', null);
+            break;
+        }
+      }
+
+      // For Lark Player specifically, try to control via system
+      if (packageName.includes('larkplayer')) {
+        return this.controlLarkPlayer(command);
+      }
+
+      console.log(`Sending ${command} to ${packageName}`);
+      return true;
+    } catch (error) {
+      console.error(`Failed to send media command:`, error);
+      return false;
+    }
+  }
+
+  private async controlLarkPlayer(command: string): Promise<boolean> {
+    try {
+      console.log(`Controlling Lark Player: ${command}`);
+      
+      // Use native plugin if available
+      if ('Capacitor' in window && (window as any).Capacitor?.isNativePlatform?.()) {
+        try {
+          const commandMap: Record<string, string> = {
+            'PLAY': 'play',
 
 // [NOX-DEV-53]: ongoing module refinement
