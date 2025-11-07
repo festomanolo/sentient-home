@@ -111,5 +111,118 @@ class AICommandProcessor {
       regex: /^volume\s+(down|quieter|decrease|lower)$/i,
       action: 'volume_down',
       confidence: 0.9
+    },
+    {
+      regex: /^(quieter|turn\s+it\s+down)$/i,
+      action: 'volume_down',
+      confidence: 0.85
+    },
+    {
+      regex: /^set\s+volume\s+to\s+(\d+)$/i,
+      action: 'set_volume',
+      extractEntities: (match) => ({ volume: parseInt(match[1]) }),
+      confidence: 0.95
+    },
+
+    // Weather
+    {
+      regex: /^(what'?s|how'?s|tell\s+me)\s+the\s+weather$/i,
+      action: 'get_weather',
+      confidence: 0.9
+    },
+    {
+      regex: /^weather\s+(today|now|outside)?$/i,
+      action: 'get_weather',
+      confidence: 0.85
+    },
+    {
+      regex: /^(what'?s\s+the\s+)?temperature(\s+outside)?$/i,
+      action: 'get_weather',
+      confidence: 0.85
+    },
+    {
+      regex: /^(what'?s\s+the\s+)?weather\s+in\s+(.+)$/i,
+      action: 'get_weather',
+      extractEntities: (match) => ({ location: match[2] }),
+      confidence: 0.9
+    },
+    {
+      regex: /^weather\s+forecast$/i,
+      action: 'get_forecast',
+      confidence: 0.9
+    },
+
+    // Time
+    {
+      regex: /^what\s+time\s+is\s+it$/i,
+      action: 'get_time',
+      confidence: 0.95
+    },
+    {
+      regex: /^(what'?s\s+the\s+)?time$/i,
+      action: 'get_time',
+      confidence: 0.85
+    },
+    {
+      regex: /^(what\s+time\s+is\s+it|time)\s+in\s+(.+)$/i,
+      action: 'get_time_in_location',
+      extractEntities: (match) => ({ location: match[2] }),
+      confidence: 0.9
+    },
+
+    // Calendar
+    {
+      regex: /^(what'?s\s+on\s+my\s+calendar|my\s+calendar|calendar)$/i,
+      action: 'get_calendar',
+      confidence: 0.9
+    },
+    {
+      regex: /^(what'?s\s+my\s+schedule|my\s+schedule|schedule)\s+(today|tomorrow)?$/i,
+      action: 'get_calendar',
+      extractEntities: (match) => ({ day: match[2] || 'today' }),
+      confidence: 0.9
+    },
+    {
+      regex: /^(what'?s\s+my\s+)?(next\s+)?(meeting|appointment|event)$/i,
+      action: 'get_next_event',
+      confidence: 0.9
+    },
+    {
+      regex: /^calendar\s+for\s+(today|tomorrow|monday|tuesday|wednesday|thursday|friday|saturday|sunday)$/i,
+      action: 'get_calendar',
+      extractEntities: (match) => ({ day: match[1] }),
+      confidence: 0.9
+    },
+
+    // App control
+    {
+      regex: /^(open|launch|start)\s+(.+)$/i,
+      action: 'open_app',
+      extractEntities: (match) => ({ app: match[2] }),
+      confidence: 0.85
+    },
+    {
+      regex: /^(play|pause|control)\s+(.+)$/i,
+      action: 'control_app',
+      extractEntities: (match) => ({ app: match[2] }),
+      confidence: 0.75
+    },
+  ];
+
+  async processCommand(transcript: string): Promise<CommandIntent> {
+    const cleanTranscript = transcript.toLowerCase().trim();
+    
+    // Try to match against patterns
+    let bestMatch: CommandIntent | null = null;
+    let highestConfidence = 0;
+
+    for (const pattern of this.commandPatterns) {
+      const match = cleanTranscript.match(pattern.regex);
+      if (match) {
+        const confidence = pattern.confidence || 0.7;
+        
+        if (confidence > highestConfidence) {
+          highestConfidence = confidence;
+          
 
 // [NOX-DEV-30]: ongoing module refinement
