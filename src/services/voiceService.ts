@@ -130,5 +130,136 @@ class VoiceService {
             interimTranscript += transcript;
           }
         }
+        
+        // Only process final results
+        if (finalTranscript) {
+          this.currentState = 'processing';
+          
+          const command: VoiceCommand = {
+            command: finalTranscript.toLowerCase().trim(),
+            confidence: event.results[event.results.length - 1][0].confidence || 0.8,
+            timestamp: new Date()
+          };
+          
+          console.log(`Voice command recognized: "${command.command}" (confidence: ${command.confidence.toFixed(2)})`);
+          this.notifyCommandListeners(command);
+          
+          // Return to listening state after processing
+          setTimeout(() => {
+            if (this.isListening) {
+              this.currentState = 'listening';
+            }
+          }, 500);
+        }
+        
+        // Log interim results for debugging
+        if (interimTranscript) {
+          console.log(`Interim speech: "${interimTranscript}"`);
+        }
+      };
+
+      this.recognition.onerror = (event: SpeechRecognitionErrorEvent) => {
+        console.error('Speech recognition error:', event.error);
+        this.isListening = false;
+        
+        switch (event.error) {
+          case 'no-speech':
+            console.log('No speech detected, will retry...');
+            if (this.settings.continuousListening) {
+              setTimeout(() => this.startListening(), 2000);
+            }
+            break;
+          case 'audio-capture':
+            console.error('Audio capture failed - check microphone');
+            break;
+          case 'not-allowed':
+            console.error('Speech recognition not allowed - check permissions');
+            break;
+          case 'network':
+            console.error('Network error during speech recognition');
+            if (this.settings.continuousListening) {
+              setTimeout(() => this.startListening(), 5000);
+            }
+            break;
+          default:
+            console.error(`Speech recognition error: ${event.error}`);
+            if (this.settings.continuousListening) {
+              setTimeout(() => this.startListening(), 3000);
+            }
+        }
+      };
+
+      this.recognition.onend = () => {
+        console.log('Speech recognition ended');
+        this.isListening = false;
+        
+        if (this.settings.continuousListening) {
+          // Restart listening in continuous mode with a small delay
+          setTimeout(() => {
+            if (!this.isListening) { // Only restart if not already listening
+              this.startListening();
+            }
+          }, 1000);
+        }
+      };
+    } else {
+      console.warn('Speech recognition not supported in this browser');
+    }
+  }
+
+  startListening(): void {
+    if (this.recognition && !this.isListening) {
+      try {
+        this.recognition.start();
+        this.isListening = true;
+        this.currentState = 'listening';
+      } catch (error) {
+        console.error('Failed to start speech recognition:', error);
+      }
+    }
+  }
+
+  stopListening(): void {
+    if (this.recognition && this.isListening) {
+      this.recognition.stop();
+      this.isListening = false;
+      this.currentState = 'inactive';
+    }
+  }
+
+  getAudioLevel(): number {
+    // Get current audio level from sound detection service
+    if (typeof window !== 'undefined') {
+      try {
+        const { soundDetectionService } = require('./soundDetectionService');
+        if (soundDetectionService.isRunning()) {
+          return soundDetectionService.getCurrentVolume();
+        }
+      } catch (error) {
+        console.error('Failed to get audio level:', error);
+      }
+    }
+    return 0;
+  }
+
+  getListeningState(): ListeningState {
+    return this.currentState;
+  }
+
+  subscribeToAudioLevels(callback: (level: number) => void): () => void {
+    this.audioLevelListeners.push(callback);
+    return () => {
+      this.audioLevelListeners = this.audioLevelListeners.filter(l => l !== callback);
+    };
+  }
+
+  private notifyAudioLevelListeners(level: number): void {
+    this.audioLevelListeners.forEach(listener => listener(level));
+  }
+
+  async speak(text: string, interrupt: boolean = false): Promise<void> {
+    if (!this.settings.voiceResponseEnabled) return;
+
+    try {
 
 // [NOX-DEV-32]: ongoing module refinement
