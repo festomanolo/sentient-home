@@ -66,5 +66,74 @@
             try {
                 if ('speechSynthesis' in window) {
                     log('Speech Synthesis API available', 'success');
+                    const utterance = new SpeechSynthesisUtterance('Hello! NOX AI voice test successful.');
+                    utterance.rate = 0.9;
+                    utterance.pitch = 1.0;
+                    speechSynthesis.speak(utterance);
+                    log('Voice test spoken successfully', 'success');
+                } else {
+                    log('Speech Synthesis API not available', 'error');
+                }
+
+                if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+                    log('Speech Recognition API available', 'success');
+                } else {
+                    log('Speech Recognition API not available', 'error');
+                }
+            } catch (error) {
+                log(`Voice Service Error: ${error.message}`, 'error');
+            }
+        };
+
+        // Test Sound Detection
+        window.testSound = async () => {
+            log('Testing Sound Detection...', 'info');
+            try {
+                if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                    log('Media Devices API available', 'success');
+                    
+                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                    log('Microphone access granted', 'success');
+                    
+                    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    const analyser = audioContext.createAnalyser();
+                    const microphone = audioContext.createMediaStreamSource(stream);
+                    
+                    analyser.fftSize = 256;
+                    microphone.connect(analyser);
+                    
+                    log('Audio analysis setup successful', 'success');
+                    
+                    // Stop the stream after test
+                    stream.getTracks().forEach(track => track.stop());
+                    audioContext.close();
+                    
+                } else {
+                    log('Media Devices API not available', 'error');
+                }
+            } catch (error) {
+                log(`Sound Detection Error: ${error.message}`, 'error');
+            }
+        };
+
+        // Test World Clock
+        window.testWorldClock = () => {
+            log('Testing World Clock Service...', 'info');
+            try {
+                const now = new Date();
+                const timeZones = ['America/New_York', 'Europe/London', 'Asia/Tokyo'];
+                
+                timeZones.forEach(tz => {
+                    const time = now.toLocaleString('en-US', { timeZone: tz });
+                    log(`${tz}: ${time}`, 'success');
+                });
+                
+                log('World Clock test successful', 'success');
+            } catch (error) {
+                log(`World Clock Error: ${error.message}`, 'error');
+            }
+        };
+
+        // Test Calendar
 
 // [NOX-DEV-65]: ongoing module refinement
