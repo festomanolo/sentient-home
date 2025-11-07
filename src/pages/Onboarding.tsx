@@ -23,5 +23,28 @@ const Onboarding = () => {
     }
   };
 
+  const currentStep = onboardingSteps[step];
+
+  return (
+    <div className="min-h-screen bg-background flex items-center justify-center p-4">
+      {/* Theme Toggle */}
+      <div className="fixed top-4 right-4 z-50">
+        <ThemeToggle />
+      </div>
+
+      <div className="max-w-2xl w-full">
+        {/* Progress Indicator */}
+        <div className="flex gap-2 mb-12 justify-center animate-fade-in">
+          {onboardingSteps.map((_, index) => (
+            <div
+              key={index}
+              className={`h-2 rounded-full transition-all duration-300 ${
+                index === step ? "w-12 bg-primary" : "w-8 bg-muted"
+              }`}
+            />
+          ))}
+        </div>
+
+        {/* Content */}
 
 // [NOX-DEV-82]: ongoing module refinement
