@@ -123,5 +123,129 @@ class CommandProcessor {
     // App control commands
     if (this.matchesPattern(cmd, voiceService.getCommandPatterns().apps)) {
       return this.handleAppCommand(cmd);
+    }
+
+    // System commands
+    if (cmd.includes('volume')) {
+      return this.handleVolumeCommand(cmd);
+    }
+
+    // Greeting responses
+    if (['hello', 'hi', 'hey'].some(greeting => cmd.includes(greeting))) {
+      return {
+        success: true,
+        message: "Hello! How can I help you today?",
+        shouldSpeak: true
+      };
+    }
+
+    // Default response for unrecognized commands
+    return {
+      success: false,
+      message: "I didn't understand that command. Try asking about weather, time, calendar, or controlling apps.",
+      shouldSpeak: true
+    };
+  }
+
+  private async handleWeatherCommand(command: string): Promise<CommandResponse> {
+    try {
+      // Add conversational filler for natural feel
+      await voiceService.speak(voiceService.getConversationalFiller());
+      
+      const weather = await weatherService.getCurrentWeather();
+      
+      // Create additional context based on weather
+      let additional = '';
+      if (weather.temperature > 80) {
+        additional = "It's quite warm out there!";
+      } else if (weather.temperature < 40) {
+        additional = "Bundle up, it's pretty cold!";
+      } else if (weather.description.includes('rain')) {
+        additional = "You might want to bring an umbrella.";
+      } else if (weather.description.includes('sunny')) {
+        additional = "Perfect weather to get outside!";
+      }
+
+      const message = voiceService.getNaturalResponse('weather', {
+        temp: weather.temperature,
+        condition: weather.description,
+        location: weather.location,
+        additional: additional
+      });
+      
+      return {
+        success: true,
+        message,
+        data: weather,
+        shouldSpeak: true
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: "I'm having trouble getting the weather right now. Let me try again in a moment.",
+        shouldSpeak: true
+      };
+    }
+  }
+
+  private async handleTimeCommand(command: string): Promise<CommandResponse> {
+    try {
+      // Check if asking for time in specific location
+      const locationMatch = command.match(/time in (.+)/i);
+      if (locationMatch) {
+        const location = locationMatch[1].trim();
+        const timeInfo = worldClockService.getTimeForLocation(location);
+        
+        if (timeInfo) {
+          const message = `The time in ${location} is ${timeInfo}. ${worldClockService.getCurrentTime(location)?.isDaytime ? "It's daytime there." : "It's nighttime there."}`;
+          return {
+            success: true,
+            message,
+            shouldSpeak: true
+          };
+        } else {
+          return {
+            success: false,
+            message: `I'm sorry, I couldn't find the timezone for ${location}. Could you try a major city name?`,
+            shouldSpeak: true
+          };
+        }
+      }
+
+      // Current local time with natural response
+      const currentTime = worldClockService.getCurrentTime();
+      const timeOfDay = this.getTimeOfDayGreeting();
+      
+      const message = voiceService.getNaturalResponse('time', {
+        time: currentTime.time
+      }) + ` ${timeOfDay}`;
+      
+      return {
+        success: true,
+        message,
+        data: currentTime,
+        shouldSpeak: true
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: "I'm having trouble with the time right now. Let me check again.",
+        shouldSpeak: true
+      };
+    }
+  }
+
+  private getTimeOfDayGreeting(): string {
+    const hour = new Date().getHours();
+    if (hour < 12) return "Good morning!";
+    if (hour < 17) return "Good afternoon!";
+    if (hour < 21) return "Good evening!";
+    return "Good night!";
+  }
+
+  private async handleCalendarCommand(command: string): Promise<CommandResponse> {
+    try {
+      if (command.includes('next')) {
+        const nextEvent = await calendarService.getNextEvent();
 
 // [NOX-DEV-31]: ongoing module refinement
