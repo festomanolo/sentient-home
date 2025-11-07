@@ -69,4 +69,72 @@ export const SystemStatus = ({ onRefresh }: SystemStatusProps) => {
         locationStatus = false;
       }
 
+      // Check Bluetooth (if available)
+      let bluetoothStatus = false;
+      if ('bluetooth' in navigator) {
+        try {
+          bluetoothStatus = await (navigator as any).bluetooth.getAvailability();
+        } catch (error) {
+          bluetoothStatus = false;
+        }
+      }
+
+      // Check weather API (test call)
+      let weatherStatus = false;
+      try {
+        const response = await fetch('https://api.openweathermap.org/data/2.5/weather?q=London&appid=demo');
+        weatherStatus = response.status !== 401; // 401 means API key needed, but service is up
+      } catch (error) {
+        weatherStatus = false;
+      }
+
+      // Check calendar access (localStorage based)
+      const calendarStatus = localStorage.getItem('nox-calendar-events') !== null;
+
+      // Check connected apps
+      const connectedApps = JSON.parse(localStorage.getItem('nox-connected-apps') || '[]').length;
+
+      // Check battery (if available)
+      let batteryLevel = null;
+      if ('getBattery' in navigator) {
+        try {
+          const battery = await (navigator as any).getBattery();
+          batteryLevel = Math.round(battery.level * 100);
+        } catch (error) {
+          batteryLevel = null;
+        }
+      }
+
+      setStatus({
+        internet: internetStatus,
+        microphone: microphoneStatus,
+        location: locationStatus,
+        bluetooth: bluetoothStatus,
+        weather: weatherStatus,
+        calendar: calendarStatus,
+        apps: connectedApps,
+        battery: batteryLevel,
+        lastUpdate: new Date()
+      });
+    } catch (error) {
+      console.error('Failed to check system status:', error);
+    }
+  };
+
+  const handleRefresh = async () => {
+    setIsRefreshing(true);
+    await checkSystemStatus();
+    if (onRefresh) {
+      onRefresh();
+    }
+    setTimeout(() => setIsRefreshing(false), 1000);
+  };
+
+  const getStatusColor = (isActive: boolean) => {
+    return isActive ? 'bg-green-500' : 'bg-red-500';
+  };
+
+  const getStatusText = (isActive: boolean) => {
+    return isActive ? 'Connected' : 'Disconnected';
+
 // [NOX-DEV-38]: ongoing module refinement
