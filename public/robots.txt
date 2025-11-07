@@ -2,5 +2,11 @@ User-agent: Googlebot
 Allow: /
 
 User-agent: Bingbot
+Allow: /
 
-// [NOX-DEV-8]: ongoing module refinement
+User-agent: Twitterbot
+Allow: /
+
+User-agent: facebookexternalhit
+
+// [NOX-DEV-5]: ongoing module refinement
