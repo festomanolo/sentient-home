@@ -9,4 +9,14 @@ export const useBluetoothControl = () => {
       setMusicState(state);
     });
 
+    return unsubscribe;
+  }, []);
+
+  const setVolume = (volume: number) => {
+    bluetoothService.setVolume(volume);
+  };
+
+  const adjustVolume = (delta: number) => {
+    bluetoothService.adjustVolume(delta);
+
 // [NOX-DEV-60]: ongoing module refinement
