@@ -123,5 +123,127 @@ const SmartDashboard = () => {
               <h1 className="text-4xl font-bold bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent animate-gradient">
                 NOX AI Assistant
               </h1>
+              <p className="text-sm text-muted-foreground mt-1 tracking-wide">
+                {assistant.state.isInitialized ? 
+                  (isListening ? "🎤 Listening to your world..." : "⏸️ Standing by") :
+                  "🔄 Initializing..."
+                }
+              </p>
+            </div>
+            <div className="flex gap-2">
+              <ThemeToggle />
+              <Button asChild variant="outline" size="icon">
+                <Link to="/settings">
+                  <Settings className="w-5 h-5" />
+                </Link>
+              </Button>
+              <Button asChild variant="outline" size="sm">
+                <Link to="/advanced-settings">
+                  Advanced
+                </Link>
+              </Button>
+            </div>
+          </header>
+
+          {/* Main Orb Section */}
+          <div className="relative flex justify-center mb-8 animate-slide-up" style={{ animationDelay: "0.1s" }}>
+            <div className="relative">
+              <MicrophoneIndicator 
+                isListening={isListening}
+                isProcessing={assistant.state.isProcessingCommand}
+                isSpeaking={false}
+                size="xl"
+                showLabel={true}
+              />
+            </div>
+          </div>
+
+          {/* Command Feedback */}
+          <div className="mb-8 animate-slide-up" style={{ animationDelay: "0.15s" }}>
+            <CommandFeedback
+              currentCommand={assistant.state.lastCommand || undefined}
+              isProcessing={assistant.state.isProcessingCommand}
+              showHistory={true}
+            />
+          </div>
+
+          {/* Voice Command Interface */}
+          <div className="mb-8 animate-slide-up" style={{ animationDelay: "0.2s" }}>
+            <GlassCard>
+              <div className="flex items-center gap-3 mb-4">
+                <div className="p-2 rounded-lg bg-primary/10">
+                  <Send className="w-5 h-5 text-primary" />
+                </div>
+                <h2 className="text-lg font-semibold">Voice Commands</h2>
+                <Badge variant={isListeningEnabled ? "default" : "secondary"}>
+                  {isListeningEnabled ? "Active" : "Paused"}
+                </Badge>
+              </div>
+              
+              <form onSubmit={handleTextCommand} className="flex gap-2 mb-4">
+                <Input
+                  value={textCommand}
+                  onChange={(e) => setTextCommand(e.target.value)}
+                  placeholder="Ask about weather, time, calendar, or control apps..."
+                  className="flex-1"
+                  disabled={isProcessingText}
+                />
+                <Button 
+                  type="submit" 
+                  size="icon"
+                  disabled={!textCommand.trim() || isProcessingText}
+                >
+                  <Send className="w-4 h-4" />
+                </Button>
+              </form>
+              
+              <div className="flex flex-wrap gap-2 mb-4">
+                {[
+                  "What's the weather?",
+                  "What time is it in Tokyo?",
+                  "What's on my calendar?",
+                  "Play music",
+                  "Open Lark Player"
+                ].map((suggestion) => (
+                  <Button
+                    key={suggestion}
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setTextCommand(suggestion)}
+                    className="text-xs"
+                  >
+                    {suggestion}
+                  </Button>
+                ))}
+              </div>
+              
+              {assistant.state.lastCommand && (
+                <div className="p-3 bg-accent/10 rounded-lg">
+                  <p className="text-sm">
+                    <span className="font-medium">Last command:</span> {assistant.state.lastCommand}
+                    {assistant.state.isProcessingCommand && (
+                      <span className="ml-2 text-accent animate-pulse">Processing...</span>
+                    )}
+                  </p>
+                </div>
+              )}
+            </GlassCard>
+          </div>
+
+          {/* Main Content Grid */}
+          <div className="grid lg:grid-cols-3 gap-6 mb-8">
+            {/* Left Column */}
+            <div className="space-y-6">
+              <WeatherWidget />
+              <WorldClock />
+            </div>
+
+            {/* Middle Column */}
+            <div className="space-y-6">
+              <CalendarWidget />
+              
+              {/* Connected Apps */}
+              <GlassCard>
+                <div className="flex items-center gap-3 mb-4">
 
 // [NOX-DEV-44]: ongoing module refinement
