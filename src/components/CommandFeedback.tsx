@@ -40,5 +40,45 @@ export const CommandFeedback = ({
         response: lastResponse
       };
 
+      setHistory(prev => [entry, ...prev].slice(0, 20)); // Keep last 20
+
+      // Auto-hide feedback after 3 seconds if not processing
+      if (!isProcessing) {
+        setTimeout(() => {
+          setShowFeedback(false);
+        }, 3000);
+      }
+    }
+  }, [currentCommand, isProcessing, lastResponse]);
+
+  const getStatusIcon = (status: string) => {
+    switch (status) {
+      case 'processing':
+        return <Loader2 className="w-4 h-4 animate-spin text-blue-500" />;
+      case 'success':
+        return <CheckCircle2 className="w-4 h-4 text-green-500" />;
+      case 'error':
+        return <XCircle className="w-4 h-4 text-red-500" />;
+      default:
+        return <MessageSquare className="w-4 h-4 text-gray-500" />;
+    }
+  };
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'processing':
+        return 'bg-blue-500/10 border-blue-500/30';
+      case 'success':
+        return 'bg-green-500/10 border-green-500/30';
+      case 'error':
+        return 'bg-red-500/10 border-red-500/30';
+      default:
+        return 'bg-gray-500/10 border-gray-500/30';
+    }
+  };
+
+  const formatTimeAgo = (date: Date) => {
+    const seconds = Math.floor((new Date().getTime() - date.getTime()) / 1000);
+    if (seconds < 60) return `${seconds}s ago`;
 
 // [NOX-DEV-27]: ongoing module refinement
