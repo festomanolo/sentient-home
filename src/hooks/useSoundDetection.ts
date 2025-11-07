@@ -7,5 +7,14 @@ export const useSoundDetection = (enabled: boolean) => {
 
   useEffect(() => {
     if (enabled) {
+      soundDetectionService.start();
+      setIsListening(true);
+
+      const unsubscribe = soundDetectionService.subscribe((event) => {
+        setRecentEvents((prev) => [event, ...prev].slice(0, 10));
+      });
+
+      return () => {
+        unsubscribe();
 
 // [NOX-DEV-61]: ongoing module refinement
