@@ -100,5 +100,107 @@ class WeatherService {
       return this.getMockForecast();
     }
 
+    try {
+      const position = await this.getCurrentPosition();
+      const { latitude, longitude } = position.coords;
+
+      console.log('Fetching weather forecast...');
+      const response = await axios.get(`${this.BASE_URL}/forecast`, {
+        params: {
+          lat: latitude,
+          lon: longitude,
+          appid: this.API_KEY,
+          units: 'imperial'
+        },
+        timeout: 10000
+      });
+
+      if (response.status !== 200 || !response.data?.list) {
+        throw new Error('Invalid forecast data received');
+      }
+
+      const forecasts: WeatherForecast[] = [];
+      const dailyData = response.data.list.filter((_: any, index: number) => index % 8 === 0).slice(0, 5);
+
+      dailyData.forEach((item: any) => {
+        if (item && item.main && item.weather && item.weather[0]) {
+          forecasts.push({
+            date: new Date(item.dt * 1000).toLocaleDateString('en-US', { weekday: 'short' }),
+            high: Math.round(item.main.temp_max),
+            low: Math.round(item.main.temp_min),
+            description: item.weather[0].description,
+            icon: item.weather[0].icon,
+            precipitation: Math.round((item.pop || 0) * 100)
+          });
+        }
+      });
+
+      console.log('Forecast fetched successfully:', forecasts.length, 'days');
+      return forecasts.length > 0 ? forecasts : this.getMockForecast();
+    } catch (error) {
+      console.error('Forecast fetch error:', error);
+      return this.getMockForecast();
+    }
+  }
+
+  async getWeatherAlerts(): Promise<any[]> {
+    if (!this.API_KEY) return [];
+
+    try {
+      const position = await this.getCurrentPosition();
+      const { latitude, longitude } = position.coords;
+
+      const response = await axios.get(`${this.BASE_URL}/onecall`, {
+        params: {
+          lat: latitude,
+          lon: longitude,
+          appid: this.API_KEY,
+          exclude: 'minutely,hourly,daily'
+        },
+        timeout: 10000
+      });
+
+      return response.data?.alerts || [];
+    } catch (error) {
+      console.error('Weather alerts fetch error:', error);
+      return [];
+    }
+  }
+
+  async getAirQuality(): Promise<any> {
+    if (!this.API_KEY) return null;
+
+    try {
+      const position = await this.getCurrentPosition();
+      const { latitude, longitude } = position.coords;
+
+      const response = await axios.get(`${this.BASE_URL}/air_pollution`, {
+        params: {
+          lat: latitude,
+          lon: longitude,
+          appid: this.API_KEY
+        },
+        timeout: 10000
+      });
+
+      return response.data?.list?.[0] || null;
+    } catch (error) {
+      console.error('Air quality fetch error:', error);
+      return null;
+    }
+  }
+
+  getWeatherAdvice(weather: WeatherData): string {
+    const temp = weather.temperature;
+    const condition = weather.description.toLowerCase();
+    
+    if (condition.includes('rain')) {
+      return "Don't forget your umbrella!";
+    } else if (condition.includes('snow')) {
+      return "Drive carefully, roads may be slippery.";
+    } else if (temp > 85) {
+      return "It's quite hot! Stay hydrated and seek shade.";
+    } else if (temp < 32) {
+      return "Bundle up! It's freezing outside.";
 
 // [NOX-DEV-35]: ongoing module refinement
