@@ -95,5 +95,98 @@ class SystemIntegrationService {
   private async checkPermissions(): Promise<SystemInfo['permissions']> {
     const permissions = {
       microphone: false,
+      location: false,
+      camera: false,
+      notifications: false
+    };
+
+    try {
+      // Check microphone permission
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        permissions.microphone = true;
+        stream.getTracks().forEach(track => track.stop());
+      } catch (micError) {
+        console.log('Microphone permission check failed:', micError);
+      }
+
+      // Check location permission
+      try {
+        await new Promise((resolve, reject) => {
+          navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 5000 });
+        });
+        permissions.location = true;
+      } catch (locError) {
+        console.log('Location permission check failed:', locError);
+      }
+
+      // Check camera permission
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        permissions.camera = true;
+        stream.getTracks().forEach(track => track.stop());
+      } catch (camError) {
+        console.log('Camera permission check failed:', camError);
+      }
+
+      // Check notification permission
+      if ('Notification' in window) {
+        permissions.notifications = Notification.permission === 'granted';
+      }
+
+    } catch (error) {
+      console.error('Permission check failed:', error);
+    }
+
+    return permissions;
+  }
+
+  async getInstalledApps(): Promise<InstalledApp[]> {
+    try {
+      console.log('Getting installed apps...');
+      
+      // Try to get installed apps using Capacitor (Android only)
+      if ('Capacitor' in window && (window as any).Capacitor?.isNativePlatform?.()) {
+        try {
+          // This would require a custom Capacitor plugin
+          // For now, we'll return a list of commonly installed apps
+          this.installedApps = await this.getCommonAndroidApps();
+        } catch (error) {
+          console.log('Native app list failed:', error);
+          this.installedApps = this.getWebApps();
+        }
+      } else {
+        // For web, return web-based apps
+        this.installedApps = this.getWebApps();
+      }
+      
+      console.log(`Found ${this.installedApps.length} apps`);
+      return this.installedApps;
+      
+    } catch (error) {
+      console.error('Failed to get installed apps:', error);
+      return [];
+    }
+  }
+
+  private async getCommonAndroidApps(): Promise<InstalledApp[]> {
+    // Simulate checking for common Android apps
+    const commonApps = [
+      { packageName: 'com.dywx.larkplayer', appName: 'Lark Player', isSystemApp: false },
+      { packageName: 'com.spotify.music', appName: 'Spotify', isSystemApp: false },
+      { packageName: 'com.google.android.youtube', appName: 'YouTube', isSystemApp: false },
+      { packageName: 'com.whatsapp', appName: 'WhatsApp', isSystemApp: false },
+      { packageName: 'com.android.camera', appName: 'Camera', isSystemApp: true },
+      { packageName: 'com.android.settings', appName: 'Settings', isSystemApp: true },
+      { packageName: 'com.android.chrome', appName: 'Chrome', isSystemApp: true },
+      { packageName: 'com.google.android.gm', appName: 'Gmail', isSystemApp: false }
+    ];
+
+    // In a real implementation, this would check which apps are actually installed
+    return commonApps;
+  }
+
+  private getWebApps(): InstalledApp[] {
+    return [
 
 // [NOX-DEV-54]: ongoing module refinement
