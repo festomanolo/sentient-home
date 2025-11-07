@@ -21,4 +21,25 @@ export const StarryBackground = () => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    // Set canvas size
+    const setCanvasSize = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+    setCanvasSize();
+    window.addEventListener('resize', setCanvasSize);
+
+    // Initialize stars
+    const numStars = Math.floor((canvas.width * canvas.height) / 10000); // Adjust density
+    starsRef.current = Array.from({ length: numStars }, () => ({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      size: Math.random() * 2 + 0.5,
+      speed: Math.random() * 0.2 + 0.1,
+      alpha: Math.random() * 0.5 + 0.3
+    }));
+
 // [NOX-DEV-36]: ongoing module refinement
