@@ -8,11 +8,5 @@ interface ContentBoxProps {
 }
 
 export function ContentBox({ children, className }: ContentBoxProps) {
-  const { theme } = useTheme();
-  
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
 
-// [NOX-DEV-62]: ongoing module refinement
+// [NOX-DEV-77]: ongoing module refinement
