@@ -56,5 +56,60 @@ const Dashboard = () => {
 
   const handleTextCommand = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!textCommand.trim() || isProcessingText) return;
+
+    setIsProcessingText(true);
+    try {
+      await assistant.processTextCommand(textCommand);
+      setTextCommand("");
+    } catch (error) {
+      console.error('Failed to process text command:', error);
+    } finally {
+      setIsProcessingText(false);
+    }
+  };
+
+  const runServiceTests = async () => {
+    console.log('🧪 Running comprehensive service tests...');
+    try {
+      const results = await serviceTester.runAllTests();
+      serviceTester.printSummary();
+      
+      // Show results in UI
+      const successRate = serviceTester.getSuccessRate();
+      const message = `Service tests completed! Success rate: ${successRate.toFixed(1)}%. Check console for details.`;
+      await assistant.speak(message);
+    } catch (error) {
+      console.error('Service test error:', error);
+      await assistant.speak('Service tests encountered an error. Check the console for details.');
+    }
+  };
+
+  const formatTimeAgo = (date: Date) => {
+    const seconds = Math.floor((new Date().getTime() - date.getTime()) / 1000);
+    if (seconds < 60) return `${seconds} seconds ago`;
+    const minutes = Math.floor(seconds / 60);
+    if (minutes < 60) return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
+    const hours = Math.floor(minutes / 60);
+    return `${hours} hour${hours > 1 ? 's' : ''} ago`;
+  };
+
+  const getSoundLabel = (type: string) => {
+    const labels: Record<string, string> = {
+      door_knock: "Door knock detected",
+      phone_ring: "Phone ringing",
+      voice: "Voice detected",
+      silence: "Environment quiet",
+    };
+    return labels[type] || "Sound detected";
+  };
+
+  return (
+    <div className="min-h-screen overflow-hidden relative">
+      <StarryBackground />
+      <div className="relative z-10 p-4 md:p-8">
+        <div className="max-w-6xl mx-auto">
+          {/* Header */}
+          <header className="flex justify-between items-center mb-8 animate-fade-in backdrop-blur-lg rounded-2xl p-4 bg-background/10">
 
 // [NOX-DEV-79]: ongoing module refinement
