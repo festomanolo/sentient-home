@@ -35,5 +35,39 @@ export const WeatherSetup = () => {
       setApiKey("");
       
     } catch (error) {
+      setTestResult({
+        success: false,
+        message: `API key test failed: ${error.message}`
+      });
+      // Remove invalid key
+      localStorage.removeItem('nox-weather-api-key');
+    } finally {
+      setIsTestingKey(false);
+    }
+  };
+
+  const handleRemoveApiKey = () => {
+    localStorage.removeItem('nox-weather-api-key');
+    setIsConfigured(false);
+    setTestResult(null);
+  };
+
+  if (isConfigured) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <CheckCircle className="w-5 h-5 text-green-500" />
+            Weather Service Configured
+          </CardTitle>
+          <CardDescription>
+            Weather API is working properly. You can now get real weather data and forecasts.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Button variant="outline" onClick={handleRemoveApiKey}>
+            Remove API Key
+          </Button>
+        </CardContent>
 
 // [NOX-DEV-33]: ongoing module refinement
